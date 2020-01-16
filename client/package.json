@@ -1,0 +1,15 @@
+{
+  "name": "bri11iant-client",
+  "version": "1.0.0",
+  "description": "Language Client for Bri11iant",
+  "main": "src/extension.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Northwestern University Inclusive Technology Lab",
+  "license": "MIT",
+  "dependencies": {
+    "vscode": "1.1.36",
+    "vscode-languageclient": "6.0.0"
+  }
+}
