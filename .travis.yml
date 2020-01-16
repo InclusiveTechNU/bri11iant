@@ -1,0 +1,4 @@
+language: node_js
+os: osx
+notifications:
+  slack: inclusive-tech:PNqRn3KSBfboII6OvVvOzl5w
