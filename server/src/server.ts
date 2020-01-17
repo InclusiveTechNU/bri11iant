@@ -2,7 +2,10 @@
 * Copyright (c) 2018 Max van der Schee; Licensed MIT 
 * Modified by: 2020 Northwestern University Inclusive Technology Lab */
 
-import * as pattern from './patterns';
+import {
+	pattern
+} from './patterns';
+
 import {
 	createConnection,
 	Diagnostic,
@@ -14,15 +17,18 @@ import {
 	TextDocuments
 } from 'vscode-languageserver';
 
-let connection = createConnection(ProposedFeatures.all);
+// MARK : Initialize connection to server
 
+let connection = createConnection(ProposedFeatures.all);
 let documents: TextDocuments = new TextDocuments();
 let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
 
+// Called when language server is being connected to
 connection.onInitialize((params: InitializeParams) => {
 	let capabilities = params.capabilities;
 
+	// Double bang is used to coerce return type to boolean
 	hasConfigurationCapability = !!(capabilities.workspace && !!capabilities.workspace.configuration);
 	hasWorkspaceFolderCapability = !!(capabilities.workspace && !!capabilities.workspace.workspaceFolders);
 
@@ -33,6 +39,7 @@ connection.onInitialize((params: InitializeParams) => {
 	};
 });
 
+// Called once language server is connected
 connection.onInitialized(() => {
 	if (hasConfigurationCapability) {
 		connection.client.register(
@@ -47,6 +54,8 @@ connection.onInitialized(() => {
 	}
 });
 
+// MARK: Default Server Settings
+
 interface ServerSettings {
 	maxNumberOfProblems: number;
 	semanticExclude: boolean;
@@ -56,18 +65,19 @@ const defaultSettings: ServerSettings = { maxNumberOfProblems: 100, semanticExcl
 let globalSettings: ServerSettings = defaultSettings;
 let documentSettings: Map<string, Thenable<ServerSettings>> = new Map();
 
+// Set global settings
 connection.onDidChangeConfiguration(change => {
 	if (hasConfigurationCapability) {
 		documentSettings.clear();
 	} else {
 		globalSettings = <ServerSettings>(
-			(change.settings.webAccessibility || defaultSettings)
+			(change.settings.bri11iant || defaultSettings)
 		);
 	}
-
 	documents.all().forEach(validateTextDocument);
 });
 
+// Return the VSCode document configuration
 function getDocumentSettings(resource: string): Thenable<ServerSettings> {
 	if (!hasConfigurationCapability) {
 		return Promise.resolve(globalSettings);
