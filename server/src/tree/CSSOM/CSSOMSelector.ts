@@ -1,4 +1,4 @@
-import CSSSelectorType from "./CSSSelectorType";
+import CSSSelectorType from "./CSSOMSelectorType";
 
 class CSSSelector {
 
