@@ -255,7 +255,16 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 */
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-	
+	let settings = await getDocumentSettings(textDocument.uri);
+	let text = textDocument.getText();
+	let problems = 0;
+	let m: RegExpExecArray | null;
+	let diagnostics: Diagnostic[] = [];
+
+	connection.sendDiagnostics({
+		uri: textDocument.uri,
+		diagnostics
+	});
 }
 
 documents.listen(connection);

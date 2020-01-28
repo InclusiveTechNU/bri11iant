@@ -21,7 +21,7 @@
 		"onLanguage:css",
 		"onLanguage:html"
 	],
-	"main": "./client/out/extension",
+	"main": "./out/client/src/extension.js",
 	"contributes": {
 		"configuration": {
 			"type": "object",
@@ -58,7 +58,6 @@
 	},
 	"scripts": {
 		"compile": "tsc -p ./",
-		"lint": "eslint '*/**/*.ts' --quiet --fix",
 		"vscode:prepublish": "npm run compile",
 		"watch": "tsc -b -w"
 	},
@@ -67,10 +66,8 @@
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^12.11.7",
 		"@types/vscode": "^1.41.0",
-		"@typescript-eslint/eslint-plugin": "2.18.0",
-		"@typescript-eslint/parser": "2.18.0",
-		"eslint": "6.8.0",
 		"path": "0.12.7",
+		"tslint": "5.20.1",
 		"typescript": "3.7.5"
 	},
 	"dependencies": {}

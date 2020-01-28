@@ -3,8 +3,8 @@ import CSSStyle from "./CSSOMStyle";
 
 class CSSOMNode {
 
-    selector: CSSSelectorLayer;
-    styles: [CSSStyle];
+    selector: CSSSelectorLayer | undefined;
+    styles: [CSSStyle] | undefined;
 
 }
 

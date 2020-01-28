@@ -2,7 +2,7 @@ import DOMNode from "./DOMNode";
 
 class DOMTree {
 
-    head: DOMNode;
+    head: DOMNode | undefined;
 
     constructor(filename: string) {
         // Construct DOM from file

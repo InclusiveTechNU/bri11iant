@@ -4,7 +4,7 @@ import RenderNode from "./RenderNode";
 
 class RenderTree {
 
-    head: RenderNode;
+    head: RenderNode | undefined;
 
     constructor(htmlFile: string, cssFile: string) {
 
@@ -13,6 +13,8 @@ class RenderTree {
         
         // Construct CSSOM from file
         const CSSOM: CSSOMTree = new CSSOMTree(cssFile);
+
+
 
     }
 

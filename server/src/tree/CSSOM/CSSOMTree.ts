@@ -2,7 +2,7 @@ import CSSOMNode from "./CSSOMNode";
 
 class CSSOMTree {
 
-    head: CSSOMNode;
+    head: CSSOMNode | undefined;
 
     constructor(filename: string) {
         // Construct CSSOM from file

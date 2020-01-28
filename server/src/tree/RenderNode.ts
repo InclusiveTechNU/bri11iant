@@ -3,9 +3,9 @@ import DOMNode from "./DOM/DOMNode";
 
 class RenderNode {
 
-    children: [RenderNode];
-    cssomNode: CSSOMNode;
-    domNode: DOMNode;
+    children: [RenderNode] | undefined;
+    cssomNode: CSSOMNode | undefined;
+    domNode: DOMNode | undefined;
 
 }
 

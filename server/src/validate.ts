@@ -19,14 +19,7 @@ import {
 	inputHidden
 } from "./patterns";
 
-// import {
-// 	createConnection,
-// 	ProposedFeatures
-// } from "vscode-languageserver";
-
-// connection is used for debuging > connection.console.log();
-// let connection = createConnection(ProposedFeatures.all);
-
+/*
 // Check that divs use WAI-ARIA roles
 export async function validateDiv(m: RegExpExecArray) {
 	if (!ariaRole.test(m[0])) {
@@ -38,7 +31,6 @@ export async function validateDiv(m: RegExpExecArray) {
 	}
 }
 
-/* Not actually sure what standard this is checking
 export async function validateSpan(m: RegExpExecArray) {
 	if (ariaRole.test(m[0])) {
 		if (/<span(?:.+?)(?:button|btn)(?:.+?)>/.test(m[0])) {
@@ -50,12 +42,12 @@ export async function validateSpan(m: RegExpExecArray) {
 		} else {
 			return {
 				meta: m,
-				mess: "Provide a WAI-ARIA role [role=""]",
+				mess: "Provide a WAI-ARIA role [role=\"\"]",
 				severity: 2
 			};
 		}
 	}
-} */
+}
 
 export async function validateA(m: RegExpExecArray) {
 	let aRegEx: RegExpExecArray;
@@ -239,16 +231,4 @@ export async function validateFrame(m: RegExpExecArray) {
 		};
 	}
 }
-
-// export async function validateId(m: RegExpExecArray) {
-// 	let connection = createConnection(ProposedFeatures.all);
-// 	let idValue = /id="(.*?[a-z].*?)"/i.exec(m[0])[1]; 
-// 	let pattern: RegExp = new RegExp(idValue, "i");
-// 	// connection.console.log(idValue);
-// 	if (pattern.exec(m.input).length == 2) {
-// 		return {
-// 			meta: m,
-// 			mess: "Duplicated id"
-// 		};
-// 	}
-// }
+*/

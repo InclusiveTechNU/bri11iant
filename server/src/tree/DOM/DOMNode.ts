@@ -2,7 +2,7 @@ import DOMNodeType from "./DOMNodeType";
 
 class DOMNode {
 
-	children: [DOMNode];
+	children: [DOMNode] | undefined;
 	classes: [string];
 	id: string;
 	type: DOMNodeType;

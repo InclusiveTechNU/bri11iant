@@ -2,8 +2,8 @@ import CSSSelector from "./CSSOMSelector";
 
 class CSSSelectorLayer {
 
-	children: CSSSelectorLayer;
-	selectors: [CSSSelector];
+	children: CSSSelectorLayer | undefined;
+	selectors: [CSSSelector] | undefined;
 
 }
 
