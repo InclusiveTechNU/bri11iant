@@ -3,7 +3,7 @@
 	"displayName": "Bri11iant",
 	"description": "A Scaffolding Tool for A11Y Web Development",
 	"version": "0.0.1",
-	"publisher": "Northwestern University Inclusive Technology Lab",
+	"publisher": "Northwestern University - Inclusive Technology Lab",
 	"license": "MIT",
 	"repository": "https://github.com/InclusiveTechNU/bri11iant",
 	"engines": {
@@ -21,7 +21,7 @@
 		"onLanguage:css",
 		"onLanguage:html"
 	],
-	"main": "./out/client/src/extension.js",
+	"main": "./client/out/extension",
 	"contributes": {
 		"configuration": {
 			"type": "object",
@@ -30,14 +30,8 @@
 				"bri11iant.maxNumberOfProblems": {
 					"scope": "resource",
 					"type": "number",
-					"default": 100,
+					"default": 500,
 					"description": "Controls the maximum number of problems produced by the server."
-				},
-				"bri11iant.semanticExclude": {
-					"scope": "resource",
-					"type": "boolean",
-					"default": false,
-					"description": "Controls if non-semantic HTML is going to produce problems by the server."
 				},
 				"bri11iant.trace.server": {
 					"scope": "window",
@@ -57,18 +51,15 @@
 		"codeActionProvider": "true"
 	},
 	"scripts": {
-		"compile": "tsc -p ./",
-		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -b",
+		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run compile",
 		"watch": "tsc -b -w"
 	},
 	"devDependencies": {
-		"@types/glob": "^7.1.1",
 		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.11.7",
-		"@types/vscode": "^1.41.0",
-		"path": "0.12.7",
-		"tslint": "5.20.1",
-		"typescript": "3.7.5"
-	},
-	"dependencies": {}
+		"@types/node": "^8.10.52",
+		"tslint": "^5.19.0",
+		"typescript": "^3.5.3"
+	}
 }

@@ -15,8 +15,7 @@ let client: LanguageClient;
 
 export function activate(context: ExtensionContext) {
 	// The server is implemented in node
-	// let serverModule = context.asAbsolutePath(path.join("server", "out", "server.js"));
-	let serverModule = context.asAbsolutePath(path.join("server", "server.js"));
+	let serverModule = context.asAbsolutePath(path.join("server", "out", "server.js"));
 	// The debug options for the server
 	// --inspect=6009: runs the server in Node"s Inspector mode so VS Code can attach to the server for debugging
 	let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
@@ -37,10 +36,7 @@ export function activate(context: ExtensionContext) {
 		// Register the server for HTML documents
 		documentSelector: [
 			{ language: "css", scheme: "file" },
-			{ language: "html", scheme: "file" }// ,
-			// { language: "javascriptreact", scheme: "file" },
-			// { language: "vue-html", scheme: "file" },
-			// { language: "vue", scheme: "file" }
+			{ language: "html", scheme: "file" }
 		],
 		synchronize: {
 			// Notify the server about file changes to ".clientrc files contained in the workspace

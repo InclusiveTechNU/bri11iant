@@ -105,3 +105,6 @@ dist
 
 # Typescript output
 out
+
+# VSCode workspace config
+.code-workspace

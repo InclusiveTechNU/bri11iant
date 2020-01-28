@@ -33,11 +33,7 @@ connection.onInitialize((params: InitializeParams) => {
 
 	return {
 		capabilities: {
-			textDocumentSync: documents.syncKind,
-			// Tell the client the server does not support code completion
-			completionProvider: {
-				resolveProvider: false
-			}
+			textDocumentSync: documents.syncKind
 		}
 	};
 });
@@ -49,7 +45,6 @@ connection.onInitialized(() => {
 	}
 	if (hasWorkspaceFolderCapability) {
 		connection.workspace.onDidChangeWorkspaceFolders(_event => {
-			connection.console.log("Workspace folder change event received.");
 			console.log(_event);
 		});
 	}
@@ -96,6 +91,10 @@ function getDocumentSettings(resource: string): Thenable<ServerSettings> {
 	}
 	return result;
 }
+
+documents.onDidOpen((e: { document: { uri: string; }; }) => {
+	console.log("Document opened");
+});
 
 // Handle closing documents
 documents.onDidClose((e: { document: { uri: string; }; }) => {
@@ -260,7 +259,6 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	let problems = 0;
 	let m: RegExpExecArray | null;
 	let diagnostics: Diagnostic[] = [];
-
 	connection.sendDiagnostics({
 		uri: textDocument.uri,
 		diagnostics
