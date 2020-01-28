@@ -18,10 +18,8 @@
 		"language-extension"
 	],
 	"activationEvents": [
-		"onLanguage:html",
-		"onLanguage:javascriptreact",
-		"onLanguage:vue-html",
-		"onLanguage:vue"
+		"onLanguage:css",
+		"onLanguage:html"
 	],
 	"main": "./client/out/extension",
 	"contributes": {
@@ -60,7 +58,7 @@
 	},
 	"scripts": {
 		"compile": "tsc -p ./",
-		"lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+		"lint": "eslint '*/**/*.ts' --quiet --fix",
 		"vscode:prepublish": "npm run compile",
 		"watch": "tsc -b -w"
 	},
