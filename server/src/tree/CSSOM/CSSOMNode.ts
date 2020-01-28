@@ -1,9 +1,9 @@
-import CSSSelector from "./CSSSelector";
+import CSSSelectorLayer from "./CSSSelectorLayer";
 import CSSStyle from "./CSSStyle";
 
 class CSSOMNode {
 
-    selectors: [CSSSelector];
+    selector: CSSSelectorLayer;
     styles: [CSSStyle];
 
 }

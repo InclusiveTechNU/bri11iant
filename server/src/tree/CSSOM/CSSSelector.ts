@@ -2,12 +2,12 @@ import CSSSelectorType from "./CSSSelectorType";
 
 class CSSSelector {
 
-	name: string;
+	name: string | undefined;
 	type: CSSSelectorType;
 
-	constructor(name: string, type: CSSSelectorType) {
-		this.name = name;
-		this.type = type;
+	constructor(type: CSSSelectorType, name: string | undefined) {
+        this.name = name;
+        this.type = type;
 	}
 
 }
