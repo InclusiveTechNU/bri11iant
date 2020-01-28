@@ -44,6 +44,12 @@ export const altNull = /alt=""/i;
 // Match non-empty head tag
 export const headNonEmpty = /<head(?:|.+?)>/i;
 
+// Match hidden input
+export const inputHidden = /type="hidden"/i;
+
+// Match language meta tag
+export const language = /lang=(?:.*?[a-z].*?)"/i;
+
 // Match maximum-scale meta info
 export const metaMaxScale = /maximum-scale=1/i;
 
@@ -58,13 +64,20 @@ export const pattern: RegExp = new RegExp([
 	"<div(>|)(?:.)+?>",
 	"<span(>|)(?:.)+?>",
 	// "id=\"(?:.)+?\"",
-	"<a (?:.)+?>(?:(?:\\s|\\S)+?(?=<\/a>))<\/a>",
+	"<a (?:.)+?>(?:(?:\\s|\\S)+?(?=</a>))</a>",
 	"<img (?:.)+?>",
 	"<input (?:.)+?>",
-	"<head (?:.|)+?>(?:(?:\\s|\\S|)+?(?=<\/head>))<\/head>",
+	"<head (?:.|)+?>(?:(?:\\s|\\S|)+?(?=</head>))</head>",
 	"<html(>|)(?:.)+?>",
 	"tabindex=\"(?:.)+?\"",
 	"<(?:i|)frame (?:.|)+?>"
-].join('|'), 'ig');
+].join("|"), "ig");
 
+// Match title start tag
 export const title = /<title>/i;
+
+// Match content inside title tags
+export const titleContent = />(?:|\s+?)</i;
+
+// Match full title expression
+export const titleFull = /<title>(?:|.*?[a-z].*?|\s+?)<\/title>/i;
