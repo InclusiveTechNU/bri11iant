@@ -7,10 +7,6 @@ class RenderNode {
     cssomNode: CSSOMNode;
     domNode: DOMNode;
 
-    constructor() {
-        
-    }
-
 }
 
 export default RenderNode;
