@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"lib": ["es6"],
+		"module": "commonjs",
+		"outDir": "out",
+		"rootDir": "src",
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"target": "es6"
+	},
+	"include": [
+		"src"
+	],
+	"exclude": [
+		".vscode-test"
+	],
+	"references": [
+		{ "path": "./client" },
+		{ "path": "./server" }
+	]
+}

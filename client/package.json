@@ -9,7 +9,9 @@
   "author": "Northwestern University Inclusive Technology Lab",
   "license": "MIT",
   "dependencies": {
-    "vscode": "1.1.36",
-    "vscode-languageclient": "6.0.0"
+    "vscode-languageclient": "^6.0.0"
+  },
+  "devDependencies": {
+    "vscode": "1.1.36"
   }
 }

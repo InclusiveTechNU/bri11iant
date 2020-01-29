@@ -2,10 +2,10 @@
   "name": "bri11iant-server",
   "version": "1.0.0",
   "description": "Language Server for Bri11iant",
-  "main": "src/server.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "engines": {
+    "node": "*"
   },
+  "scripts": {},
   "author": "Northwestern University Inclusive Technology Lab",
   "license": "MIT",
   "dependencies": {

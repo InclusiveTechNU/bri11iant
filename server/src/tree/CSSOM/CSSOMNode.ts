@@ -1,10 +1,10 @@
-import CSSSelector from "./CSSSelector";
-import CSSStyle from "./CSSStyle";
+import CSSSelectorLayer from "./CSSOMSelector/CSSOMSelectorLayer";
+import CSSStyle from "./CSSOMStyle";
 
 class CSSOMNode {
 
-    selectors: [CSSSelector];
-    styles: [CSSStyle];
+    selector: CSSSelectorLayer | undefined;
+    styles: [CSSStyle] | undefined;
 
 }
 

@@ -1,5 +1,6 @@
 enum CSSSelectorType {
 
+    All,
     Class,
     Element,
     Id,
