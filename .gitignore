@@ -103,8 +103,10 @@ dist
 # TernJS port file
 .tern-port
 
-# Typescript output
+# JS output
 out
+client/out
+server/out
 
 # VSCode workspace config
 .code-workspace
