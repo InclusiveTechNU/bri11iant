@@ -1,6 +1,6 @@
 # Contributing to Bri11iant
 
-Bri11iant is an *open-source* library created by researchers at the [Northwestern University Inclusive Technology Lab](https://inclusive.northwestern.edu) under NSF 1901456.
+Bri11iant is an open-source language extension created by researchers at the [Northwestern University Inclusive Technology Lab](https://inclusive.northwestern.edu) under NSF 1901456.
 
 Feel free to submit PRs to this repo or to our [standards repository](https://github.com/InclusiveTechNU/A11yGrammar)!
 
@@ -12,9 +12,10 @@ First, clone the repository:
 
 ```unix
 git clone https://github.com/InclusiveTechNU/Bri11iant.git
+cd Bri11iant
 ```
 
-Then, in the root directory, run these commands to install dependencies:
+Then, run these commands to install dependencies and compile the project:
 
 ```unix
 npm install
