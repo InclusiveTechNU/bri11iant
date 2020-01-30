@@ -31,4 +31,24 @@ When a webpage is rendered by your browser's rendering engine, the DOM and CSSOM
 1. Download the Bri11iant extension within the VSCode application.
 2. Install and enable the application
 
+### Local (VSCode)
+
+First, clone the repository:
+
+```unix
+git clone https://github.com/InclusiveTechNU/Bri11iant.git
+cd Bri11iant
+```
+
+Then, run these commands to install dependencies and compile the project:
+
+```unix
+npm install
+cd client && npm install && cd ..
+cd server && npm install && cd ..
+npm run compile
+```
+
+Open Visual Studio Code. Press ⌘ + Shift + B to build the project. Then, press F5 to run the project in debug mode. A new VSCode window should pop up with the language client and server running.
+
 This project is built and maintained by the [Northwestern University Inclusive Technology Lab](https://inclusive.northwestern.edu) and is funded by [NSF Grant 1901456](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1901456).
