@@ -53,12 +53,16 @@
 	"scripts": {
 		"compile": "tsc -b",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"test": "ts-mocha -p tsconfig.json",
 		"vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run compile",
 		"watch": "tsc -b -w"
 	},
 	"devDependencies": {
-		"@types/mocha": "^5.2.7",
+		"@types/expect": "24.3.0",
+		"@types/mocha": "5.2.7",
 		"@types/node": "^8.10.52",
+		"mocha": "7.0.1",
+		"ts-mocha": "6.0.0",
 		"tslint": "^5.19.0",
 		"typescript": "^3.5.3"
 	}
