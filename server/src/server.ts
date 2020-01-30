@@ -2,7 +2,8 @@
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab 
 * https://code.visualstudio.com/api/language-extensions/language-server-extension-guide */
 
-import * as patterns from "./patterns";
+import { globalPattern } from "./patterns";
+import * as validate from "./validate";
 
 import {
 	createConnection,
@@ -92,10 +93,6 @@ function getDocumentSettings(resource: string): Thenable<ServerSettings> {
 	return result;
 }
 
-documents.onDidOpen((e: { document: { uri: string; }; }) => {
-	console.log("Document opened");
-});
-
 // Handle closing documents
 documents.onDidClose((e: { document: { uri: string; }; }) => {
 	documentSettings.delete(e.document.uri);
@@ -109,8 +106,6 @@ documents.onDidChangeContent((change: { document: TextDocument; }) => {
 	validateTextDocument(change.document);
 });
 
-// Check for valid accessibility practices
-/*
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	let settings = await getDocumentSettings(textDocument.uri);
 	let text = textDocument.getText();
@@ -118,95 +113,78 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	let m: RegExpExecArray | null;
 	let diagnostics: Diagnostic[] = [];
 
-	while ((m = patterns.pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
+	while ((m = globalPattern.exec(text)) && problems < settings.maxNumberOfProblems) {
 		if (m !== null) {
 			let el = m[0].slice(0, 5);
-			connection.console.log(el);
 			switch (true) {
-			// ID
-			// case (/id="/i.test(el)):
-			// 	let resultId = await pattern.validateId(m);
-			// 	if (resultId) {
-			// 		problems++;
-			// 		_diagnostics(resultId.meta, resultId.mess);
-			// 	}
-			// 	break;
 			// Div
 			case (/<div/i.test(el)):
-				let resultDiv = await patterns.validateDiv(m);
+				let resultDiv = await validate.validateDiv(m);
 				if (resultDiv) {
 					problems++;
 					_diagnostics(resultDiv.meta, resultDiv.mess, resultDiv.severity);
 				}
 				break;
-				// Span
-			case (/<span/i.test(el)):
-				let resultSpan = await patterns.validateSpan(m);
-				if (resultSpan) {
-					problems++;
-					_diagnostics(resultSpan.meta, resultSpan.mess, resultSpan.severity);
-				}
-				break;
-				// Links
+			// A
 			case (/<a\s/i.test(el)):
-				let resultA = await patterns.validateA(m);
+				let resultA = await validate.validateA(m);
 				if (resultA) {
 					problems++;
 					_diagnostics(resultA.meta, resultA.mess, resultA.severity);
 				}
 				break;
-				// Images
+			// Images
 			case (/<img/i.test(el)):
-				let resultImg = await patterns.validateImg(m);
+				let resultImg = await validate.validateImg(m);
 				if (resultImg) {
 					problems++;
 					_diagnostics(resultImg.meta, resultImg.mess, resultImg.severity);
 				}
 				break;
-				// input
-			case (/<inpu/i.test(el)):
-				let resultInput = await patterns.validateInput(m);
+			// Input
+			case (/<input/i.test(el)):
+				let resultInput = await validate.validateInput(m);
 				if (resultInput) {
 					problems++;
 					_diagnostics(resultInput.meta, resultInput.mess, resultInput.severity);
 				}
 				break;
-				// Head, title and meta
+			// Head, title and meta
 			case (/<head/i.test(el)):
 				if (/<meta(?:.+?)viewport(?:.+?)>/i.test(m[0])) {
-					let resultMeta = await patterns.validateMeta(m);
+					let resultMeta = await validate.validateMeta(m);
 					if (resultMeta) {
 						problems++;
 						_diagnostics(resultMeta.meta, resultMeta.mess, resultMeta.severity);
 					}
 				}
 				if (!/<title>/i.test(m[0]) || /<title>/i.test(m[0])) {
-					let resultTitle = await patterns.validateTitle(m);
+					let resultTitle = await validate.validateTitle(m);
 					if (resultTitle) {
 						problems++;
 						_diagnostics(resultTitle.meta, resultTitle.mess, resultTitle.severity);
 					}
 				}
 				break;
-				// HTML
+			// HTML
 			case (/<html/i.test(el)):
-				let resultHtml = await patterns.validateHtml(m);
+				let resultHtml = await validate.validateHtml(m);
 				if (resultHtml) {
 					problems++;
 					_diagnostics(resultHtml.meta, resultHtml.mess, resultHtml.severity);
 				}
 				break;
-				// Tabindex
-			case (/tabin/i.test(el)):
-				let resultTab = await patterns.validateTab(m);
+			// Tabindex
+			case (/tabindex/i.test(el)):
+				let resultTab = await validate.validateTab(m);
 				if (resultTab) {
 					problems++;
 					_diagnostics(resultTab.meta, resultTab.mess, resultTab.severity);
 				}
 				break;
-				// iframe and frame
-			case (/(<fram|<ifra)/i.test(el)):
-				let resultFrame = await patterns.validateFrame(m);
+			// iframe and frame
+			case (/(<frame|<iframe)/i.test(el)):
+				let resultFrame = await validate.validateFrame(m);
 				if (resultFrame) {
 					problems++;
 					_diagnostics(resultFrame.meta, resultFrame.mess, resultFrame.severity);
@@ -218,24 +196,8 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		}
 	}
 
-	async function _diagnostics(regEx: RegExpExecArray, diagnosticsMessage: string, severityNumber: number) {
-		let severity: DiagnosticSeverity = DiagnosticSeverity.Hint;
-
-		switch (severityNumber) {
-		case 1:
-			severity = DiagnosticSeverity.Error;
-			break;
-		case 2:
-			severity = DiagnosticSeverity.Warning;
-			break;
-		case 3:
-			severity = DiagnosticSeverity.Information;
-			break;
-		case 4:
-			// Handled in initialization
-			break;
-		}
-
+	// Adds diagnostic to diagnostics list
+	async function _diagnostics(regEx: RegExpExecArray, diagnosticsMessage: string, severity: DiagnosticSeverity) {
 		let diagnostic: Diagnostic = {
 			severity,
 			message: diagnosticsMessage,
@@ -249,16 +211,8 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 		diagnostics.push(diagnostic);
 	}
-	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
-}
-*/
 
-async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-	let settings = await getDocumentSettings(textDocument.uri);
-	let text = textDocument.getText();
-	let problems = 0;
-	let m: RegExpExecArray | null;
-	let diagnostics: Diagnostic[] = [];
+
 	connection.sendDiagnostics({
 		uri: textDocument.uri,
 		diagnostics
