@@ -6,7 +6,7 @@ Bri11iant is an opinionated software - we have decided to enforce WCAG2 Level A 
 
 ## Table of Contents
 
-1. [Text Alternatives]()
+1. [Text Alternatives](###Text-Alternatives)
 2. 
 
 ### Text Alternatives
