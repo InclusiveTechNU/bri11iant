@@ -53,6 +53,7 @@
 	"scripts": {
 		"compile": "tsc -b",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"test": "",
 		"vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run compile",
 		"watch": "tsc -b -w"
 	},
