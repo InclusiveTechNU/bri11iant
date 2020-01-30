@@ -1,68 +1,64 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import { DiagnosticSeverity } from "vscode-languageserver";
+
 import {
+	a,
 	altExists,
 	altLong,
 	altNonDescriptive,
 	altNull,
+	ariaId,
+	ariaIdNonEmpty,
+	ariaLabel,
+	ariaLabelEmpty,
 	ariaRole,
 	altBadStart,
 	headNonEmpty,
+	inputHidden,
 	language,
 	metaMaxScale,
 	metaScalable,
 	metaViewport,
+	tag,
 	title,
 	titleContent,
 	titleFull,
-	inputHidden
+	tagNoWhitespace,
+	ariaLabelledBy,
+	ariaLabelledByEmpty,
+	tabIndexValid,
+	titleNonEmpty
 } from "./patterns";
 
-/*
 // Check that divs use WAI-ARIA roles
 export async function validateDiv(m: RegExpExecArray) {
 	if (!ariaRole.test(m[0])) {
 		return {
 			meta: m,
 			mess: "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]",
-			severity: 3
+			severity: DiagnosticSeverity.Information
 		};
-	}
-}
-
-export async function validateSpan(m: RegExpExecArray) {
-	if (ariaRole.test(m[0])) {
-		if (/<span(?:.+?)(?:button|btn)(?:.+?)>/.test(m[0])) {
-			return {
-				meta: m,
-				mess: "Change the span to a <button>",
-				severity: 3
-			};
-		} else {
-			return {
-				meta: m,
-				mess: "Provide a WAI-ARIA role [role=\"\"]",
-				severity: 2
-			};
-		}
 	}
 }
 
 export async function validateA(m: RegExpExecArray) {
-	let aRegEx: RegExpExecArray;
+	let aRegEx: RegExpExecArray | null;
 	let oldRegEx: RegExpExecArray = m;
 
 	// Matches any whitespace or non-whitespace in between brackets
-	let filteredString = m[0].replace(/<(?:\s|\S)+?>/ig, "");
-	if (!/(?:\S+?)/ig.test(filteredString)) {
-		aRegEx = /<a(?:.)+?>/i.exec(oldRegEx[0]);
-		aRegEx.index = oldRegEx.index;
-		return {
-			meta: aRegEx,
-			mess: "Provide a descriptive text in between the tags",
-			severity: 2
-		};
+	let filteredString = m[0].replace(tag, "");
+	if (!tagNoWhitespace.test(filteredString)) {
+		aRegEx = a.exec(oldRegEx[0]);
+		if (aRegEx) {
+			aRegEx.index = oldRegEx.index;
+			return {
+				meta: aRegEx,
+				mess: "Provide a descriptive text in between the tags",
+				severity: DiagnosticSeverity.Warning
+			};
+		}
 	}
 }
 
@@ -72,49 +68,49 @@ export async function validateImg(m: RegExpExecArray) {
 		return {
 			meta: m,
 			mess: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
-			severity: 1
+			severity: DiagnosticSeverity.Error
 		};
 	}
 	if (altNonDescriptive.test(m[0])) {
 		return {
 			meta: m,
 			mess: "Alt attribute must be specifically descriptive",
-			severity: 3
+			severity: DiagnosticSeverity.Information
 		};
 	}
 	if (altBadStart.test(m[0])) {
 		return {
 			meta: m,
 			mess: "Alt text should not begin with \"image of\" or similar phrasing",
-			severity: 3
+			severity: DiagnosticSeverity.Information
 		};
 	}
 	if ((altLong.test(m[0]))) {
 		return {
 			meta: m,
 			mess: "Alt text is too long - most screen readers cut off at 125 characters",
-			severity: 1
+			severity: DiagnosticSeverity.Error
 		};
 	}
 }
 
+// Check for the presence of meta tags
 export async function validateMeta(m: RegExpExecArray) {
-	let metaRegEx: RegExpExecArray;
-	let oldRegEx: RegExpExecArray = m;
-	if ((metaRegEx = metaViewport.exec(oldRegEx[0]))) {
-		metaRegEx.index = oldRegEx.index + metaRegEx.index;
+	const metaRegEx: RegExpExecArray | null = metaViewport.exec(m[0]);
+	if (metaRegEx) {
+		metaRegEx.index = m.index + metaRegEx.index;
 		if (!metaScalable.test(metaRegEx[0])) {
 			return {
 				meta: metaRegEx,
 				mess: "Enable pinching to zoom [user-scalable=yes]",
-				severity: 3
+				severity: DiagnosticSeverity.Information
 			};
 		}
 		if (metaMaxScale.test(metaRegEx[0])) {
 			return {
 				meta: metaRegEx,
 				mess: "Avoid using [maximum-scale=1]",
-				severity: 3
+				severity: DiagnosticSeverity.Information
 			};
 		}
 	}
@@ -122,25 +118,28 @@ export async function validateMeta(m: RegExpExecArray) {
 
 // Checks that title tag follows standards
 export async function validateTitle(m: RegExpExecArray) {
-	let titleRegEx: RegExpExecArray;
-	let oldRegEx: RegExpExecArray = m;
-	if (!title.test(oldRegEx[0])) {
-		titleRegEx = headNonEmpty.exec(oldRegEx[0]);
-		titleRegEx.index = oldRegEx.index;
-		return {
-			meta: titleRegEx,
-			mess: "Provide a title within the <head> tags",
-			severity: 1
-		};
-	} else {
-		titleRegEx = titleFull.exec(oldRegEx[0]);
-		if (titleContent.test(titleRegEx[0])) {
-			titleRegEx.index = oldRegEx.index + titleRegEx.index;
+	let titleRegEx: RegExpExecArray | null;
+	if (!title.test(m[0])) {
+		titleRegEx = headNonEmpty.exec(m[0]);
+		if (titleRegEx) {
+			titleRegEx.index = m.index;
 			return {
 				meta: titleRegEx,
-				mess: "Provide a text within the <title> tags",
-				severity: 1
+				mess: "Provide a title within the <head> tags",
+				severity: DiagnosticSeverity.Error
 			};
+		}
+	} else {
+		titleRegEx = titleFull.exec(m[0]);
+		if (titleRegEx) {
+			if (titleContent.test(titleRegEx[0])) {
+				titleRegEx.index = m.index + titleRegEx.index;
+				return {
+					meta: titleRegEx,
+					mess: "Provide a text within the <title> tags",
+					severity: DiagnosticSeverity.Error
+				};
+			}
 		}
 	}
 }
@@ -150,7 +149,7 @@ export async function validateHtml(m: RegExpExecArray) {
 		return {
 			meta: m,
 			mess: "Provide a language [lang=\"\"]",
-			severity: 2
+			severity: DiagnosticSeverity.Warning
 		};
 	}
 }
@@ -159,76 +158,71 @@ export async function validateInput(m: RegExpExecArray) {
 	switch (true) {
 	case (inputHidden.test(m[0])):
 		break;
-	case (/aria-label=/i.test(m[0])):
-		if (!/aria-label="(?:(?![a-z]*?)|\s|)"/i.test(m[0])){
-			break;
-		} else {
+	case (ariaLabel.test(m[0])):
+		if (ariaLabelEmpty.test(m[0])) {
 			return {
 				meta: m,
 				mess: "Provide a text within the aria label [aria-label=\"\"]",
-				severity: 3
+				severity: DiagnosticSeverity.Information
 			};
-		}
-	case (/id=/i.test(m[0])):
-		if (/id="(?:.*?[a-z].*?)"/i.test(m[0])){
-			let idValue = /id="(.*?[a-z].*?)"/i.exec(m[0])[1];
-			let pattern: RegExp = new RegExp("for=\"" + idValue + "\"", "i");
-			if (pattern.test(m.input)) {
-				break;
-			} else {
-				return {
-					meta: m,
-					mess: "Provide an aria label [aria-label=\"\"] or a <label for=\"\">",
-					severity: 2
-				};
+		} else { break; }
+	case (ariaId.test(m[0])):
+		if (ariaIdNonEmpty.test(m[0])) {
+			let idRegEx: RegExpExecArray | null = ariaIdNonEmpty.exec(m[0]);
+			if (idRegEx) {
+				const idValue = idRegEx[1];
+				let pattern: RegExp = new RegExp("for=\"" + idValue + "\"", "i");
+				if (!pattern.test(m.input)) {
+					return {
+						meta: m,
+						mess: "Provide an aria label [aria-label=\"\"] or a <label for=\"\">",
+						severity: DiagnosticSeverity.Warning
+					};
+				} else { break; }
 			}
 		} else {
 			return {
 				meta: m,
 				mess: "Provide an aria label [aria-label=\"\"]",
-				severity: 2
+				severity: DiagnosticSeverity.Warning
 			};
 		}
-	case (/aria-labelledby=/i.test(m[0])):
-		if (!/aria-labelledby="(?:(?![a-z]*?)|\s|)"/i.test(m[0])) {
-			// TODO: needs to check elements with the same value.
-			break;
-		} else {
+	case (ariaLabelledBy.test(m[0])):
+		if (ariaLabelledByEmpty.test(m[0])) {
 			return {
 				meta: m,
 				mess: "Provide an id within the aria labelledby [aria-labelledby=\"\"]",
-				severity: 1
+				severity: DiagnosticSeverity.Error
 			};
-		}
+		} else { break; }
 	case (/role=/i.test(m[0])):
-		// TODO: needs to check if <label> is surrounded.
 		break;
 	default:
 		return {
 			meta: m,
+
 			mess: "Provide an aria label [aria-label=\"\"]",
-			severity: 2
+			severity: DiagnosticSeverity.Warning
 		};
 	}
 }
 
 export async function validateTab(m: RegExpExecArray) {
-	if (!/tabindex="(?:0|-1)"/i.test(m[0])) {
+	if (!tabIndexValid.test(m[0])) {
 		return {
 			meta: m,
 			mess: "A tabindex greater than 0 interferes with the focus order. Try restructuring the HTML",
-			severity: 1
+			severity: DiagnosticSeverity.Error
 		};
 	}
 }
 
 export async function validateFrame(m: RegExpExecArray) {
-	if (!/title=(?:.*?[a-z].*?)"/i.test(m[0])) {
+	if (!titleNonEmpty.test(m[0])) {
 		return {
 			meta: m,
 			mess: "Provide a title that describes the frame's content [title=\"\"]",
-			severity: 3
+			severity: DiagnosticSeverity.Information
 		};
 	}
 }
-*/

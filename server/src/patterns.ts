@@ -1,6 +1,27 @@
 /*! patterns.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+// Match a tags
+export const a = /<a(?:.)+?>/i;
+
+// Match aria id
+export const ariaId = /id=/i;
+
+// Match empty aria id
+export const ariaIdNonEmpty = /id="(.*?[a-z].*?)"/i;
+
+// Match aria labels
+export const ariaLabel = /aria-label=/i;
+
+// Match empty aria labels
+export const ariaLabelEmpty = /aria-label="(?:(?![a-z]*?)|\s|)"/i;
+
+// Match aria-labelled-by
+export const ariaLabelledBy = /aria-labelledby=/i;
+
+// Match empty aria-labelled-by
+export const ariaLabelledByEmpty = /aria-labelledby="(?:(?![a-z]*?)|\s|)"/i;
+
 // Match the use of a WAI-ARIA role
 export const ariaRole = /role=(?:.*?[a-z].*?)"/i;
 
@@ -60,10 +81,9 @@ export const metaScalable = /user-scalable=yes/i;
 export const metaViewport = /<meta(?:.+?)viewport(?:.+?)>/i;
 
 // Match common html tags
-export const pattern: RegExp = new RegExp([
+export const globalPattern: RegExp = new RegExp([
 	"<div(>|)(?:.)+?>",
 	"<span(>|)(?:.)+?>",
-	// "id=\"(?:.)+?\"",
 	"<a (?:.)+?>(?:(?:\\s|\\S)+?(?=</a>))</a>",
 	"<img (?:.)+?>",
 	"<input (?:.)+?>",
@@ -73,6 +93,15 @@ export const pattern: RegExp = new RegExp([
 	"<(?:i|)frame (?:.|)+?>"
 ].join("|"), "ig");
 
+// Matches non-zero|-1 tabindex
+export const tabIndexValid = /tabindex="(?:0|-1)"/i;
+
+// Matches a tag
+export const tag = /<(?:\s|\S)+?>/ig;
+
+// Matches a tag without whitespace
+export const tagNoWhitespace = /(?:\S+?)/ig;
+
 // Match title start tag
 export const title = /<title>/i;
 
@@ -81,3 +110,5 @@ export const titleContent = />(?:|\s+?)</i;
 
 // Match full title expression
 export const titleFull = /<title>(?:|.*?[a-z].*?|\s+?)<\/title>/i;
+
+export const titleNonEmpty = /title="(?:.*?[a-z].*?)"/i;
