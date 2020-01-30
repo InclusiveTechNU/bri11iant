@@ -9,17 +9,26 @@ When a webpage is rendered by your browser's rendering engine, the DOM and CSSOM
 
 [List of Accessibility Standards Supported by Bri11iant](standards.md)
 
-### Text Editors:
+## Compatibility
+
+### Text Editors
 
 - [Visual Studio Code](https://code.visualstudio.com)
 - More on the way!
 
-### Languages:
+### Languages
 
 - HTML
 - CSS
 - [React.js](https://reactjs.org) (Coming Soon)
 - [React Native](https://facebook.github.io/react-native/) (Coming Soon)
 - [Vue.js](https://vuejs.org) (Coming Soon)
+
+## Run
+
+### Visual Studio Code
+
+1. Download the Bri11iant extension within the VSCode application.
+2. Install and enable the application
 
 This project is built and maintained by the [Northwestern University Inclusive Technology Lab](https://inclusive.northwestern.edu) and is funded by [NSF Grant 1901456](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1901456).
