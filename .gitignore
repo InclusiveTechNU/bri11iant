@@ -110,3 +110,6 @@ server/out
 
 # VSCode workspace config
 .code-workspace
+
+# Build output
+build
