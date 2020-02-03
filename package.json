@@ -18,7 +18,6 @@
 		"language-extension"
 	],
 	"activationEvents": [
-		"onLanguage:css",
 		"onLanguage:html"
 	],
 	"main": "./client/out/extension",
