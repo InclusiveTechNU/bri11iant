@@ -7,7 +7,7 @@ Bri11iant is a Language Extension for scaffolding accessible web development. Br
 
 Unlike other language extensions, Bri11iant reads the HTML files you are working on, loads in any CSS files specified in <link> tags, and runs any specified JS scripts using [JSDOM](https://github.com/jsdom/jsdom) in order to mock the render tree that would be created by a browser. This allows the language extension to provide more nuanced feedback that depends on parent-to-child element relationships and page layout.
 
-[List of Accessibility Standards Supported by Bri11iant](standards.md)
+[List of Accessibility Standards Supported by Bri11iant](https://github.com/InclusiveTechNU/A11yGrammar)
 
 ## Compatibility
 
