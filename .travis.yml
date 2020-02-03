@@ -1,4 +1,6 @@
 language: node_js
 os: osx
+before_install:
+  - npm install -g node-gyp
 notifications:
   slack: inclusive-tech:PNqRn3KSBfboII6OvVvOzl5w
