@@ -33,7 +33,7 @@ export function activate(context: ExtensionContext) {
 
 	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
-		// Register the server for HTML documents
+		// Register the server for HTML and CSS documents
 		documentSelector: [
 			{ language: "css", scheme: "file" },
 			{ language: "html", scheme: "file" }

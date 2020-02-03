@@ -106,12 +106,56 @@ documents.onDidChangeContent((change: { document: TextDocument; }) => {
 	validateTextDocument(change.document);
 });
 
-async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-	let settings = await getDocumentSettings(textDocument.uri);
-	let text = textDocument.getText();
+import { JSDOM } from "jsdom";
+
+async function validateHtmlDocument(htmlDocument: TextDocument): Promise<void> {
+	let settings = await getDocumentSettings(htmlDocument.uri);
+	let text = htmlDocument.getText();
+	const uri = htmlDocument.uri;
+
+	const tempDOM = new JSDOM(text);
+	let tempDoc = tempDOM.window.document;
+
+	// Replace css links with full paths
+	const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
+	for (let link of tempDoc.querySelectorAll("link")) {
+		link.setAttribute("href", uriPath + link.getAttribute("href"));
+	}
+
+	const DOM = new JSDOM(tempDOM.serialize(), {
+		includeNodeLocations: true,
+		resources: "usable"//,
+		// runScripts: "dangerously" // Run .js scripts
+	});
+
+	DOM.window.addEventListener('load', () => {
+		const document = DOM.window.document;
+		const h1 = document.querySelector('h1');
+		if (h1) {
+			const color = DOM.window.getComputedStyle(h1, null).getPropertyValue('color');
+			console.log(color);
+		}
+	});
+	
 	let problems = 0;
 	let m: RegExpExecArray | null;
 	let diagnostics: Diagnostic[] = [];
+
+	// Adds diagnostic to diagnostics list
+	async function _diagnostics(regEx: RegExpExecArray, diagnosticsMessage: string, severity: DiagnosticSeverity) {
+		let diagnostic: Diagnostic = {
+			severity,
+			message: diagnosticsMessage,
+			range: {
+				start: htmlDocument.positionAt(regEx.index),
+				end: htmlDocument.positionAt(regEx.index + regEx[0].length),
+			},
+			code: 0,
+			source: "bri11iant"
+		};
+
+		diagnostics.push(diagnostic);
+	}
 
 	while ((m = globalPattern.exec(text)) && problems < settings.maxNumberOfProblems) {
 		if (m !== null) {
@@ -196,27 +240,25 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		}
 	}
 
-	// Adds diagnostic to diagnostics list
-	async function _diagnostics(regEx: RegExpExecArray, diagnosticsMessage: string, severity: DiagnosticSeverity) {
-		let diagnostic: Diagnostic = {
-			severity,
-			message: diagnosticsMessage,
-			range: {
-				start: textDocument.positionAt(regEx.index),
-				end: textDocument.positionAt(regEx.index + regEx[0].length),
-			},
-			code: 0,
-			source: "bri11iant"
-		};
-
-		diagnostics.push(diagnostic);
-	}
-
-
 	connection.sendDiagnostics({
-		uri: textDocument.uri,
+		uri: htmlDocument.uri,
 		diagnostics
 	});
+
+}
+
+async function validateCssDocument(cssDocument: TextDocument): Promise<void> {
+	
+}
+
+async function validateTextDocument(textDocument: TextDocument) {
+	let uri = textDocument.uri;	
+
+	if (/.html/i.test(uri)) {
+		validateHtmlDocument(textDocument);
+	} else {
+		validateCssDocument(textDocument);
+	}
 }
 
 documents.listen(connection);

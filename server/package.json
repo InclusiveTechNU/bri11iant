@@ -9,6 +9,8 @@
   "author": "Northwestern University Inclusive Technology Lab",
   "license": "MIT",
   "dependencies": {
+    "@types/jsdom": "12.2.4",
+    "jsdom": "16.1.0",
     "vscode-languageserver": "5.2.1"
   }
 }
