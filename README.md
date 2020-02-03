@@ -3,6 +3,8 @@
 [![Northwestern HCI](https://img.shields.io/badge/NU-HCI-blueviolet)](https://hci.northwestern.edu/)
 [![NSF Grant 1901456](https://img.shields.io/badge/NSF-1901456-informational)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1901456)
 
+**Made in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/)**
+
 Bri11iant is a Language Extension for scaffolding accessible web development. Bri11iant fits right into your text editor, suggesting improvements to your HTML and CSS code in order to improve the accessibility of your websites.
 
 Unlike other language extensions, Bri11iant reads the HTML files you are working on, loads in any CSS files specified in <link> tags, and runs any specified JS scripts using [JSDOM](https://github.com/jsdom/jsdom) in order to mock the render tree that would be created by a browser. This allows the language extension to provide more nuanced feedback that depends on parent-to-child element relationships and page layout.
