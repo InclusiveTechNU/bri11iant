@@ -1,8 +1,9 @@
 /*! server.ts
-* Copyright (c) 2020 Northwestern University Inclusive Technology Lab 
-* https://code.visualstudio.com/api/language-extensions/language-server-extension-guide */
+* Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import { createDOM } from "./DOM";
 import { globalPattern } from "./patterns";
+import { JSDOM } from "jsdom";
 import * as validate from "./validate";
 
 import {
@@ -16,17 +17,12 @@ import {
 	TextDocuments
 } from "vscode-languageserver";
 
-// MARK : Initialize connection to server
-
-// Create a connection for the server
 let connection = createConnection(ProposedFeatures.all);
-
-// Create a text document manager
 let documents: TextDocuments = new TextDocuments();
-
 let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
 
+// Called when the server is connected to
 connection.onInitialize((params: InitializeParams) => {
 	let capabilities = params.capabilities;
 	hasConfigurationCapability = !!(capabilities.workspace && !!capabilities.workspace.configuration);
@@ -106,36 +102,9 @@ documents.onDidChangeContent((change: { document: TextDocument; }) => {
 	validateTextDocument(change.document);
 });
 
-import { JSDOM } from "jsdom";
-
 async function validateHtmlDocument(htmlDocument: TextDocument): Promise<void> {
 	let settings = await getDocumentSettings(htmlDocument.uri);
 	let text = htmlDocument.getText();
-	const uri = htmlDocument.uri;
-
-	const tempDOM = new JSDOM(text);
-	let tempDoc = tempDOM.window.document;
-
-	// Replace css links with full paths
-	const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
-	for (let link of tempDoc.querySelectorAll("link")) {
-		link.setAttribute("href", uriPath + link.getAttribute("href"));
-	}
-
-	const DOM = new JSDOM(tempDOM.serialize(), {
-		includeNodeLocations: true,
-		resources: "usable"//,
-		// runScripts: "dangerously" // Run .js scripts
-	});
-
-	DOM.window.addEventListener('load', () => {
-		const document = DOM.window.document;
-		const h1 = document.querySelector('h1');
-		if (h1) {
-			const color = DOM.window.getComputedStyle(h1, null).getPropertyValue('color');
-			console.log(color);
-		}
-	});
 	
 	let problems = 0;
 	let m: RegExpExecArray | null;
@@ -156,6 +125,14 @@ async function validateHtmlDocument(htmlDocument: TextDocument): Promise<void> {
 
 		diagnostics.push(diagnostic);
 	}
+
+	const DOM = await createDOM(text, htmlDocument.uri);
+	/* const document = DOM.window.document;
+	const h1 = document.querySelector('h1');
+	if (h1) {
+		const color = DOM.window.getComputedStyle(h1, null).getPropertyValue('color');
+		console.log(color);
+	} */
 
 	while ((m = globalPattern.exec(text)) && problems < settings.maxNumberOfProblems) {
 		if (m !== null) {
