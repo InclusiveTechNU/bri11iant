@@ -1,7 +1,7 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
-import { contrast } from "./util/contrast";
+import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
 
@@ -32,7 +32,7 @@ import {
 	ariaLabelledByEmpty,
 	tabIndexValid,
 	titleNonEmpty
-} from "./util/patterns";
+} from "./patterns";
 
 // Checks for sufficient color contrast between elements
 export function validateContrast(e: Element, DOM: JSDOM) {
