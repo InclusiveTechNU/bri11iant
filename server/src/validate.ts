@@ -1,7 +1,9 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import { contrast } from "./util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
+import { JSDOM } from "jsdom";
 
 import {
 	a,
@@ -30,7 +32,56 @@ import {
 	ariaLabelledByEmpty,
 	tabIndexValid,
 	titleNonEmpty
-} from "./patterns";
+} from "./util/patterns";
+
+// Checks that img tags use valid alt attributes
+export function validateImg(e: HTMLImageElement) {
+	if (e.hasAttributes()) {
+		const alt = e.attributes.getNamedItem("alt");
+		if (alt) {
+			if (altNonDescriptive.test(alt.value)) {
+				return {
+					message: "Alt attribute must be specifically descriptive",
+					severity: DiagnosticSeverity.Information
+				};
+			} else if (altBadStart.test(alt.value)) {
+				return {
+					message: "Alt text should not begin with \"image of\" or similar phrasing",
+					severity: DiagnosticSeverity.Information
+				};
+			} else if (altLong.test(alt.value)) {
+				return {
+					message: "Alt text is too long - most screen readers cut off at 125 characters",
+					severity: DiagnosticSeverity.Information
+				};
+			}
+		} else {
+			return {
+				message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
+				severity: DiagnosticSeverity.Error
+			};
+		}
+	}
+}
+
+// Checks for sufficient color contrast between elements
+export function validateContrast(e: Element, DOM: JSDOM) {
+	const style = DOM.window.getComputedStyle(e);
+	const backgroundColor = style.getPropertyValue("background-color");
+	const color = style.getPropertyValue("color");
+	if (color && backgroundColor) {
+		// TODO: Handle large-scale text
+		const c = contrast(color, backgroundColor);
+		if (c < 4.5) {
+			return {
+				message: `Color contrast between content and its background must be 4.5 or above (is ${c.toFixed(2)})`,
+				severity: DiagnosticSeverity.Error
+			};
+		}
+	}
+}
+
+/*
 
 // Check that divs use WAI-ARIA roles
 export async function validateDiv(m: RegExpExecArray) {
@@ -59,38 +110,6 @@ export async function validateA(m: RegExpExecArray) {
 				severity: DiagnosticSeverity.Warning
 			};
 		}
-	}
-}
-
-// Checkes that img tags meet standards
-export async function validateImg(m: RegExpExecArray) {
-	if ((!altExists.test(m[0])) && (!altNull.test(m[0]))) {
-		return {
-			meta: m,
-			mess: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
-			severity: DiagnosticSeverity.Error
-		};
-	}
-	if (altNonDescriptive.test(m[0])) {
-		return {
-			meta: m,
-			mess: "Alt attribute must be specifically descriptive",
-			severity: DiagnosticSeverity.Information
-		};
-	}
-	if (altBadStart.test(m[0])) {
-		return {
-			meta: m,
-			mess: "Alt text should not begin with \"image of\" or similar phrasing",
-			severity: DiagnosticSeverity.Information
-		};
-	}
-	if ((altLong.test(m[0]))) {
-		return {
-			meta: m,
-			mess: "Alt text is too long - most screen readers cut off at 125 characters",
-			severity: DiagnosticSeverity.Error
-		};
 	}
 }
 
@@ -225,4 +244,4 @@ export async function validateFrame(m: RegExpExecArray) {
 			severity: DiagnosticSeverity.Information
 		};
 	}
-}
+} */

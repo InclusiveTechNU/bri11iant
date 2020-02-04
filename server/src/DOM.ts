@@ -1,19 +1,21 @@
+/*! DOM.ts
+* Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
+
 import { JSDOM } from "jsdom";
 
 export function createDOM(text: string, uri: string): Promise<JSDOM> {
     const tempDOM = new JSDOM(text);
 	let tempDoc = tempDOM.window.document;
 
-	// Replace css links with full paths
+    // Replace css links with full paths
 	const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
-	for (let link of tempDoc.querySelectorAll("link")) {
-		link.setAttribute("href", uriPath + link.getAttribute("href"));
+	for (const link of tempDoc.querySelectorAll("link")) {
+        const attribute = link.getAttribute("href");
+        link.setAttribute("href", uriPath + attribute);
 	}
 
 	const DOM = new JSDOM(tempDOM.serialize(), {
-		includeNodeLocations: true,
-		resources: "usable"//,
-		// runScripts: "dangerously" // TODO: Run .js scripts
+		resources: "usable"
     });
     
     return new Promise(resolve => {
@@ -24,7 +26,7 @@ export function createDOM(text: string, uri: string): Promise<JSDOM> {
             /* const document = DOM.window.document;
             const h1 = document.querySelector('h1');
             if (h1) {
-                const color = DOM.window.getComputedStyle(h1, null).getPropertyValue('color');
+                const color = DOM.window.getComputedStyle(h1, null)?.getPropertyValue('color');
                 console.log(color);
             } */
         });

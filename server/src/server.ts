@@ -2,8 +2,6 @@
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
 import { createDOM } from "./DOM";
-import { globalPattern } from "./patterns";
-import { JSDOM } from "jsdom";
 import * as validate from "./validate";
 
 import {
@@ -104,138 +102,56 @@ documents.onDidChangeContent((change: { document: TextDocument; }) => {
 
 async function validateHtmlDocument(htmlDocument: TextDocument): Promise<void> {
 	let settings = await getDocumentSettings(htmlDocument.uri);
-	let text = htmlDocument.getText();
-	
+	let text: string = htmlDocument.getText();
 	let problems = 0;
-	let m: RegExpExecArray | null;
 	let diagnostics: Diagnostic[] = [];
 
-	// Adds diagnostic to diagnostics list
-	async function _diagnostics(regEx: RegExpExecArray, diagnosticsMessage: string, severity: DiagnosticSeverity) {
-		let diagnostic: Diagnostic = {
-			severity,
-			message: diagnosticsMessage,
-			range: {
-				start: htmlDocument.positionAt(regEx.index),
-				end: htmlDocument.positionAt(regEx.index + regEx[0].length),
-			},
-			code: 0,
-			source: "bri11iant"
-		};
-
-		diagnostics.push(diagnostic);
-	}
-
-	const DOM = await createDOM(text, htmlDocument.uri);
-	/* const document = DOM.window.document;
-	const h1 = document.querySelector('h1');
-	if (h1) {
-		const color = DOM.window.getComputedStyle(h1, null).getPropertyValue('color');
-		console.log(color);
-	} */
-
-	while ((m = globalPattern.exec(text)) && problems < settings.maxNumberOfProblems) {
-		if (m !== null) {
-			let el = m[0].slice(0, 5);
-			switch (true) {
-			// Div
-			case (/<div/i.test(el)):
-				let resultDiv = await validate.validateDiv(m);
-				if (resultDiv) {
-					problems++;
-					_diagnostics(resultDiv.meta, resultDiv.mess, resultDiv.severity);
-				}
-				break;
-			// A
-			case (/<a\s/i.test(el)):
-				let resultA = await validate.validateA(m);
-				if (resultA) {
-					problems++;
-					_diagnostics(resultA.meta, resultA.mess, resultA.severity);
-				}
-				break;
-			// Images
-			case (/<img/i.test(el)):
-				let resultImg = await validate.validateImg(m);
-				if (resultImg) {
-					problems++;
-					_diagnostics(resultImg.meta, resultImg.mess, resultImg.severity);
-				}
-				break;
-			// Input
-			case (/<input/i.test(el)):
-				let resultInput = await validate.validateInput(m);
-				if (resultInput) {
-					problems++;
-					_diagnostics(resultInput.meta, resultInput.mess, resultInput.severity);
-				}
-				break;
-			// Head, title and meta
-			case (/<head/i.test(el)):
-				if (/<meta(?:.+?)viewport(?:.+?)>/i.test(m[0])) {
-					let resultMeta = await validate.validateMeta(m);
-					if (resultMeta) {
-						problems++;
-						_diagnostics(resultMeta.meta, resultMeta.mess, resultMeta.severity);
-					}
-				}
-				if (!/<title>/i.test(m[0]) || /<title>/i.test(m[0])) {
-					let resultTitle = await validate.validateTitle(m);
-					if (resultTitle) {
-						problems++;
-						_diagnostics(resultTitle.meta, resultTitle.mess, resultTitle.severity);
-					}
-				}
-				break;
-			// HTML
-			case (/<html/i.test(el)):
-				let resultHtml = await validate.validateHtml(m);
-				if (resultHtml) {
-					problems++;
-					_diagnostics(resultHtml.meta, resultHtml.mess, resultHtml.severity);
-				}
-				break;
-			// Tabindex
-			case (/tabindex/i.test(el)):
-				let resultTab = await validate.validateTab(m);
-				if (resultTab) {
-					problems++;
-					_diagnostics(resultTab.meta, resultTab.mess, resultTab.severity);
-				}
-				break;
-			// iframe and frame
-			case (/(<frame|<iframe)/i.test(el)):
-				let resultFrame = await validate.validateFrame(m);
-				if (resultFrame) {
-					problems++;
-					_diagnostics(resultFrame.meta, resultFrame.mess, resultFrame.severity);
-				}
-				break;
-			default:
-				break;
-			}
+	function _diagnostics({ element, diagnosticsMessage, severity }: { element: Element; diagnosticsMessage: string; severity: DiagnosticSeverity; }) {
+		if (problems < settings.maxNumberOfProblems) {
+			const startPosition = text.indexOf(element.outerHTML);
+			const diagnostic: Diagnostic = {
+				severity,
+				message: diagnosticsMessage,
+				range: {
+					start: htmlDocument.positionAt(startPosition),
+					end: htmlDocument.positionAt(startPosition + element.outerHTML.length)
+				},
+				code: 0,
+				source: "bri11iant"
+			};
+			diagnostics.push(diagnostic);
+			
+			problems++;
+			connection.sendDiagnostics({
+				uri: htmlDocument.uri,
+				diagnostics
+			});
 		}
 	}
 
-	connection.sendDiagnostics({
-		uri: htmlDocument.uri,
-		diagnostics
+	const DOM = await createDOM(text, htmlDocument.uri);
+	const document = DOM.window.document;
+
+	// Perform non-element-specific checks
+	document.querySelectorAll("body *").forEach(e => {
+		const result = validate.validateContrast(e, DOM);
+		if (result) {
+			_diagnostics({ element: e, diagnosticsMessage: result.message, severity: result.severity });
+		}
 	});
 
-}
-
-async function validateCssDocument(cssDocument: TextDocument): Promise<void> {
-	
+	// Validate <img> tags
+	document.querySelectorAll("img").forEach(async e => {
+		const result = validate.validateImg(e);
+		if (result) {
+			_diagnostics({ element: e, diagnosticsMessage: result.message, severity: result.severity });
+		}
+	});
 }
 
 async function validateTextDocument(textDocument: TextDocument) {
-	let uri = textDocument.uri;	
-
-	if (/.html/i.test(uri)) {
-		validateHtmlDocument(textDocument);
-	} else {
-		validateCssDocument(textDocument);
-	}
+	validateHtmlDocument(textDocument);
+	// TODO: Add more document types later
 }
 
 documents.listen(connection);

@@ -35,7 +35,6 @@ export function activate(context: ExtensionContext) {
 	let clientOptions: LanguageClientOptions = {
 		// Register the server for HTML and CSS documents
 		documentSelector: [
-			{ language: "css", scheme: "file" },
 			{ language: "html", scheme: "file" }
 		],
 		synchronize: {
