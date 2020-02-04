@@ -11,7 +11,9 @@ export function createDOM(text: string, uri: string): Promise<JSDOM> {
 	const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
 	for (const link of tempDoc.querySelectorAll("link")) {
         const attribute = link.getAttribute("href");
-        link.setAttribute("href", uriPath + attribute);
+        if (attribute && attribute.charAt(0) !== "/") {
+            link.setAttribute("href", uriPath + attribute);
+        }
 	}
 
 	const DOM = new JSDOM(tempDOM.serialize(), {
