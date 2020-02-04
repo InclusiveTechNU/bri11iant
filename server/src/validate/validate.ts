@@ -32,7 +32,7 @@ import {
 	ariaLabelledByEmpty,
 	tabIndexValid,
 	titleNonEmpty
-} from "./patterns";
+} from "../util/patterns";
 
 // Checks for sufficient color contrast between elements
 export function validateContrast(e: Element, DOM: JSDOM) {
