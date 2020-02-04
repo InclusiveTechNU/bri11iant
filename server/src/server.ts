@@ -106,7 +106,7 @@ async function validateHtmlDocument(htmlDocument: TextDocument): Promise<void> {
 	let problems = 0;
 	let diagnostics: Diagnostic[] = [];
 
-	async function _diagnostics(element: HTMLElement, diagnosticsMessage: string, severity: DiagnosticSeverity) {
+	function _diagnostics({ element, diagnosticsMessage, severity }: { element: Element; diagnosticsMessage: string; severity: DiagnosticSeverity; }) {
 		if (problems < settings.maxNumberOfProblems) {
 			const startPosition = text.indexOf(element.outerHTML);
 			const diagnostic: Diagnostic = {
@@ -132,11 +132,19 @@ async function validateHtmlDocument(htmlDocument: TextDocument): Promise<void> {
 	const DOM = await createDOM(text, htmlDocument.uri);
 	const document = DOM.window.document;
 
+	// Perform non-element-specific checks
+	document.querySelectorAll("body *").forEach(e => {
+		const result = validate.validateContrast(e, DOM);
+		if (result) {
+			_diagnostics({ element: e, diagnosticsMessage: result.message, severity: result.severity });
+		}
+	});
+
 	// Validate <img> tags
 	document.querySelectorAll("img").forEach(async e => {
-		const result = await validate.validateImg(e);
+		const result = validate.validateImg(e);
 		if (result) {
-			_diagnostics(e, result.message, result.severity);
+			_diagnostics({ element: e, diagnosticsMessage: result.message, severity: result.severity });
 		}
 	});
 }

@@ -1,7 +1,9 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import { contrast } from "./util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
+import { JSDOM } from "jsdom";
 
 import {
 	a,
@@ -32,7 +34,8 @@ import {
 	titleNonEmpty
 } from "./util/patterns";
 
-export async function validateImg(e: HTMLImageElement) {
+// Checks that img tags use valid alt attributes
+export function validateImg(e: HTMLImageElement) {
 	if (e.hasAttributes()) {
 		const alt = e.attributes.getNamedItem("alt");
 		if (alt) {
@@ -61,7 +64,24 @@ export async function validateImg(e: HTMLImageElement) {
 	}
 }
 
-/* // Checkes that img tags meet standards
+// Checks for sufficient color contrast between elements
+export function validateContrast(e: Element, DOM: JSDOM) {
+	const style = DOM.window.getComputedStyle(e);
+	const backgroundColor = style.getPropertyValue("background-color");
+	const color = style.getPropertyValue("color");
+	if (color && backgroundColor) {
+		// TODO: Handle large-scale text
+		const c = contrast(color, backgroundColor);
+		if (c < 4.5) {
+			return {
+				message: `Color contrast between content and its background must be 4.5 or above (is ${c.toFixed(2)})`,
+				severity: DiagnosticSeverity.Error
+			};
+		}
+	}
+}
+
+/*
 
 // Check that divs use WAI-ARIA roles
 export async function validateDiv(m: RegExpExecArray) {
