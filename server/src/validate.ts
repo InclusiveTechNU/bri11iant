@@ -53,46 +53,44 @@ export function validateContrast(e: Element, DOM: JSDOM) {
 
 // Checks that img tags use valid alt attributes
 export function validateImg(e: HTMLImageElement) {
-	if (e.hasAttributes()) {
-		const alt = e.attributes.getNamedItem("alt");
-		if (alt) {
-			if (altNonDescriptive.test(alt.value)) {
-				return {
-					message: "Alt attribute must be specifically descriptive",
-					severity: DiagnosticSeverity.Information
-				};
-			} else if (altBadStart.test(alt.value)) {
-				return {
-					message: "Alt text should not begin with \"image of\" or similar phrasing",
-					severity: DiagnosticSeverity.Information
-				};
-			} else if (altLong.test(alt.value)) {
-				return {
-					message: "Alt text is too long - most screen readers cut off at 125 characters",
-					severity: DiagnosticSeverity.Information
-				};
-			}
-		} else {
+	const alt = e.attributes.getNamedItem("alt");
+	if (alt) {
+		if (altNonDescriptive.test(alt.value)) {
 			return {
-				message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
-				severity: DiagnosticSeverity.Error
+				message: "Alt attribute must be specifically descriptive",
+				severity: DiagnosticSeverity.Information
 			};
+		} else if (altBadStart.test(alt.value)) {
+			return {
+				message: "Alt text should not begin with \"image of\" or similar phrasing",
+				severity: DiagnosticSeverity.Information
+			};
+		} else if (altLong.test(alt.value)) {
+			return {
+				message: "Alt text is too long - most screen readers cut off at 125 characters",
+				severity: DiagnosticSeverity.Information
+			};
+		}
+	} else {
+		return {
+			message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
+			severity: DiagnosticSeverity.Error
+		};
+	}
+}
+
+// Check that divs use WAI-ARIA roles
+export function validateDiv(e: HTMLDivElement) {
+	const role = e.attributes.getNamedItem("role");
+	if (!role) {
+		return {
+			message: "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]",
+			severity: DiagnosticSeverity.Information
 		}
 	}
 }
 
 /*
-// Check that divs use WAI-ARIA roles
-export async function validateDiv(m: RegExpExecArray) {
-	if (!ariaRole.test(m[0])) {
-		return {
-			meta: m,
-			mess: "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]",
-			severity: DiagnosticSeverity.Information
-		};
-	}
-}
-
 export async function validateA(m: RegExpExecArray) {
 	let aRegEx: RegExpExecArray | null;
 	let oldRegEx: RegExpExecArray = m;

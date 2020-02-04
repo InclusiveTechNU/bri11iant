@@ -106,15 +106,16 @@ async function validateHtmlDocument(htmlDocument: TextDocument): Promise<void> {
 	let problems = 0;
 	let diagnostics: Diagnostic[] = [];
 
-	function _diagnostics({ element, diagnosticsMessage, severity }: { element: Element; diagnosticsMessage: string; severity: DiagnosticSeverity; }) {
-		if (problems < settings.maxNumberOfProblems) {
-			const startPosition = text.indexOf(element.outerHTML);
+	function _diagnostics(e: Element, result: { severity: any; message: any; } | undefined) {
+		if (result && problems < settings.maxNumberOfProblems) {
+			const startPosition = text.indexOf(e.outerHTML);
+			const severity = result.severity;
 			const diagnostic: Diagnostic = {
 				severity,
-				message: diagnosticsMessage,
+				message: result.message,
 				range: {
 					start: htmlDocument.positionAt(startPosition),
-					end: htmlDocument.positionAt(startPosition + element.outerHTML.length)
+					end: htmlDocument.positionAt(startPosition + e.outerHTML.length)
 				},
 				code: 0,
 				source: "bri11iant"
@@ -135,17 +136,20 @@ async function validateHtmlDocument(htmlDocument: TextDocument): Promise<void> {
 	// Perform non-element-specific checks
 	document.querySelectorAll("body *").forEach(e => {
 		const result = validate.validateContrast(e, DOM);
-		if (result) {
-			_diagnostics({ element: e, diagnosticsMessage: result.message, severity: result.severity });
-		}
+		_diagnostics(e, result);
 	});
 
 	// Validate <img> tags
-	document.querySelectorAll("img").forEach(async e => {
+	document.querySelectorAll("img").forEach(e => {
 		const result = validate.validateImg(e);
-		if (result) {
-			_diagnostics({ element: e, diagnosticsMessage: result.message, severity: result.severity });
-		}
+		_diagnostics(e, result);
+
+	});
+
+	// Validate <div> tags
+	document.querySelectorAll("div").forEach(e => {
+		const result = validate.validateDiv(e);
+		_diagnostics(e, result);
 	});
 }
 
