@@ -30,7 +30,7 @@ import {
 	ariaLabelledByEmpty,
 	tabIndexValid,
 	titleNonEmpty
-} from "./patterns";
+} from "./util/patterns";
 
 export async function validateImg(e: HTMLImageElement) {
 	if (e.hasAttributes()) {

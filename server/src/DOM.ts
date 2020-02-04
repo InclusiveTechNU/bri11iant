@@ -1,3 +1,6 @@
+/*! DOM.ts
+* Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
+
 import { JSDOM } from "jsdom";
 
 export function createDOM(text: string, uri: string): Promise<JSDOM> {
