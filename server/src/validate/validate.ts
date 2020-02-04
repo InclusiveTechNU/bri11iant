@@ -4,34 +4,10 @@
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
-
 import {
-	a,
-	altExists,
 	altLong,
 	altNonDescriptive,
-	altNull,
-	ariaId,
-	ariaIdNonEmpty,
-	ariaLabel,
-	ariaLabelEmpty,
-	ariaRole,
 	altBadStart,
-	headNonEmpty,
-	inputHidden,
-	language,
-	metaMaxScale,
-	metaScalable,
-	metaViewport,
-	tag,
-	title,
-	titleContent,
-	titleFull,
-	tagNoWhitespace,
-	ariaLabelledBy,
-	ariaLabelledByEmpty,
-	tabIndexValid,
-	titleNonEmpty
 } from "../util/patterns";
 
 // Checks for sufficient color contrast between elements
@@ -90,26 +66,43 @@ export function validateDiv(e: HTMLDivElement) {
 	}
 }
 
-/*
-export async function validateA(m: RegExpExecArray) {
-	let aRegEx: RegExpExecArray | null;
-	let oldRegEx: RegExpExecArray = m;
+// Check that anchor elements have descriptive text
+export function validateA(e: HTMLAnchorElement) {
+	if (!e.childElementCount) {
+		return {
+			message: "Provide descriptive text in between anchor tags",
+			severity: DiagnosticSeverity.Warning
+		};
+	}
 
-	// Matches any whitespace or non-whitespace in between brackets
-	let filteredString = m[0].replace(tag, "");
-	if (!tagNoWhitespace.test(filteredString)) {
-		aRegEx = a.exec(oldRegEx[0]);
-		if (aRegEx) {
-			aRegEx.index = oldRegEx.index;
-			return {
-				meta: aRegEx,
-				mess: "Provide a descriptive text in between the tags",
-				severity: DiagnosticSeverity.Warning
-			};
+	/* // This is an example of how difficult it used to be to write rules
+	export async function validateA(m: RegExpExecArray) {
+		let aRegEx: RegExpExecArray | null;
+		let oldRegEx: RegExpExecArray = m;
+
+		// Matches any whitespace or non-whitespace in between brackets
+		let filteredString = m[0].replace(tag, "");
+		if (!tagNoWhitespace.test(filteredString)) {
+			aRegEx = a.exec(oldRegEx[0]);
+			if (aRegEx) {
+				aRegEx.index = oldRegEx.index;
+				return {
+					meta: aRegEx,
+					mess: "Provide a descriptive text in between the tags",
+					severity: DiagnosticSeverity.Warning
+				};
+			}
 		}
 	}
+	*/
 }
 
+
+
+
+
+
+/*
 // Check for the presence of meta tags
 export async function validateMeta(m: RegExpExecArray) {
 	const metaRegEx: RegExpExecArray | null = metaViewport.exec(m[0]);

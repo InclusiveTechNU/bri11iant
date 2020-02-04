@@ -50,12 +50,16 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	document.querySelectorAll("img").forEach(e => {
 		const result = validate.validateImg(e);
 		_diagnostics(e, result);
-
 	});
 
 	// Validate <div> tags
 	document.querySelectorAll("div").forEach(e => {
 		const result = validate.validateDiv(e);
+		_diagnostics(e, result);
+	});
+
+	document.querySelectorAll("a").forEach(e => {
+		const result = validate.validateA(e);
 		_diagnostics(e, result);
 	});
 }
