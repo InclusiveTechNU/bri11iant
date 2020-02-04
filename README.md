@@ -46,8 +46,7 @@ Then, run these commands to install dependencies and compile the project:
 
 ```unix
 npm install
-cd client && npm install && cd ..
-cd server && npm install && cd ..
+npm run postinstall
 npm start
 ```
 
