@@ -32,6 +32,37 @@ import {
 	titleNonEmpty
 } from "./patterns";
 
+export async function validateImg(e: HTMLImageElement) {
+	if (e.hasAttributes()) {
+		const alt = e.attributes.getNamedItem("alt");
+		if (alt) {
+			if (altNonDescriptive.test(alt.value)) {
+				return {
+					message: "Alt attribute must be specifically descriptive",
+					severity: DiagnosticSeverity.Information
+				};
+			} else if (altBadStart.test(alt.value)) {
+				return {
+					message: "Alt text should not begin with \"image of\" or similar phrasing",
+					severity: DiagnosticSeverity.Information
+				};
+			} else if (altLong.test(alt.value)) {
+				return {
+					message: "Alt text is too long - most screen readers cut off at 125 characters",
+					severity: DiagnosticSeverity.Information
+				};
+			}
+		} else {
+			return {
+				message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
+				severity: DiagnosticSeverity.Error
+			};
+		}
+	}
+}
+
+/* // Checkes that img tags meet standards
+
 // Check that divs use WAI-ARIA roles
 export async function validateDiv(m: RegExpExecArray) {
 	if (!ariaRole.test(m[0])) {
@@ -59,38 +90,6 @@ export async function validateA(m: RegExpExecArray) {
 				severity: DiagnosticSeverity.Warning
 			};
 		}
-	}
-}
-
-// Checkes that img tags meet standards
-export async function validateImg(m: RegExpExecArray) {
-	if ((!altExists.test(m[0])) && (!altNull.test(m[0]))) {
-		return {
-			meta: m,
-			mess: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
-			severity: DiagnosticSeverity.Error
-		};
-	}
-	if (altNonDescriptive.test(m[0])) {
-		return {
-			meta: m,
-			mess: "Alt attribute must be specifically descriptive",
-			severity: DiagnosticSeverity.Information
-		};
-	}
-	if (altBadStart.test(m[0])) {
-		return {
-			meta: m,
-			mess: "Alt text should not begin with \"image of\" or similar phrasing",
-			severity: DiagnosticSeverity.Information
-		};
-	}
-	if ((altLong.test(m[0]))) {
-		return {
-			meta: m,
-			mess: "Alt text is too long - most screen readers cut off at 125 characters",
-			severity: DiagnosticSeverity.Error
-		};
 	}
 }
 
@@ -225,4 +224,4 @@ export async function validateFrame(m: RegExpExecArray) {
 			severity: DiagnosticSeverity.Information
 		};
 	}
-}
+} */
