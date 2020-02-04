@@ -34,6 +34,23 @@ import {
 	titleNonEmpty
 } from "./util/patterns";
 
+// Checks for sufficient color contrast between elements
+export function validateContrast(e: Element, DOM: JSDOM) {
+	const style = DOM.window.getComputedStyle(e);
+	const backgroundColor = style.getPropertyValue("background-color");
+	const color = style.getPropertyValue("color");
+	if (color && backgroundColor) {
+		// TODO: Handle large-scale text
+		const c = contrast(color, backgroundColor);
+		if (c < 4.5) {
+			return {
+				message: `Color contrast between content and its background must be 4.5 or above (is ${c.toFixed(2)})`,
+				severity: DiagnosticSeverity.Error
+			};
+		}
+	}
+}
+
 // Checks that img tags use valid alt attributes
 export function validateImg(e: HTMLImageElement) {
 	if (e.hasAttributes()) {
@@ -64,25 +81,7 @@ export function validateImg(e: HTMLImageElement) {
 	}
 }
 
-// Checks for sufficient color contrast between elements
-export function validateContrast(e: Element, DOM: JSDOM) {
-	const style = DOM.window.getComputedStyle(e);
-	const backgroundColor = style.getPropertyValue("background-color");
-	const color = style.getPropertyValue("color");
-	if (color && backgroundColor) {
-		// TODO: Handle large-scale text
-		const c = contrast(color, backgroundColor);
-		if (c < 4.5) {
-			return {
-				message: `Color contrast between content and its background must be 4.5 or above (is ${c.toFixed(2)})`,
-				severity: DiagnosticSeverity.Error
-			};
-		}
-	}
-}
-
 /*
-
 // Check that divs use WAI-ARIA roles
 export async function validateDiv(m: RegExpExecArray) {
 	if (!ariaRole.test(m[0])) {
