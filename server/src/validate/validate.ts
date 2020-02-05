@@ -1,68 +1,14 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
-import { contrast } from "./util/contrast";
+import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
-
 import {
-	a,
-	altExists,
 	altLong,
 	altNonDescriptive,
-	altNull,
-	ariaId,
-	ariaIdNonEmpty,
-	ariaLabel,
-	ariaLabelEmpty,
-	ariaRole,
 	altBadStart,
-	headNonEmpty,
-	inputHidden,
-	language,
-	metaMaxScale,
-	metaScalable,
-	metaViewport,
-	tag,
-	title,
-	titleContent,
-	titleFull,
-	tagNoWhitespace,
-	ariaLabelledBy,
-	ariaLabelledByEmpty,
-	tabIndexValid,
-	titleNonEmpty
-} from "./util/patterns";
-
-// Checks that img tags use valid alt attributes
-export function validateImg(e: HTMLImageElement) {
-	if (e.hasAttributes()) {
-		const alt = e.attributes.getNamedItem("alt");
-		if (alt) {
-			if (altNonDescriptive.test(alt.value)) {
-				return {
-					message: "Alt attribute must be specifically descriptive",
-					severity: DiagnosticSeverity.Information
-				};
-			} else if (altBadStart.test(alt.value)) {
-				return {
-					message: "Alt text should not begin with \"image of\" or similar phrasing",
-					severity: DiagnosticSeverity.Information
-				};
-			} else if (altLong.test(alt.value)) {
-				return {
-					message: "Alt text is too long - most screen readers cut off at 125 characters",
-					severity: DiagnosticSeverity.Information
-				};
-			}
-		} else {
-			return {
-				message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
-				severity: DiagnosticSeverity.Error
-			};
-		}
-	}
-}
+} from "../util/patterns";
 
 // Checks for sufficient color contrast between elements
 export function validateContrast(e: Element, DOM: JSDOM) {
@@ -74,45 +20,89 @@ export function validateContrast(e: Element, DOM: JSDOM) {
 		const c = contrast(color, backgroundColor);
 		if (c < 4.5) {
 			return {
-				message: `Color contrast between content and its background must be 4.5 or above (is ${c.toFixed(2)})`,
+				message: `Color contrast between content and its background must be 4.5:1 or above (is ${c.toFixed(2)}:1)`,
 				severity: DiagnosticSeverity.Error
 			};
 		}
 	}
 }
 
-/*
-
-// Check that divs use WAI-ARIA roles
-export async function validateDiv(m: RegExpExecArray) {
-	if (!ariaRole.test(m[0])) {
+// Checks that img tags use valid alt attributes
+export function validateImg(e: HTMLImageElement) {
+	const alt = e.attributes.getNamedItem("alt");
+	if (alt) {
+		if (altNonDescriptive.test(alt.value)) {
+			return {
+				message: "Alt attribute must be specifically descriptive",
+				severity: DiagnosticSeverity.Information
+			};
+		} else if (altBadStart.test(alt.value)) {
+			return {
+				message: "Alt text should not begin with \"image of\" or similar phrasing",
+				severity: DiagnosticSeverity.Information
+			};
+		} else if (altLong.test(alt.value)) {
+			return {
+				message: "Alt text is too long - most screen readers cut off at 125 characters",
+				severity: DiagnosticSeverity.Information
+			};
+		}
+	} else {
 		return {
-			meta: m,
-			mess: "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]",
-			severity: DiagnosticSeverity.Information
+			message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
+			severity: DiagnosticSeverity.Error
 		};
 	}
 }
 
-export async function validateA(m: RegExpExecArray) {
-	let aRegEx: RegExpExecArray | null;
-	let oldRegEx: RegExpExecArray = m;
-
-	// Matches any whitespace or non-whitespace in between brackets
-	let filteredString = m[0].replace(tag, "");
-	if (!tagNoWhitespace.test(filteredString)) {
-		aRegEx = a.exec(oldRegEx[0]);
-		if (aRegEx) {
-			aRegEx.index = oldRegEx.index;
-			return {
-				meta: aRegEx,
-				mess: "Provide a descriptive text in between the tags",
-				severity: DiagnosticSeverity.Warning
-			};
+// Check that divs use WAI-ARIA roles
+export function validateDiv(e: HTMLDivElement) {
+	const role = e.attributes.getNamedItem("role");
+	if (!role) {
+		return {
+			message: "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]",
+			severity: DiagnosticSeverity.Information
 		}
 	}
 }
 
+// Check that anchor elements have descriptive text
+export function validateA(e: HTMLAnchorElement) {
+	if (e.innerHTML.length === 0) {
+		return {
+			message: "Provide descriptive text in between anchor tags",
+			severity: DiagnosticSeverity.Warning
+		};
+	}
+
+	/* // This is an example of how difficult it used to be to write rules
+	export async function validateA(m: RegExpExecArray) {
+		let aRegEx: RegExpExecArray | null;
+		let oldRegEx: RegExpExecArray = m;
+
+		// Matches any whitespace or non-whitespace in between brackets
+		let filteredString = m[0].replace(tag, "");
+		if (!tagNoWhitespace.test(filteredString)) {
+			aRegEx = a.exec(oldRegEx[0]);
+			if (aRegEx) {
+				aRegEx.index = oldRegEx.index;
+				return {
+					meta: aRegEx,
+					mess: "Provide a descriptive text in between the tags",
+					severity: DiagnosticSeverity.Warning
+				};
+			}
+		}
+	}
+	*/
+}
+
+
+
+
+
+
+/*
 // Check for the presence of meta tags
 export async function validateMeta(m: RegExpExecArray) {
 	const metaRegEx: RegExpExecArray | null = metaViewport.exec(m[0]);
