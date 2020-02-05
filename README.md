@@ -3,7 +3,7 @@
 [![Northwestern HCI](https://img.shields.io/badge/NU-HCI-blueviolet)](https://hci.northwestern.edu/)
 [![NSF Grant 1901456](https://img.shields.io/badge/NSF-1901456-informational)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1901456)
 
-**Made in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/)**
+**Made with :purple_heart: in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/)**
 
 Bri11iant is a Language Extension for scaffolding accessible web development. Bri11iant fits right into your text editor, suggesting improvements to your HTML and CSS code in order to improve the accessibility of your websites.
 
