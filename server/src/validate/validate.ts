@@ -20,7 +20,7 @@ export function validateContrast(e: Element, DOM: JSDOM) {
 		const c = contrast(color, backgroundColor);
 		if (c < 4.5) {
 			return {
-				message: `Color contrast between content and its background must be 4.5 or above (is ${c.toFixed(2)})`,
+				message: `Color contrast between content and its background must be 4.5:1 or above (is ${c.toFixed(2)}:1)`,
 				severity: DiagnosticSeverity.Error
 			};
 		}
@@ -68,7 +68,7 @@ export function validateDiv(e: HTMLDivElement) {
 
 // Check that anchor elements have descriptive text
 export function validateA(e: HTMLAnchorElement) {
-	if (!e.childElementCount) {
+	if (e.innerHTML.length === 0) {
 		return {
 			message: "Provide descriptive text in between anchor tags",
 			severity: DiagnosticSeverity.Warning

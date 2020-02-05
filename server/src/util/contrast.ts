@@ -2,8 +2,6 @@
 * Adopted from https://github.com/tmcw/relative-luminance
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
-import { Color } from "vscode-languageserver";
-
 // red, green, and blue coefficients
 const rc = 0.2126;
 const gc = 0.7152;
