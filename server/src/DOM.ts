@@ -12,7 +12,7 @@ export function createDOM(text: string, uri: string): Promise<JSDOM> {
     // Replace css links with full paths
 	for (const link of tempDOM.window.document.querySelectorAll("link")) {
         const attribute = link.getAttribute("href");
-        if (attribute && attribute.charAt(0) !== "/") {
+        if (attribute && attribute.charAt(0) !== "/" && !/http*/i.test(attribute)) {
             link.setAttribute("href", uriPath + attribute);
         }
     }
