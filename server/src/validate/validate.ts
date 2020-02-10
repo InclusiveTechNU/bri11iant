@@ -5,7 +5,6 @@ import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
 import {
-	altLong,
 	altNonDescriptive,
 	altBadStart,
 } from "../util/patterns";
@@ -40,7 +39,7 @@ export function validateImg(e: HTMLImageElement) {
 				message: "Alt text should not begin with \"image of\" or similar phrasing",
 				severity: DiagnosticSeverity.Information
 			};
-		} else if (altLong.test(alt.value)) {
+		} else if (alt.value.length > 125) {
 			return {
 				message: "Alt text is too long - most screen readers cut off at 125 characters",
 				severity: DiagnosticSeverity.Information
