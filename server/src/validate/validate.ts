@@ -9,6 +9,7 @@ import {
 	altNonDescriptive,
 	altBadStart,
 } from "../util/patterns";
+import { classifyObjects} from "../util/objectClassifier";
 
 // Checks for sufficient color contrast between elements
 export function validateContrast(e: Element, DOM: JSDOM) {
@@ -28,7 +29,7 @@ export function validateContrast(e: Element, DOM: JSDOM) {
 }
 
 // Checks that img tags use valid alt attributes
-export function validateImg(e: HTMLImageElement) {
+export async function validateImg(e: HTMLImageElement) {
 	const alt = e.attributes.getNamedItem("alt");
 	if (alt) {
 		if (altNonDescriptive.test(alt.value)) {
@@ -49,9 +50,8 @@ export function validateImg(e: HTMLImageElement) {
 		}
 	} else {
 		// Run TF object classifier on image to retrieve potential alt text
-
-		
-
+		const imgSrcs = await classifyObjects();
+		console.log(imgSrcs);
 		// No likely objects detected
 		// Non-descript alt text suggestion
 		return {

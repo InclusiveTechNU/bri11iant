@@ -9,6 +9,7 @@
   "author": "Northwestern University Inclusive Technology Lab",
   "license": "MIT",
   "dependencies": {
+    "@tensorflow-models/coco-ssd": "^2.0.1",
     "@tensorflow/tfjs-node": "^1.5.2",
     "@types/jsdom": "12.2.4",
     "jsdom": "16.1.0",

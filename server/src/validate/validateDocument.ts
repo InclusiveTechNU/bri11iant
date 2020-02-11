@@ -48,8 +48,9 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Validate <img> tags
 	document.querySelectorAll("img").forEach(e => {
-		const result = validate.validateImg(e);
-		_diagnostics(e, result);
+		validate.validateImg(e).then((result) => {
+			_diagnostics(e, result);
+		});
 	});
 
 	// Validate <div> tags
