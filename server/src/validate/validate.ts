@@ -1,6 +1,7 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import * as pluralize from 'pluralize';
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
@@ -65,7 +66,9 @@ export async function validateImg(e: HTMLImageElement) {
 					extra += " and ";
 				}
 
-				sampleAltText += `${imageObjects.get(objectName)} ${objectName}${extra}`;
+				const nameCount = imageObjects.get(objectName);
+				const pluralName = pluralize(objectName, nameCount);
+				sampleAltText += `${nameCount} ${pluralName}${extra}`;
 				index++;
 			}
 
