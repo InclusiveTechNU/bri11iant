@@ -50,12 +50,30 @@ export async function validateImg(e: HTMLImageElement) {
 		}
 	} else {
 		// Run TF object classifier on image to retrieve potential alt text
-		const imgSrcs = await classifyObjects();
-		console.log(imgSrcs);
-		// No likely objects detected
-		// Non-descript alt text suggestion
+		const imageObjects = await classifyObjects(e);
+		let messageDecorative = "or alt=\"\" if image is purely decorative";
+		let message = `Provide an alt text that describes the image, ${messageDecorative}`;
+		if (imageObjects.size > 0) {
+			let sampleAltText = "";
+			let imageObjectNames = imageObjects.keys();
+			let index = 0;
+			for (let objectName of imageObjectNames) {
+				let extra = "";
+				if (index != imageObjects.size-1 && imageObjects.size !== 2) {
+					extra += ", ";
+				} else if (imageObjects.size !== 1) {
+					extra += " and ";
+				}
+
+				sampleAltText += `${imageObjects.get(objectName)} ${objectName}${extra}`;
+				index++;
+			}
+
+			message = `Provide an alt text such as alt=\"${sampleAltText}\",\n${messageDecorative}`;
+		}
+
 		return {
-			message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
+			message: message,
 			severity: DiagnosticSeverity.Error
 		};
 	}
