@@ -48,6 +48,12 @@ export function validateImg(e: HTMLImageElement) {
 			};
 		}
 	} else {
+		// Run TF object classifier on image to retrieve potential alt text
+
+		
+
+		// No likely objects detected
+		// Non-descript alt text suggestion
 		return {
 			message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
 			severity: DiagnosticSeverity.Error
