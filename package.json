@@ -58,6 +58,7 @@
 		"watch": "tsc -b -w"
 	},
 	"devDependencies": {
+		"@tensorflow/tfjs": "^1.5.2",
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^8.10.52",
 		"tslint": "^5.19.0",
