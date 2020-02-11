@@ -51,7 +51,8 @@ export async function validateImg(e: HTMLImageElement) {
 		}
 	} else {
 		// Run TF object classifier on image to retrieve potential alt text
-		const imageObjects = await classifyObjects(e);
+		let imageObjects = await classifyObjects(e);
+
 		let messageDecorative = "or alt=\"\" if image is purely decorative";
 		let message = `Provide an alt text that describes the image, ${messageDecorative}`;
 		if (imageObjects.size > 0) {
@@ -60,10 +61,18 @@ export async function validateImg(e: HTMLImageElement) {
 			let index = 0;
 			for (let objectName of imageObjectNames) {
 				let extra = "";
-				if (index != imageObjects.size-1 && imageObjects.size !== 2) {
-					extra += ", ";
-				} else if (imageObjects.size !== 1) {
-					extra += " and ";
+				if (imageObjects.size !== 1) {
+					if (imageObjects.size !== 2) {
+						if (index !== imageObjects.size-1) {
+							if (index !== imageObjects.size-2) {
+								extra = ", ";
+							} else {
+								extra = ", and ";
+							}
+						}
+					} else {
+						extra = " and ";
+					}
 				}
 
 				const nameCount = imageObjects.get(objectName);
