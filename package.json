@@ -62,5 +62,6 @@
 		"@types/node": "^8.10.52",
 		"tslint": "^5.19.0",
 		"typescript": "^3.5.3"
-	}
+	},
+	"dependencies": {}
 }
