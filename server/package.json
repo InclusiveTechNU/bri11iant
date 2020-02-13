@@ -5,12 +5,19 @@
   "engines": {
     "node": "*"
   },
-  "scripts": {},
+  "scripts": {
+    "postinstall": "rm -rf node_modules/@tensorflow-models/coco-ssd/tsconfig.json && rm -rf node_modules/@tensorflow-models/coco-ssd/*.ts"
+  },
   "author": "Northwestern University Inclusive Technology Lab",
   "license": "MIT",
   "dependencies": {
+    "@tensorflow-models/coco-ssd": "^2.0.1",
+    "@tensorflow/tfjs": "^1.5.2",
     "@types/jsdom": "12.2.4",
+    "@types/pluralize": "0.0.29",
+    "image-js": "^0.21.8",
     "jsdom": "16.1.0",
+    "pluralize": "^8.0.0",
     "vscode-languageserver": "5.2.1"
   }
 }

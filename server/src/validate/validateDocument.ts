@@ -4,10 +4,12 @@ import * as validate from "./validate";
 import {
     Connection,
 	Diagnostic,
-	TextDocument
+	TextDocument,
 } from "vscode-languageserver";
 
 export async function html(htmlDocument: TextDocument, connection: Connection): Promise<void> {
+	const uri = htmlDocument.uri;
+	const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
 	let settings = await getDocumentSettings(htmlDocument.uri);
 	let text: string = htmlDocument.getText();
 	let problems = 0;
@@ -15,14 +17,19 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	function _diagnostics(e: Element, result: { severity: any; message: any; } | undefined) {
 		if (result && problems < settings.maxNumberOfProblems) {
-			const startPosition = text.indexOf(e.outerHTML);
+			let outerHTML = e.outerHTML;
+			let startPosition = text.indexOf(outerHTML);
+			if (startPosition === -1)
+				outerHTML = outerHTML.replace(uriPath, "");
+				startPosition = text.indexOf(outerHTML);
+
 			const severity = result.severity;
 			const diagnostic: Diagnostic = {
 				severity,
 				message: result.message,
 				range: {
 					start: htmlDocument.positionAt(startPosition),
-					end: htmlDocument.positionAt(startPosition + e.outerHTML.length)
+					end: htmlDocument.positionAt(startPosition + outerHTML.length)
 				},
 				code: 0,
 				source: "bri11iant"
@@ -48,8 +55,9 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Validate <img> tags
 	document.querySelectorAll("img").forEach(e => {
-		const result = validate.validateImg(e);
-		_diagnostics(e, result);
+		validate.validateImg(e).then((result) => {
+			_diagnostics(e, result);
+		});
 	});
 
 	// Validate <div> tags

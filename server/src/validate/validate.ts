@@ -1,6 +1,7 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import * as pluralize from 'pluralize';
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
@@ -8,6 +9,7 @@ import {
 	altNonDescriptive,
 	altBadStart,
 } from "../util/patterns";
+import { classifyObjects} from "../util/objectClassifier";
 
 // Checks for sufficient color contrast between elements
 export function validateContrast(e: Element, DOM: JSDOM) {
@@ -26,7 +28,7 @@ export function validateContrast(e: Element, DOM: JSDOM) {
 }
 
 // Checks that img tags use valid alt attributes
-export function validateImg(e: HTMLImageElement) {
+export async function validateImg(e: HTMLImageElement) {
 	const alt = e.attributes.getNamedItem("alt");
 	if (alt) {
 		if (altNonDescriptive.test(alt.value)) {
@@ -46,8 +48,42 @@ export function validateImg(e: HTMLImageElement) {
 			};
 		}
 	} else {
+		// Run TF object classifier on image to retrieve potential alt text
+		let imageObjects = await classifyObjects(e);
+
+		let messageDecorative = "or alt=\"\" if image is purely decorative";
+		let message = `Provide an alt text that describes the image, ${messageDecorative}`;
+		if (imageObjects.size > 0) {
+			let sampleAltText = "";
+			let imageObjectNames = imageObjects.keys();
+			let index = 0;
+			for (let objectName of imageObjectNames) {
+				let extra = "";
+				if (imageObjects.size !== 1) {
+					if (imageObjects.size !== 2) {
+						if (index !== imageObjects.size-1) {
+							if (index !== imageObjects.size-2) {
+								extra = ", ";
+							} else {
+								extra = ", and ";
+							}
+						}
+					} else {
+						extra = " and ";
+					}
+				}
+
+				const nameCount = imageObjects.get(objectName);
+				const pluralName = pluralize(objectName, nameCount);
+				sampleAltText += `${nameCount} ${pluralName}${extra}`;
+				index++;
+			}
+
+			message = `Provide an alt text such as alt=\"${sampleAltText}\",\n${messageDecorative}`;
+		}
+
 		return {
-			message: "Provide an alt text that describes the image, or alt=\"\" if image is purely decorative",
+			message: message,
 			severity: DiagnosticSeverity.Error
 		};
 	}
