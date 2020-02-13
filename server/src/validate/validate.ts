@@ -6,7 +6,6 @@ import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
 import {
-	altLong,
 	altNonDescriptive,
 	altBadStart,
 } from "../util/patterns";
@@ -18,7 +17,6 @@ export function validateContrast(e: Element, DOM: JSDOM) {
 	const backgroundColor = style.getPropertyValue("background-color");
 	const color = style.getPropertyValue("color");
 	if (color && backgroundColor) {
-		// TODO: Handle large-scale text
 		const c = contrast(color, backgroundColor);
 		if (c < 4.5) {
 			return {
@@ -43,7 +41,7 @@ export async function validateImg(e: HTMLImageElement) {
 				message: "Alt text should not begin with \"image of\" or similar phrasing",
 				severity: DiagnosticSeverity.Information
 			};
-		} else if (altLong.test(alt.value)) {
+		} else if (alt.value.length > 125) {
 			return {
 				message: "Alt text is too long - most screen readers cut off at 125 characters",
 				severity: DiagnosticSeverity.Information
@@ -96,7 +94,7 @@ export function validateDiv(e: HTMLDivElement) {
 	const role = e.attributes.getNamedItem("role");
 	if (!role) {
 		return {
-			message: "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]",
+			message: "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]\nhttps://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles",
 			severity: DiagnosticSeverity.Information
 		}
 	}
@@ -110,27 +108,6 @@ export function validateA(e: HTMLAnchorElement) {
 			severity: DiagnosticSeverity.Warning
 		};
 	}
-
-	/* // This is an example of how difficult it used to be to write rules
-	export async function validateA(m: RegExpExecArray) {
-		let aRegEx: RegExpExecArray | null;
-		let oldRegEx: RegExpExecArray = m;
-
-		// Matches any whitespace or non-whitespace in between brackets
-		let filteredString = m[0].replace(tag, "");
-		if (!tagNoWhitespace.test(filteredString)) {
-			aRegEx = a.exec(oldRegEx[0]);
-			if (aRegEx) {
-				aRegEx.index = oldRegEx.index;
-				return {
-					meta: aRegEx,
-					mess: "Provide a descriptive text in between the tags",
-					severity: DiagnosticSeverity.Warning
-				};
-			}
-		}
-	}
-	*/
 }
 
 

@@ -42,9 +42,6 @@ export const altBadStart: RegExp = new RegExp([
 // Match nonnull alt tags
 export const altExists = /alt="(?:.*?[a-z].*?)"/i;
 
-// Match alt tags > 125 characters
-export const altLong = /alt="(?:.*?[a-z].*.{125,}?)"/i;
-
 // Match nondescriptive words in alt text
 export const altNonDescriptive: RegExp = new RegExp([
 	"alt=\"image\"",
