@@ -1,8 +1,9 @@
 <html>
     <head>
-        <title>
-            Hello
-        </title>
+        <title>Hello</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Bri11iant Sample Document">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
         <link rel="stylesheet" type="text/css" href="index.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
@@ -10,18 +11,12 @@
         <a href="This link needs descriptive text"></a>
         <a id="link" href="This link is fine because we give it descriptive text in index.js!"></a>
         <i class="material-icons">accessibility</i>
-        <div>
-            This is a div!
-        </div>
-        <div role="example-aria-div">
-            This is a better div!
-        </div>
-        <h1>
-            The contrast for this header isn't great (specified in index.css)
-        </h1>
-        <h2>
-            The color contrast for this header is much better!
-        </h2>
+        <div id="no-role-sadness">This is a div!</div>
+        <div role="example-aria-div">This is a better div!</div>
+        <div role="bad-tab-index" tabindex="1"></div>
+        <div role="good-tab-index" tabindex="-1"></div>
+        <h1>The contrast for this header isn't great (specified in index.css)</h1>
+        <h2>The color contrast for this header is much better!</h2>
         <img src="hello" alt="Honestly, this alt text is far too long and it doesn't even really tell the user much about what's happening in the linked image.">
         <img src="no alt text :(">
     </body>

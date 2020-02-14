@@ -1,30 +1,72 @@
 /*! objectClassifier.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
-import * as tf from '@tensorflow/tfjs';
-import { load } from '@tensorflow-models/coco-ssd';
+
 import { Image } from "image-js";
+import { load } from '@tensorflow-models/coco-ssd';
+import * as pluralize from 'pluralize';
 
-export async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number>> {
-    console.log(e.src);
+async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number> | undefined> {
     let preds: Map<string, number> = new Map();
-    const image = await Image.load("/Users/tommymchugh/Desktop/apple.jpg");
-    const imageData = {data: image.data, width: image.width, height: image.height};
+    const src = e.attributes.getNamedItem("src");
+    if (src && src.value) { 
+        // Determine potential objects in image element
+        const image = await Image.load(src.value)
+                                .catch(() => { return; });
+        if (!image) { return; }
+        const cocoModel = await load()
+                                .catch(() => { return; });
+        if (!cocoModel) { return; }
+        
+        const imageData = {data: image.data, width: image.width, height: image.height};
+        const cocoPreds = await cocoModel?.detect(imageData)
+                                        .catch(err => {
+                                            console.log(err);
+                                            return null;
+                                        });
 
-    // Determine potential objects in image element
-    const cocoModel = await load()
-                            .catch(() => {
-                                throw "Failed to load coco model";
-                            });
-    const cocoPreds = await cocoModel?.detect(imageData)
-                                      .catch((err) => {
-                                        return null;
-                                      });
+        // Store predictions as map
+        cocoPreds?.forEach((pred) => {
+            const objectName: string = pred.class;
+            const existingCount: number = preds.get(objectName) ?? 0;
+            preds.set(objectName, existingCount + 1);
+        });
 
-    // Store predictions as map
-    cocoPreds?.forEach((pred) => {
-        const objectName: string = pred.class;
-        const existingCount: number = preds.get(objectName) ?? 0;
-        preds.set(objectName, existingCount+1);
-    });
-    return preds;
+        return preds;
+    }
 };
+
+function getAltText(imageObjects: Map<string, number>): string {
+    let sampleAltText = "";
+    let imageObjectNames = imageObjects.keys();
+    let index = 0;
+    for (let objectName of imageObjectNames) {
+        let extra = "";
+        if (imageObjects.size !== 1) {
+            if (imageObjects.size !== 2) {
+                if (index !== imageObjects.size - 1) {
+                    if (index !== imageObjects.size - 2) {
+                        extra = ", ";
+                    } else {
+                        extra = ", and ";
+                    }
+                }
+            } else {
+                extra = " and ";
+            }
+        }
+
+        const nameCount = imageObjects.get(objectName);
+        const pluralName = pluralize(objectName, nameCount);
+        sampleAltText += `${nameCount} ${pluralName}${extra}`;
+        index++;
+    }
+
+    return sampleAltText;
+}
+
+export async function altText(e: HTMLImageElement): Promise<string | undefined> {
+    const imageObjects = await classifyObjects(e);
+    if (imageObjects && imageObjects?.size > 0) {
+        return getAltText(imageObjects);
+    }
+}

@@ -17,7 +17,7 @@ export function createDOM(text: string, uri: string): Promise<JSDOM> {
     const tempDOM = new JSDOM(text);
 
     const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
-  
+
     // Replace element links with full paths
     setLinkToFullPath(tempDOM, uriPath, "link", "href"); // CSS
     setLinkToFullPath(tempDOM, uriPath, "img", "src"); // img

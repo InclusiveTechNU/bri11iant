@@ -1,7 +1,7 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
-import * as pluralize from 'pluralize';
+import { altText } from "../util/objectClassifier";
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
@@ -9,21 +9,73 @@ import {
 	altNonDescriptive,
 	altBadStart,
 } from "../util/patterns";
-import { classifyObjects} from "../util/objectClassifier";
 
-// Checks for sufficient color contrast between elements
-export function validateContrast(e: Element, DOM: JSDOM) {
-	const style = DOM.window.getComputedStyle(e);
-	const backgroundColor = style.getPropertyValue("background-color");
-	const color = style.getPropertyValue("color");
-	if (color && backgroundColor) {
-		const c = contrast(color, backgroundColor);
-		if (c < 4.5) {
-			return {
-				message: `Color contrast between content and its background must be 4.5:1 or above (is ${c.toFixed(2)}:1)`,
-				severity: DiagnosticSeverity.Error
-			};
+// Check for html's language specification
+export function validateHtml(e: HTMLHtmlElement) {
+	const language = e.attributes.getNamedItem("lang");
+	if (!language) {
+		return {
+			message: "Provide a language [lang=\"\"]",
+			severity: DiagnosticSeverity.Warning
 		}
+	}
+}
+
+export function validateHead(e: HTMLHeadElement) {
+	// Check for a title tag
+	const title = e.querySelector("title");
+	if (!title) {
+		return {
+			message: "Provide a title within the <head> tags",
+			severity: DiagnosticSeverity.Error
+		}
+	}
+
+	// Check for the existance of a meta tag with user-scalable=yes
+	// Other case handled by validateMeta
+	e.querySelectorAll("meta").forEach(meta => {
+		if (meta.attributes.getNamedItem("user-scalable")) {
+			return;
+		}
+	});
+
+	return {
+		message: "Enable pinching to zoom [user-scalable=yes]",
+		severity: DiagnosticSeverity.Information
+	}
+}
+
+// Check for valid meta tags
+export function validateMeta(e: HTMLMetaElement) {
+	// Need to handle having multiple meta tags
+	const role = e.attributes.getNamedItem("user-scalable");
+	if (role && role.value !== "yes") {
+		return {
+			extended: true,
+			message: "Enable pinching to zoom [user-scalable=yes]",
+			severity: DiagnosticSeverity.Information
+		}
+	}
+
+	const maximumScale = e.attributes.getNamedItem("maximum-scale");
+	if (maximumScale && maximumScale.value === "1") {
+		return {
+			extended: true,
+			message: "Avoid using [maximum-scale=1]",
+			severity: DiagnosticSeverity.Information
+		}
+	}
+}
+
+// Check for non-empty titles
+export function validateTitle(e: HTMLTitleElement) {
+	const text = e.innerText;
+	if (!text || text === "") {
+		return {
+			extended: true,
+			message: "Provide a text within the <title> tags",
+			severity: DiagnosticSeverity.Error
+		};
 	}
 }
 
@@ -48,42 +100,17 @@ export async function validateImg(e: HTMLImageElement) {
 			};
 		}
 	} else {
-		// Run TF object classifier on image to retrieve potential alt text
-		let imageObjects = await classifyObjects(e);
-
+		const message = `Provide an alt text that describes the image, `;
 		let messageDecorative = "or alt=\"\" if image is purely decorative";
-		let message = `Provide an alt text that describes the image, ${messageDecorative}`;
-		if (imageObjects.size > 0) {
-			let sampleAltText = "";
-			let imageObjectNames = imageObjects.keys();
-			let index = 0;
-			for (let objectName of imageObjectNames) {
-				let extra = "";
-				if (imageObjects.size !== 1) {
-					if (imageObjects.size !== 2) {
-						if (index !== imageObjects.size-1) {
-							if (index !== imageObjects.size-2) {
-								extra = ", ";
-							} else {
-								extra = ", and ";
-							}
-						}
-					} else {
-						extra = " and ";
-					}
-				}
 
-				const nameCount = imageObjects.get(objectName);
-				const pluralName = pluralize(objectName, nameCount);
-				sampleAltText += `${nameCount} ${pluralName}${extra}`;
-				index++;
-			}
-
-			message = `Provide an alt text such as alt=\"${sampleAltText}\",\n${messageDecorative}`;
+		// Run TF object classifier on image to retrieve potential alt text
+		const alt = await altText(e);
+		if (alt) {
+			messageDecorative = alt;
 		}
 
 		return {
-			message: message,
+			message: message + messageDecorative,
 			severity: DiagnosticSeverity.Error
 		};
 	}
@@ -104,147 +131,74 @@ export function validateDiv(e: HTMLDivElement) {
 export function validateA(e: HTMLAnchorElement) {
 	if (e.innerHTML.length === 0) {
 		return {
+			extended: true,
 			message: "Provide descriptive text in between anchor tags",
 			severity: DiagnosticSeverity.Warning
 		};
 	}
 }
 
-
-
-
-
-
-/*
-// Check for the presence of meta tags
-export async function validateMeta(m: RegExpExecArray) {
-	const metaRegEx: RegExpExecArray | null = metaViewport.exec(m[0]);
-	if (metaRegEx) {
-		metaRegEx.index = m.index + metaRegEx.index;
-		if (!metaScalable.test(metaRegEx[0])) {
-			return {
-				meta: metaRegEx,
-				mess: "Enable pinching to zoom [user-scalable=yes]",
-				severity: DiagnosticSeverity.Information
-			};
-		}
-		if (metaMaxScale.test(metaRegEx[0])) {
-			return {
-				meta: metaRegEx,
-				mess: "Avoid using [maximum-scale=1]",
-				severity: DiagnosticSeverity.Information
-			};
-		}
+// Check that inputs are properly labelled
+export function validateInput(e: HTMLInputElement) {
+	if (e.style.getPropertyValue("display") === "none") {
+		return;
+	} else if (e.style.getPropertyValue("visibility") === "hidden") {
+		return;
 	}
-}
 
-// Checks that title tag follows standards
-export async function validateTitle(m: RegExpExecArray) {
-	let titleRegEx: RegExpExecArray | null;
-	if (!title.test(m[0])) {
-		titleRegEx = headNonEmpty.exec(m[0]);
-		if (titleRegEx) {
-			titleRegEx.index = m.index;
+	const ariaLabel = e.attributes.getNamedItem("aria-label");
+	const ariaLabelledBy = e.attributes.getNamedItem("aria-labelled-by");
+	const title = e.attributes.getNamedItem("title");
+	if (ariaLabel) {
+		if (ariaLabel.value === "") {
 			return {
-				meta: titleRegEx,
-				mess: "Provide a title within the <head> tags",
-				severity: DiagnosticSeverity.Error
+				message: "Provide a text within the aria label [aria-label=\"\"]",
+				severity: DiagnosticSeverity.Hint
 			};
 		}
+	} else if (ariaLabelledBy) {
+		if (ariaLabelledBy.value === "") {
+			return {
+				message: "Provide a text within the aria-labelled-by tag [aria-labelled-by=\"\"]",
+				severity: DiagnosticSeverity.Hint
+			};
+		}
+	} else if (title) {
+		return {
+			message: "It's recommended to use aria-label or aria-labelled-by to identify form controls, as the title attribute is often used to provide non-essential information.",
+			severity: DiagnosticSeverity.Hint
+		};
 	} else {
-		titleRegEx = titleFull.exec(m[0]);
-		if (titleRegEx) {
-			if (titleContent.test(titleRegEx[0])) {
-				titleRegEx.index = m.index + titleRegEx.index;
-				return {
-					meta: titleRegEx,
-					mess: "Provide a text within the <title> tags",
-					severity: DiagnosticSeverity.Error
-				};
-			}
-		}
-	}
-}
-
-export async function validateHtml(m: RegExpExecArray) {
-	if (!language.test(m[0])) {
 		return {
-			meta: m,
-			mess: "Provide a language [lang=\"\"]",
-			severity: DiagnosticSeverity.Warning
+			message: "Provide an aria label to identify the input element [aria-label=\"\"]",
+			severity: DiagnosticSeverity.Hint
 		};
 	}
 }
 
-export async function validateInput(m: RegExpExecArray) {
-	switch (true) {
-	case (inputHidden.test(m[0])):
-		break;
-	case (ariaLabel.test(m[0])):
-		if (ariaLabelEmpty.test(m[0])) {
+// Checks for sufficient color contrast between elements
+export function validateContrast(e: Element, DOM: JSDOM) {
+	const style = DOM.window.getComputedStyle(e);
+	const backgroundColor = style.getPropertyValue("background-color");
+	const color = style.getPropertyValue("color");
+	if (color && backgroundColor) {
+		const c = contrast(color, backgroundColor);
+		if (c < 4.5) {
 			return {
-				meta: m,
-				mess: "Provide a text within the aria label [aria-label=\"\"]",
-				severity: DiagnosticSeverity.Information
-			};
-		} else { break; }
-	case (ariaId.test(m[0])):
-		if (ariaIdNonEmpty.test(m[0])) {
-			let idRegEx: RegExpExecArray | null = ariaIdNonEmpty.exec(m[0]);
-			if (idRegEx) {
-				const idValue = idRegEx[1];
-				let pattern: RegExp = new RegExp("for=\"" + idValue + "\"", "i");
-				if (!pattern.test(m.input)) {
-					return {
-						meta: m,
-						mess: "Provide an aria label [aria-label=\"\"] or a <label for=\"\">",
-						severity: DiagnosticSeverity.Warning
-					};
-				} else { break; }
-			}
-		} else {
-			return {
-				meta: m,
-				mess: "Provide an aria label [aria-label=\"\"]",
-				severity: DiagnosticSeverity.Warning
-			};
-		}
-	case (ariaLabelledBy.test(m[0])):
-		if (ariaLabelledByEmpty.test(m[0])) {
-			return {
-				meta: m,
-				mess: "Provide an id within the aria labelledby [aria-labelledby=\"\"]",
+				message: `Color contrast between content and its background must be 4.5:1 or above (is ${c.toFixed(2)}:1)`,
 				severity: DiagnosticSeverity.Error
 			};
-		} else { break; }
-	case (/role=/i.test(m[0])):
-		break;
-	default:
-		return {
-			meta: m,
-
-			mess: "Provide an aria label [aria-label=\"\"]",
-			severity: DiagnosticSeverity.Warning
-		};
+		}
 	}
 }
 
-export async function validateTab(m: RegExpExecArray) {
-	if (!tabIndexValid.test(m[0])) {
+// Check that tabindexes are 0 or -1
+export function validateTabIndex(e: Element) {
+	const tabIndex = e.attributes.getNamedItem("tabindex");
+	if (tabIndex && tabIndex.value !== "-1" && tabIndex.value !== "0") {
 		return {
-			meta: m,
-			mess: "A tabindex greater than 0 interferes with the focus order. Try restructuring the HTML",
+			message: "A tabindex other than 0 or -1 interferes with the focus order.",
 			severity: DiagnosticSeverity.Error
-		};
+		}
 	}
 }
-
-export async function validateFrame(m: RegExpExecArray) {
-	if (!titleNonEmpty.test(m[0])) {
-		return {
-			meta: m,
-			mess: "Provide a title that describes the frame's content [title=\"\"]",
-			severity: DiagnosticSeverity.Information
-		};
-	}
-} */
