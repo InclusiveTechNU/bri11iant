@@ -7,7 +7,7 @@
 
 Bri11iant is a Language Extension for scaffolding accessible web development. Bri11iant fits right into your text editor, suggesting improvements to your HTML and CSS code in order to improve the accessibility of your websites.
 
-Unlike other language extensions, Bri11iant reads the HTML files you are working on, loads in any CSS files specified in <link> tags, and runs any specified JS scripts using [JSDOM](https://github.com/jsdom/jsdom) in order to mock the render tree that would be created by a browser. This allows the language extension to provide more nuanced feedback that depends on parent-to-child element relationships and page layout.
+Unlike other projects, Bri11iant reads the HTML files you are working on, loads in any CSS files specified in <link> tags, and runs any specified JS scripts using [JSDOM](https://github.com/jsdom/jsdom) in order to mock the render tree that would be created by a browser. This allows the language extension to provide more nuanced feedback that depends on parent-to-child element relationships and page layout.
 
 [List of Accessibility Standards Supported by Bri11iant](https://github.com/InclusiveTechNU/A11yGrammar)
 
@@ -20,8 +20,7 @@ Unlike other language extensions, Bri11iant reads the HTML files you are working
 
 ### Languages
 
-- HTML
-- CSS
+- HTML / CSS
 - [React.js](https://reactjs.org) (Coming Soon)
 - [React Native](https://facebook.github.io/react-native/) (Coming Soon)
 - [Vue.js](https://vuejs.org) (Coming Soon)
