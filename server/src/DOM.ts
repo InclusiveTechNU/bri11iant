@@ -23,11 +23,11 @@ export function createDOM(text: string, uri: string): Promise<JSDOM> {
     setLinkToFullPath(tempDOM, uriPath, "img", "src"); // img
     setLinkToFullPath(tempDOM, uriPath, "script", "src"); // JS
 
-	  const DOM = new JSDOM(tempDOM.serialize(), {
+	const DOM = new JSDOM(tempDOM.serialize(), {
         resources: "usable",
         runScripts: "dangerously"
     });
-    
+
     // Return DOM when the scripts have loaded
     return new Promise(resolve => {
         DOM.window.addEventListener("load", () => {

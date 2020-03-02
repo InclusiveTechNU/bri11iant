@@ -1,34 +1,36 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
-import { altText } from "../util/objectClassifier";
+import { altText } from "../util/imageClassifier";
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import { JSDOM } from "jsdom";
+import * as messages from "../util/messages";
 import {
 	altNonDescriptive,
 	altBadStart,
 } from "../util/patterns";
+import { Result } from "../util/Result";
 
 // Check for html's language specification
-export function validateHtml(e: HTMLHtmlElement) {
+export function validateHtml(e: HTMLHtmlElement): Result | undefined {
 	const language = e.attributes.getNamedItem("lang");
 	if (!language) {
 		return {
-			message: "Provide a language [lang=\"\"]",
+			message: messages.validateHtmlMessage,
 			severity: DiagnosticSeverity.Warning
-		}
+		};
 	}
 }
 
-export function validateHead(e: HTMLHeadElement) {
+export function validateHead(e: HTMLHeadElement): Result | undefined {
 	// Check for a title tag
 	const title = e.querySelector("title");
 	if (!title) {
 		return {
-			message: "Provide a title within the <head> tags",
+			message: messages.validateHeadTitleMessage,
 			severity: DiagnosticSeverity.Error
-		}
+		};
 	}
 
 	// Check for the existance of a meta tag with user-scalable=yes
@@ -40,106 +42,106 @@ export function validateHead(e: HTMLHeadElement) {
 	});
 
 	return {
-		message: "Enable pinching to zoom [user-scalable=yes]",
+		message: messages.validateHeadUserScalableMessage,
 		severity: DiagnosticSeverity.Information
-	}
+	};
 }
 
 // Check for valid meta tags
-export function validateMeta(e: HTMLMetaElement) {
+export function validateMeta(e: HTMLMetaElement): Result | undefined {
 	// Need to handle having multiple meta tags
 	const role = e.attributes.getNamedItem("user-scalable");
 	if (role && role.value !== "yes") {
 		return {
 			extended: true,
-			message: "Enable pinching to zoom [user-scalable=yes]",
+			message: messages.validateMetaUserScalableMessage,
 			severity: DiagnosticSeverity.Information
-		}
+		};
 	}
 
 	const maximumScale = e.attributes.getNamedItem("maximum-scale");
 	if (maximumScale && maximumScale.value === "1") {
 		return {
 			extended: true,
-			message: "Avoid using [maximum-scale=1]",
+			message: messages.validateMetaMaximumScaleMessage,
 			severity: DiagnosticSeverity.Information
-		}
+		};
 	}
 }
 
 // Check for non-empty titles
-export function validateTitle(e: HTMLTitleElement) {
+export function validateTitle(e: HTMLTitleElement): Result | undefined {
 	const text = e.innerText;
 	if (!text || text === "") {
 		return {
 			extended: true,
-			message: "Provide a text within the <title> tags",
+			message: messages.validateTitleMessage,
 			severity: DiagnosticSeverity.Error
 		};
 	}
 }
 
 // Checks that img tags use valid alt attributes
-export async function validateImg(e: HTMLImageElement) {
+export async function validateImg(e: HTMLImageElement): Promise<Result | undefined> {
 	const alt = e.attributes.getNamedItem("alt");
 	if (alt) {
 		if (altNonDescriptive.test(alt.value)) {
 			return {
-				message: "Alt attribute must be specifically descriptive",
+				message: messages.validateAltDescriptiveMessage,
 				severity: DiagnosticSeverity.Information
 			};
 		} else if (altBadStart.test(alt.value)) {
 			return {
-				message: "Alt text should not begin with \"image of\" or similar phrasing",
+				message: messages.validateAltBadStartMessage,
 				severity: DiagnosticSeverity.Information
 			};
 		} else if (alt.value.length > 125) {
 			return {
-				message: "Alt text is too long - most screen readers cut off at 125 characters",
+				message: messages.validateAltLongMessage,
 				severity: DiagnosticSeverity.Information
 			};
 		}
 	} else {
-		const message = `Provide an alt text that describes the image, `;
-		let messageDecorative = "or alt=\"\" if image is purely decorative";
-
 		// Run TF object classifier on image to retrieve potential alt text
 		const alt = await altText(e);
 		if (alt) {
-			messageDecorative = alt;
+			return {
+				message: messages.validateAltMessage(alt),
+				severity: DiagnosticSeverity.Error
+			};
+		} else {
+			return {
+				message: messages.validateAltMessage(),
+				severity: DiagnosticSeverity.Error
+			};
 		}
-
-		return {
-			message: message + messageDecorative,
-			severity: DiagnosticSeverity.Error
-		};
 	}
 }
 
 // Check that divs use WAI-ARIA roles
-export function validateDiv(e: HTMLDivElement) {
+export function validateDiv(e: HTMLDivElement): Result | undefined {
 	const role = e.attributes.getNamedItem("role");
 	if (!role) {
 		return {
-			message: "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]\nhttps://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles",
+			message: messages.validateDivMessage,
 			severity: DiagnosticSeverity.Information
-		}
+		};
 	}
 }
 
 // Check that anchor elements have descriptive text
-export function validateA(e: HTMLAnchorElement) {
+export function validateA(e: HTMLAnchorElement): Result | undefined {
 	if (e.innerHTML.length === 0) {
 		return {
 			extended: true,
-			message: "Provide descriptive text in between anchor tags",
+			message: messages.validateAMessage,
 			severity: DiagnosticSeverity.Warning
 		};
 	}
 }
 
 // Check that inputs are properly labelled
-export function validateInput(e: HTMLInputElement) {
+export function validateInput(e: HTMLInputElement): Result | undefined {
 	if (e.style.getPropertyValue("display") === "none") {
 		return;
 	} else if (e.style.getPropertyValue("visibility") === "hidden") {
@@ -152,32 +154,32 @@ export function validateInput(e: HTMLInputElement) {
 	if (ariaLabel) {
 		if (ariaLabel.value === "") {
 			return {
-				message: "Provide a text within the aria label [aria-label=\"\"]",
+				message: messages.validateAriaEmptyMessage,
 				severity: DiagnosticSeverity.Hint
 			};
 		}
 	} else if (ariaLabelledBy) {
 		if (ariaLabelledBy.value === "") {
 			return {
-				message: "Provide a text within the aria-labelled-by tag [aria-labelled-by=\"\"]",
+				message: messages.validateAriaLabelledByEmptyMessage,
 				severity: DiagnosticSeverity.Hint
 			};
 		}
 	} else if (title) {
 		return {
-			message: "It's recommended to use aria-label or aria-labelled-by to identify form controls, as the title attribute is often used to provide non-essential information.",
+			message: messages.validateAriaLabelledByEmptyMessage,
 			severity: DiagnosticSeverity.Hint
 		};
 	} else {
 		return {
-			message: "Provide an aria label to identify the input element [aria-label=\"\"]",
+			message: messages.validateAriaLabelMessage,
 			severity: DiagnosticSeverity.Hint
 		};
 	}
 }
 
 // Checks for sufficient color contrast between elements
-export function validateContrast(e: Element, DOM: JSDOM) {
+export function validateContrast(e: Element, DOM: JSDOM): Result | undefined {
 	const style = DOM.window.getComputedStyle(e);
 	const backgroundColor = style.getPropertyValue("background-color");
 	const color = style.getPropertyValue("color");
@@ -185,7 +187,7 @@ export function validateContrast(e: Element, DOM: JSDOM) {
 		const c = contrast(color, backgroundColor);
 		if (c < 4.5) {
 			return {
-				message: `Color contrast between content and its background must be 4.5:1 or above (is ${c.toFixed(2)}:1)`,
+				message: messages.validateContrastMessage(c),
 				severity: DiagnosticSeverity.Error
 			};
 		}
@@ -193,12 +195,32 @@ export function validateContrast(e: Element, DOM: JSDOM) {
 }
 
 // Check that tabindexes are 0 or -1
-export function validateTabIndex(e: Element) {
+export function validateTabIndex(e: Element): Result | undefined {
 	const tabIndex = e.attributes.getNamedItem("tabindex");
 	if (tabIndex && tabIndex.value !== "-1" && tabIndex.value !== "0") {
 		return {
-			message: "A tabindex other than 0 or -1 interferes with the focus order.",
+			message: messages.validateTabIndex,
 			severity: DiagnosticSeverity.Error
-		}
+		};
 	}
+}
+
+// Validate that audio has captions and provides suggested captions if not
+export function validateVideo(e: HTMLVideoElement): Result | undefined {
+	// check if there are video captions
+
+	
+	// return clickable button that will generate captions
+
+	return;
+}
+
+// Encourage use of a video tag with (1) audio as a source and (2) a track for captions
+// https://www.iandevlin.com/blog/2015/12/html5/webvtt-and-audio/
+export function validateAudio(e: HTMLAudioElement): Result {
+	return {
+		extended: true,
+		message: messages.validateAudioMessage,
+		severity: DiagnosticSeverity.Hint
+	};
 }

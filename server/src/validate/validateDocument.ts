@@ -73,10 +73,9 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	});
 
 	// Validate <img> tags
-	document.querySelectorAll("img").forEach(e => {
-		validate.validateImg(e).then((result) => {
-			_diagnostics(e, result);
-		});
+	document.querySelectorAll("img").forEach(async e => {
+		const result = await validate.validateImg(e)
+		_diagnostics(e, result);
 	});
 	
 	// Validate <input> elements
@@ -100,6 +99,11 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	// Validate <a> tags
 	document.querySelectorAll("a").forEach(e => {
 		const result = validate.validateA(e);
+		_diagnostics(e, result);
+	});
+
+	document.querySelectorAll("audio").forEach(e => {
+		const result = validate.validateAudio(e);
 		_diagnostics(e, result);
 	});
 

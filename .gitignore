@@ -113,3 +113,6 @@ server/out
 
 # Build output
 build
+
+# Package files
+.vsix
