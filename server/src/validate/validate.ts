@@ -1,16 +1,16 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
-import { altText } from "../util/imageClassifier";
+import { altText } from "../util/classifiers/imageClassifier";
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
-import { JSDOM } from "jsdom";
 import * as messages from "../util/messages";
 import {
 	altNonDescriptive,
 	altBadStart,
 } from "../util/patterns";
-import { Result } from "../util/Result";
+import { Result } from "./Result";
+import { roleNames } from "../util/roles";
 
 // Check for html's language specification
 export function validateHtml(e: HTMLHtmlElement): Result | undefined {
@@ -179,13 +179,14 @@ export function validateInput(e: HTMLInputElement): Result | undefined {
 }
 
 // Checks for sufficient color contrast between elements
-export function validateContrast(e: Element, DOM: JSDOM): Result | undefined {
-	const style = DOM.window.getComputedStyle(e);
+export function validateContrast(e: Element, window: Window): Result | undefined {
+	const style = window.getComputedStyle(e);
 	const backgroundColor = style.getPropertyValue("background-color");
 	const color = style.getPropertyValue("color");
+	const MINIMUM_CONTRAST_RATIO = 4.5; // TODO: Move this into settings
 	if (color && backgroundColor) {
 		const c = contrast(color, backgroundColor);
-		if (c < 4.5) {
+		if (c < MINIMUM_CONTRAST_RATIO) {
 			return {
 				message: messages.validateContrastMessage(c),
 				severity: DiagnosticSeverity.Error
@@ -223,4 +224,25 @@ export function validateAudio(e: HTMLAudioElement): Result {
 		message: messages.validateAudioMessage,
 		severity: DiagnosticSeverity.Hint
 	};
+}
+
+// Check that specified aria roles are valid
+export function validateAriaRole(e: Element): Result | undefined {
+	const role = e.attributes.getNamedItem("role");
+	if (role && !roleNames.has(role.value)) {
+		return {
+			message: messages.validateAriaRoleMessage(role.value),
+			severity: DiagnosticSeverity.Error
+		};
+	}
+}
+
+// Encourage the marking of dynamic regions as live
+export function validateAriaLive(e: Element, document: Document): Result | undefined {
+	const window = document.defaultView;
+	const $ = require("jquery")(window);
+	const events = $._data(e, "events");
+	// console.log(events);
+	
+	return;
 }

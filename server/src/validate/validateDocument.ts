@@ -1,6 +1,6 @@
 import { createDOM } from "../DOM";
 import { getDocumentSettings } from "../server";
-import { Result } from "../util/Result";
+import { Result } from "./Result";
 import * as validate from "./validate";
 import {
     Connection,
@@ -52,7 +52,16 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	}
 
 	const DOM = await createDOM(text, htmlDocument.uri);
-	const document = DOM.window.document;
+	const window = DOM.window;
+	const document = window.document;
+
+	// Perform non-element-specific checks
+	document.querySelectorAll("body *").forEach(e => {
+		_diagnostics(e, validate.validateAriaLive(e, document));
+		_diagnostics(e, validate.validateAriaRole(e));
+		_diagnostics(e, validate.validateContrast(e, window));
+		_diagnostics(e, validate.validateTabIndex(e));
+	});
 
 	// Validate html tags
 	document.querySelectorAll("html").forEach(e => {
@@ -82,12 +91,6 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	document.querySelectorAll("input").forEach(e => {
 		const result = validate.validateInput(e);
 		_diagnostics(e, result);
-	});
-
-	// Perform non-element-specific checks
-	document.querySelectorAll("body *").forEach(e => {
-		_diagnostics(e, validate.validateTabIndex(e));
-		_diagnostics(e, validate.validateContrast(e, DOM));
 	});
 
 	// Validate <div> tags

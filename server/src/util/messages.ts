@@ -7,6 +7,7 @@ export const validateAriaEmptyMessage = "Provide a text within the aria label [a
 export const validateAriaLabelMessage = "Provide an aria label to identify the input element [aria-label=\"\"]";
 export const validateAriaLabelledByEmptyMessage = "Provide a text within the aria-labelled-by tag [aria-labelled-by=\"\"]";
 export const validateAriaOverTitleMessage = "It's recommended to use aria-label or aria-labelled-by to identify form controls, as the title attribute is often used to provide non-essential information.";
+export const validateAriaRoleMessage = (role: String = "The specified role value") => `"${role}" is not a valid ARIA role - see https://www.w3.org/TR/html-aria/#allowed-aria-roles-states-and-properties for details.`
 export const validateAudioMessage = "Consider instead using a <video> tag instead of an <audio> tag to display audio content, as <audio> tags do not currently support subtitles.\nAdd your audio as a <source> element with your captions in a <track kind=\"subtitles\">\nFor more info, see https://www.iandevlin.com/blog/2015/12/html5/webvtt-and-audio/.";
 export const validateContrastMessage = (c: Number) => `Color contrast between content and its background must be 4.5:1 or above (is ${c.toFixed(2)}:1)`;
 export const validateDivMessage = "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]\nhttps://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles";
