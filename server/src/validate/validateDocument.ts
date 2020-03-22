@@ -63,21 +63,33 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, validate.validateTabIndex(e));
 	});
 
-	// Validate html tags
-	document.querySelectorAll("html").forEach(e => {
-		const result = validate.validateHtml(e);
+	// Validate <a> tags
+	document.querySelectorAll("a").forEach(e => {
+		const result = validate.validateA(e);
 		_diagnostics(e, result);
 	});
 
-	// Validate head
+	// Validate <audio> tags
+	document.querySelectorAll("audio").forEach(e => {
+		const result = validate.validateAudio(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <div> tags
+	document.querySelectorAll("div").forEach(e => {
+		const result = validate.validateDiv(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <head> tags
 	document.querySelectorAll("head").forEach(e => {
 		const result = validate.validateHead(e);
 		_diagnostics(e, result);
 	});
 
-	// Validate meta tags
-	document.querySelectorAll("meta").forEach(e => {
-		const result = validate.validateMeta(e);
+	// Validate <html> tags
+	document.querySelectorAll("html").forEach(e => {
+		const result = validate.validateHtml(e);
 		_diagnostics(e, result);
 	});
 
@@ -93,26 +105,15 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
-	// Validate <div> tags
-	document.querySelectorAll("div").forEach(e => {
-		const result = validate.validateDiv(e);
+	// Validate <meta> tags
+	document.querySelectorAll("meta").forEach(e => {
+		const result = validate.validateMeta(e);
 		_diagnostics(e, result);
 	});
 
 	// Validate <span> tags
 	document.querySelectorAll("span").forEach(e => {
 		const result = validate.validateSpan(e);
-		_diagnostics(e, result);
-	});
-
-	// Validate <a> tags
-	document.querySelectorAll("a").forEach(e => {
-		const result = validate.validateA(e);
-		_diagnostics(e, result);
-	});
-
-	document.querySelectorAll("audio").forEach(e => {
-		const result = validate.validateAudio(e);
 		_diagnostics(e, result);
 	});
 
