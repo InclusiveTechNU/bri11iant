@@ -99,6 +99,12 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
+	// Validate <span> tags
+	document.querySelectorAll("span").forEach(e => {
+		const result = validate.validateSpan(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <a> tags
 	document.querySelectorAll("a").forEach(e => {
 		const result = validate.validateA(e);

@@ -129,6 +129,15 @@ export function validateDiv(e: HTMLDivElement): Result | undefined {
 	}
 }
 
+export function validateSpan(e: HTMLSpanElement): Result | undefined {
+	const role = e.attributes.getNamedItem("role");
+	if (!role) {
+		return {
+			message: messages.validateSpanMessage,
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
 // Check that anchor elements have descriptive text
 export function validateA(e: HTMLAnchorElement): Result | undefined {
 	if (e.innerHTML.length === 0) {
@@ -242,7 +251,6 @@ export function validateAriaLive(e: Element, document: Document): Result | undef
 	const window = document.defaultView;
 	const $ = require("jquery")(window);
 	const events = $._data(e, "events");
-	// console.log(events);
 	
 	return;
 }

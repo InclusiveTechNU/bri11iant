@@ -16,5 +16,6 @@ export const validateHeadUserScalableMessage = "Enable pinching to zoom [user-sc
 export const validateHtmlMessage = "Provide a language [lang=\"\"]";
 export const validateMetaMaximumScaleMessage = "Avoid using [maximum-scale=1]";
 export const validateMetaUserScalableMessage = "Enable pinching to zoom [user-scalable=yes]";
+export const validateSpanMessage = "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]\nhttps://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles";
 export const validateTabIndex = "A tabindex other than 0 or -1 interferes with the focus order.";
 export const validateTitleMessage = "Provide a text within the <title> tags";
