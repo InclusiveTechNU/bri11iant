@@ -69,12 +69,6 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
-	// Validate <audio> tags
-	document.querySelectorAll("audio").forEach(e => {
-		const result = validate.validateAudio(e);
-		_diagnostics(e, result);
-	});
-
 	// Validate <div> tags
 	document.querySelectorAll("div").forEach(e => {
 		const result = validate.validateDiv(e);
@@ -111,9 +105,26 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
+	// Validate <p> tags
+	document.querySelectorAll("p").forEach(e => {
+		const result = validate.validateP(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <select> tags
+	document.querySelectorAll("select").forEach(e => {
+		const result = validate.validateSelect(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <span> tags
 	document.querySelectorAll("span").forEach(e => {
 		const result = validate.validateSpan(e);
+		_diagnostics(e, result);
+	});
+
+	document.querySelectorAll("video").forEach(e => {
+		const result = validate.validateVideo();
 		_diagnostics(e, result);
 	});
 

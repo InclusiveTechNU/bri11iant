@@ -43,22 +43,12 @@ export function validateAriaRole(e: Element): Result | undefined {
 	}
 }
 
-// Encourage use of a video tag with (1) audio as a source and (2) a track for captions
-// https://www.iandevlin.com/blog/2015/12/html5/webvtt-and-audio/
-export function validateAudio(e: HTMLAudioElement): Result {
-	return {
-		extended: true,
-		message: messages.validateAudioMessage,
-		severity: DiagnosticSeverity.Hint
-	};
-}
-
 // Checks for sufficient color contrast between elements
 export function validateContrast(e: Element, window: Window): Result | undefined {
 	const style = window.getComputedStyle(e);
 	const backgroundColor = style.getPropertyValue("background-color");
 	const color = style.getPropertyValue("color");
-	const MINIMUM_CONTRAST_RATIO = 4.5; // TODO: Move this into settings
+	const MINIMUM_CONTRAST_RATIO = 4.5; // TODO: Differentiate between large and small text
 	if (color && backgroundColor) {
 		const c = contrast(color, backgroundColor);
 		if (c < MINIMUM_CONTRAST_RATIO) {
@@ -78,6 +68,16 @@ export function validateDiv(e: HTMLDivElement): Result | undefined {
 			message: messages.validateDivMessage,
 			severity: DiagnosticSeverity.Information
 		};
+	}
+
+	const ariaLabel = e.attributes.getNamedItem("aria-label");
+	const ariaLabelledBy = e.attributes.getNamedItem("aria-labelledby");
+	const ariaDescribedBy = e.attributes.getNamedItem("aria-describedby");
+	if (ariaLabel || ariaLabelledBy || ariaDescribedBy) {
+		return {
+			message: messages.validateAriaLabelBadElementMessage("<div>"),
+			severity: DiagnosticSeverity.Warning
+		}
 	}
 }
 
@@ -215,6 +215,36 @@ export function validateMeta(e: HTMLMetaElement): Result | undefined {
 }
 
 // Make sure <span> tags have roles, if used
+export function validateP(e: HTMLParagraphElement): Result | undefined {
+	const ariaLabel = e.attributes.getNamedItem("aria-label");
+	const ariaLabelledBy = e.attributes.getNamedItem("aria-labelledby");
+	const ariaDescribedBy = e.attributes.getNamedItem("aria-describedby");
+	if (ariaLabel || ariaLabelledBy || ariaDescribedBy) {
+		return {
+			message: messages.validateAriaLabelBadElementMessage("<p>"),
+			severity: DiagnosticSeverity.Warning
+		}
+	}
+}
+ 
+// Make sure <select> tags follow specifications
+export function validateSelect(e: HTMLSelectElement): Result | undefined {
+	if (e.attributes.getNamedItem("multiple")) {
+		return {
+			message: messages.validateSelectMultipleMessage,
+			severity: DiagnosticSeverity.Hint
+		}
+	}
+	
+	if (!(e.attributes.getNamedItem("aria-live"))) {
+		return {
+			message: messages.validateSelectAriaLiveMessage,
+			severity: DiagnosticSeverity.Hint
+		}
+	}
+}
+
+// Make sure <span> tags have roles, if used
 export function validateSpan(e: HTMLSpanElement): Result | undefined {
 	const role = e.attributes.getNamedItem("role");
 	if (!role) {
@@ -222,6 +252,16 @@ export function validateSpan(e: HTMLSpanElement): Result | undefined {
 			message: messages.validateSpanMessage,
 			severity: DiagnosticSeverity.Information
 		};
+	}
+
+	const ariaLabel = e.attributes.getNamedItem("aria-label");
+	const ariaLabelledBy = e.attributes.getNamedItem("aria-labelledby");
+	const ariaDescribedBy = e.attributes.getNamedItem("aria-describedby");
+	if (ariaLabel || ariaLabelledBy || ariaDescribedBy) {
+		return {
+			message: messages.validateAriaLabelBadElementMessage("<span>"),
+			severity: DiagnosticSeverity.Warning
+		}
 	}
 }
 
@@ -248,11 +288,9 @@ export function validateTitle(e: HTMLTitleElement): Result | undefined {
 	}
 }
 
-// Validate that audio has captions and provides suggested captions if not
-export function validateVideo(e: HTMLVideoElement): Result | undefined {
-	// check if there are video captions
-
-	// return clickable button that will generate captions
-
-	return;
+export function validateVideo(): Result {
+	return {
+		message: messages.validateVideoMessage,
+		severity: DiagnosticSeverity.Hint
+	}
 }
