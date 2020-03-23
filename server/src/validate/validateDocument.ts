@@ -69,9 +69,141 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
+	// Validate <area> tags
+	document.querySelectorAll("area").forEach(e => {
+		const result = validate.validateArea(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <article> tags
+	document.querySelectorAll("article").forEach(e => {
+		const result = validate.validateArticle(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <aside> tags
+	document.querySelectorAll("aside").forEach(e => {
+		const result = validate.validateAside(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <audio> tags
+	document.querySelectorAll("audio").forEach(e => {
+		const result = validate.validateAudio(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <base> tags
+	document.querySelectorAll("base").forEach(e => {
+		const result = validate.validateBase(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <br> tags
+	document.querySelectorAll("br").forEach(e => {
+		const result = validate.validateBR(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <button> tags
+	document.querySelectorAll("button").forEach(e => {
+		const result = validate.validateButton(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <caption> tags
+	document.querySelectorAll("caption").forEach(e => {
+		const result = validate.validateCaption(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <col> tags
+	document.querySelectorAll("col").forEach(e => {
+		const result = validate.validateCol(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <colgroup> tags
+	document.querySelectorAll("colgroup").forEach(e => {
+		const result = validate.validateColGroup(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <datalist> tags
+	document.querySelectorAll("datalist").forEach(e => {
+		const result = validate.validateDataList(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <dd> tags
+	document.querySelectorAll("dd").forEach(e => {
+		const result = validate.validateDD(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <details> tags
+	document.querySelectorAll("details").forEach(e => {
+		const result = validate.validateDetails(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <dialog> tags
+	document.querySelectorAll("dialog").forEach(e => {
+		const result = validate.validateDialog(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <div> tags
 	document.querySelectorAll("div").forEach(e => {
 		const result = validate.validateDiv(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <dl> tags
+	document.querySelectorAll("dl").forEach(e => {
+		const result = validate.validateDL(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <dt> tags
+	document.querySelectorAll("dt").forEach(e => {
+		const result = validate.validateDT(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <dt> tags
+	document.querySelectorAll("embed").forEach(e => {
+		const result = validate.validateEmbed(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <dt> tags
+	document.querySelectorAll("fieldset").forEach(e => {
+		const result = validate.validateFieldSet(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <dt> tags
+	document.querySelectorAll("figcaption").forEach(e => {
+		const result = validate.validateFigCaption(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <figure> tags
+	document.querySelectorAll("figure").forEach(e => {
+		const result = validate.validateFigCaption(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <figure> tags
+	document.querySelectorAll("footer").forEach(e => {
+		const result = validate.validateFooter(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <form> tags
+	document.querySelectorAll("form").forEach(e => {
+		const result = validate.validateForm(e);
 		_diagnostics(e, result);
 	});
 
@@ -81,9 +213,27 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
+	// Validate header tags
+	document.querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(e => {
+		const result = validate.validateHeader(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <hr> tags
+	document.querySelectorAll("hr").forEach(e => {
+		const result = validate.validateHR(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <html> tags
 	document.querySelectorAll("html").forEach(e => {
 		const result = validate.validateHtml(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <iframe> tags
+	document.querySelectorAll("iframe").forEach(e => {
+		const result = validate.validateIFrame(e);
 		_diagnostics(e, result);
 	});
 

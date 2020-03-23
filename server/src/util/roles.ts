@@ -15,7 +15,7 @@ export class Role {
         this.name = name;
         this.url = specialRoles.has(name)? `https://www.w3.org/TR/wai-aria-1.1/#${name}` : null;
     }
-    
+
 }
 
 const ariaRoles = [
@@ -93,3 +93,124 @@ const ariaRoles = [
 
 export const roleNames = new Set(ariaRoles);
 export const roles = new Set(ariaRoles.map(e => new Role(e)));
+
+// Valid role names found at https://www.w3.org/TR/html-aria/
+
+export const validARoleNames = new Set([
+    "button",
+    "checkbox",
+    "menuitem",
+    "menuitemcheckbox",
+    "menuitemradio",
+    "option",
+    "radio",
+    "switch",
+    "tab",
+    "treeitem"
+]);
+
+export const validArticleRoleNames = new Set([
+    "application",
+    "document",
+    "feed",
+    "main",
+    "none",
+    "presentation",
+    "region"
+]);
+
+export const validAsideRoleNames = new Set([
+    "feed",
+    "none",
+    "note",
+    "presentation",
+    "region",
+    "search"
+]);
+
+export const validAudioRoleNames = new Set([
+    "application"
+]);
+
+export const validBRRoleNames = new Set([
+    "presentation",
+    "none"
+]);
+
+export const validButtonRoleNames = new Set([
+    "checkbox",
+    "link",
+    "menuitem",
+    "menuitemcheckbox",
+    "menuitemradio",
+    "option",
+    "radio",
+    "switch",
+    "tab"
+]);
+
+export const validDialogRoleNames = new Set([
+    "alertdialog"
+]);
+
+export const validDLRoleNames = new Set([
+    "group",
+    "list",
+    "none",
+    "presentation"
+]);
+
+export const validDTRoleNames = new Set([
+    "listitem"
+]);
+
+export const validEmbedRoleNames = new Set([
+    "application",
+    "document",
+    "img",
+    "none",
+    "presentation"
+]);
+
+export const validFieldSetRoleNames = new Set([
+    "none",
+    "presentation",
+    "radiogroup"
+]);
+
+export const validFigCaptionRoleNames = new Set([
+    "group",
+    "none",
+    "presentation"
+]);
+
+export const validFooterRoleNames = new Set([
+    "group",
+    "none",
+    "presentation"
+]);
+
+export const validFormRoleNames = new Set([
+    "none",
+    "presentation",
+    "search"
+]);
+
+export const validHeaderRoleNames = new Set([
+    "none",
+    "presentation",
+    "tab"
+]);
+
+export const validHRRoleNames = new Set([
+    "none",
+    "presentation"
+]);
+
+export const validIFrameRoleNames = new Set([
+    "application",
+    "document",
+    "img",
+    "none",
+    "presentation"
+]);
