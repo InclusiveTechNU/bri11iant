@@ -214,3 +214,94 @@ export const validIFrameRoleNames = new Set([
     "none",
     "presentation"
 ]);
+
+export const validImgEmptyAltRoleNames = new Set([
+    "none",
+    "presentation"
+]);
+
+export const validImgWithAltRoleNames = new Set([
+    "button",
+    "checkbox",
+    "link",
+    "menuitem",
+    "menuitemcheckbox",
+    "menuitemradio",
+    "option",
+    "progressbar",
+    "scrollbar",
+    "separator",
+    "slider",
+    "switch",
+    "tab",
+    "treeitem"
+]);
+
+export const inputTypesWithoutRoles = new Set([
+    "color",
+    "date",
+    "datetime-local",
+    "email",
+    "file",
+    "month",
+    "number",
+    "password",
+    "range",
+    "reset",
+    "search",
+    "submit",
+    "tel",
+    "time",
+    "url",
+    "week"
+]);
+
+export const validInputButtonRoleNames = new Set([
+    "link",
+    "menuitem",
+    "menuitemcheckbox",
+    "menuitemradio",
+    "option",
+    "radio",
+    "switch",
+    "tab"
+]);
+
+export const validInputCheckboxRoleNames = new Set([
+    "button",
+    "menuitemcheckbox",
+    "option",
+    "switch"
+]);
+
+export const validInputImageRoleNames = new Set([
+    "link",
+    "menuitem",
+    "menuitemcheckbox",
+    "menuitemradio",
+    "radio",
+    "switch"
+]);
+
+export const validInputRadioRoleNames = new Set([
+    "menuitemradio"
+]);
+
+export const validInputTextRoleNames = new Set([
+    "combobox",
+    "searchbox",
+    "spinbutton"
+]);
+
+export const validLIRoleNames = new Set([
+    "menuitem",
+    "menuitemcheckbox",
+    "menuitemradio",
+    "none",
+    "option",
+    "presentation",
+    "radio",
+    "separator",
+    "tab",
+    "treeitem"
+]);

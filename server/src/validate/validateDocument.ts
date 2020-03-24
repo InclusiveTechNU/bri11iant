@@ -95,7 +95,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Validate <base> tags
 	document.querySelectorAll("base").forEach(e => {
-		const result = validate.validateBase(e);
+		const result = validate.validateNoAriaRole(e);
 		_diagnostics(e, result);
 	});
 
@@ -119,13 +119,13 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Validate <col> tags
 	document.querySelectorAll("col").forEach(e => {
-		const result = validate.validateCol(e);
+		const result = validate.validateNoAriaRole(e);
 		_diagnostics(e, result);
 	});
 
 	// Validate <colgroup> tags
 	document.querySelectorAll("colgroup").forEach(e => {
-		const result = validate.validateColGroup(e);
+		const result = validate.validateNoAriaRole(e);
 		_diagnostics(e, result);
 	});
 
@@ -209,8 +209,8 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Validate <head> tags
 	document.querySelectorAll("head").forEach(e => {
-		const result = validate.validateHead(e);
-		_diagnostics(e, result);
+		_diagnostics(e, validate.validateHead(e));
+		_diagnostics(e, validate.validateNoAriaRole(e));
 	});
 
 	// Validate header tags
@@ -227,8 +227,8 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Validate <html> tags
 	document.querySelectorAll("html").forEach(e => {
-		const result = validate.validateHtml(e);
-		_diagnostics(e, result);
+		_diagnostics(e, validate.validateHtml(e));
+		_diagnostics(e, validate.validateNoAriaRole(e));
 	});
 
 	// Validate <iframe> tags
@@ -249,9 +249,63 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
+	// Validate <label> elements
+	document.querySelectorAll("label").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <legend> tags
+	document.querySelectorAll("legend").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <li> elements
+	document.querySelectorAll("li").forEach(e => {
+		const result = validate.validateLI(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <link> elements
+	document.querySelectorAll("link").forEach(e => {
+		const result = validate.validateLink(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <main> elements
+	document.querySelectorAll("main").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <map> elements
+	document.querySelectorAll("map").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <meta> tags
 	document.querySelectorAll("meta").forEach(e => {
-		const result = validate.validateMeta(e);
+		_diagnostics(e, validate.validateMeta(e));
+		_diagnostics(e, validate.validateNoAriaRole(e));
+	});
+
+	// Validate <meter> tags
+	document.querySelectorAll("meter").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <noscript> tags
+	document.querySelectorAll("noscript").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <optgroup> tags
+	document.querySelectorAll("optgroup").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
 		_diagnostics(e, result);
 	});
 
@@ -261,15 +315,87 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
+	// Validate <param> tags
+	document.querySelectorAll("param").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <picture> tags
+	document.querySelectorAll("picture").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <progress> tags
+	document.querySelectorAll("progress").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <script> tags
+	document.querySelectorAll("script").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <select> tags
 	document.querySelectorAll("select").forEach(e => {
-		const result = validate.validateSelect(e);
+		_diagnostics(e, validate.validateSelect(e));
+		_diagnostics(e, validate.validateNoAriaRole(e));
+	});
+
+	// Validate <slot> tags
+	document.querySelectorAll("slot").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <source> tags
+	document.querySelectorAll("source").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
 		_diagnostics(e, result);
 	});
 
 	// Validate <span> tags
 	document.querySelectorAll("span").forEach(e => {
 		const result = validate.validateSpan(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <style> tags
+	document.querySelectorAll("style").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <summary> tags
+	document.querySelectorAll("summary").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <template> tags
+	document.querySelectorAll("template").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <textarea> tags
+	document.querySelectorAll("textarea").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <title> tags
+	document.querySelectorAll("title").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <track> tags
+	document.querySelectorAll("track").forEach(e => {
+		const result = validate.validateNoAriaRole(e);
 		_diagnostics(e, result);
 	});
 

@@ -100,16 +100,6 @@ export function validateAudio(e: HTMLAudioElement): Result | undefined {
 	// TODO: Check for captions and suggest/generate
 }
 
-// Validate <base> tags
-export function validateBase(e: HTMLBaseElement): Result | undefined {
-	if (e.attributes.getNamedItem("role")) {
-		return {
-			message: messages.noRolesAllowedMessage,
-			severity: DiagnosticSeverity.Information
-		};
-	}
-}
-
 // Validate <body> tags
 export function validateBody(e: HTMLBodyElement): Result | undefined {
 	const value = e.attributes.getNamedItem("role")?.value;
@@ -149,26 +139,6 @@ export function validateCaption(e: HTMLTableCaptionElement): Result | undefined 
 	if (value) {
 		return {
 			message: messages.roleNotAllowedMessage(value, "<caption>"),
-			severity: DiagnosticSeverity.Information
-		};
-	}
-}
-
-// Validate <col> tags
-export function validateCol(e: HTMLTableColElement): Result | undefined {
-	if (e.attributes.getNamedItem("role")) {
-		return {
-			message: messages.noRolesAllowedMessage,
-			severity: DiagnosticSeverity.Information
-		};
-	}
-}
-
-// Validate <colgroup> tags
-export function validateColGroup(e: HTMLElement): Result | undefined {
-	if (e.attributes.getNamedItem("role")) {
-		return {
-			message: messages.noRolesAllowedMessage,
 			severity: DiagnosticSeverity.Information
 		};
 	}
@@ -357,14 +327,6 @@ export function validateHead(e: HTMLHeadElement): Result | undefined {
 		};
 	}
 
-	// Check for ARIA role
-	if (e.attributes.getNamedItem("role")) {
-		return {
-			message: messages.noRolesAllowedMessage,
-			severity: DiagnosticSeverity.Information
-		};
-	}
-
 	// Check for the existance of a meta tag with user-scalable=yes
 	// Other case handled by validateMeta
 	e.querySelectorAll("meta").forEach(meta => {
@@ -403,19 +365,10 @@ export function validateHR(e: HTMLHRElement): Result | undefined {
 
 // Check for html's language specification and ARIA role
 export function validateHtml(e: HTMLHtmlElement): Result | undefined {
-	const language = e.attributes.getNamedItem("lang");
-	if (!language) {
+	if (!e.attributes.getNamedItem("lang")) {
 		return {
 			message: messages.validateHtmlMessage,
 			severity: DiagnosticSeverity.Warning
-		};
-	}
-
-	// Check for ARIA role
-	if (e.attributes.getNamedItem("role")) {
-		return {
-			message: messages.noRolesAllowedMessage,
-			severity: DiagnosticSeverity.Information
 		};
 	}
 }
@@ -435,7 +388,20 @@ export function validateIFrame(e: HTMLIFrameElement): Result | undefined {
 export async function validateImg(e: HTMLImageElement): Promise<Result | undefined> {
 	const alt = e.attributes.getNamedItem("alt");
 	if (alt) {
-		if (altNonDescriptive.test(alt.value)) {
+		const role = e.attributes.getNamedItem("role")?.value;
+		if (role) {
+			if (alt.value === "" && !roles.validImgEmptyAltRoleNames.has(role)) {
+				return {
+					message: messages.roleNotAllowedMessage(role, "<img>"),
+					severity: DiagnosticSeverity.Information
+				};
+			} else if (alt.value !== "" && !roles.validImgWithAltRoleNames.has(role)) {
+				return {
+					message: messages.roleNotAllowedMessage(role, "<img>"),
+					severity: DiagnosticSeverity.Information
+				};
+			}
+		} else if (altNonDescriptive.test(alt.value)) {
 			return {
 				message: messages.validateAltDescriptiveMessage,
 				severity: DiagnosticSeverity.Information
@@ -504,7 +470,67 @@ export function validateInput(e: HTMLInputElement): Result | undefined {
 			severity: DiagnosticSeverity.Hint
 		};
 	}
+
+	const role = e.attributes.getNamedItem("role")?.value;
+	const type = e.attributes.getNamedItem("type")?.value;
+	if (role && type) {
+		if (roles.inputTypesWithoutRoles.has(type)) {
+			return {
+				message: messages.noRolesAllowedMessage,
+				severity: DiagnosticSeverity.Information
+			};
+		} else if (type === "button" && !roles.validInputButtonRoleNames.has(role)) {
+			return {
+				message: messages.roleNotAllowedMessage(role, "<input type=\"button\">"),
+				severity: DiagnosticSeverity.Information
+			};
+		} else if (type === "checkbox" && !roles.validInputCheckboxRoleNames.has(role)) {
+			return {
+				message: messages.roleNotAllowedMessage(role, "<input type=\"checkbox\">"),
+				severity: DiagnosticSeverity.Information
+			};
+		} else if (type === "image" && !roles.validInputImageRoleNames.has(role)) {
+			return {
+				message: messages.roleNotAllowedMessage(role, "<input type=\"image\">"),
+				severity: DiagnosticSeverity.Information
+			};
+		} else if (type === "radio" && !roles.validInputRadioRoleNames.has(role)) {
+			return {
+				message: messages.roleNotAllowedMessage(role, "<input type=\"radio\">"),
+				severity: DiagnosticSeverity.Information
+			};
+		} else if (type === "text" && !e.attributes.getNamedItem("list") && !roles.validInputTextRoleNames.has(role)) {
+			return {
+				message: messages.roleNotAllowedMessage(role, "<input type=\"text\">"),
+				severity: DiagnosticSeverity.Information
+			};
+		}
+	}
 }
+
+// Check for valid <li> tags
+export function validateLI(e: HTMLLIElement): Result | undefined {
+	const value = e.attributes.getNamedItem("role")?.value;
+	if (value && !roles.validLIRoleNames.has(value)) {
+		return {
+			message: messages.roleNotAllowedMessage(value, "<li>"),
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
+
+// Check for valid <link> tags
+export function validateLink(e: HTMLLinkElement): Result | undefined {
+	const value = e.attributes.getNamedItem("role")?.value;
+	if (value && e.attributes.getNamedItem("href")) {
+		return {
+			message: messages.roleNotAllowedMessage(value, "<link>"),
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
+
+// TODO: Start with <menu>
 
 // Check for valid meta tags
 export function validateMeta(e: HTMLMetaElement): Result | undefined {
@@ -523,6 +549,16 @@ export function validateMeta(e: HTMLMetaElement): Result | undefined {
 		return {
 			extended: true,
 			message: messages.validateMetaMaximumScaleMessage,
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
+
+// Validate that the tag does not contain an ARIA role
+export function validateNoAriaRole(e: HTMLElement): Result | undefined {
+	if (e.attributes.getNamedItem("role")) {
+		return {
+			message: messages.noRolesAllowedMessage,
 			severity: DiagnosticSeverity.Information
 		};
 	}
