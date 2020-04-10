@@ -326,19 +326,6 @@ export function validateHead(e: HTMLHeadElement): Result | undefined {
 			severity: DiagnosticSeverity.Error
 		};
 	}
-
-	// Check for the existance of a meta tag with user-scalable=yes
-	// Other case handled by validateMeta
-	e.querySelectorAll("meta").forEach(meta => {
-		if (meta.attributes.getNamedItem("user-scalable")) {
-			return;
-		}
-	});
-
-	return {
-		message: messages.validateHeadUserScalableMessage,
-		severity: DiagnosticSeverity.Information
-	};
 }
 
 // Validate h1-h6 tags
@@ -543,21 +530,23 @@ export function validateMenu(e: HTMLMenuElement): Result | undefined {
 
 // Check for valid meta tags
 export function validateMeta(e: HTMLMetaElement): Result | undefined {
-	// Need to handle having multiple meta tags
-	const role = e.attributes.getNamedItem("user-scalable");
-	if (role && role.value !== "yes") {
-		return {
-			extended: true,
-			message: messages.validateMetaUserScalableMessage,
-			severity: DiagnosticSeverity.Information
-		};
-	}
-
 	const maximumScale = e.attributes.getNamedItem("maximum-scale");
 	if (maximumScale && maximumScale.value === "1") {
 		return {
 			extended: true,
 			message: messages.validateMetaMaximumScaleMessage,
+			severity: DiagnosticSeverity.Information
+		};
+	}
+
+	// Need to handle having multiple meta tags
+	const userScalable = e.attributes.getNamedItem("user-scalable");
+	console.log(userScalable);
+	if (userScalable && userScalable.value !== "yes") {
+		console.log(userScalable);
+		return {
+			extended: true,
+			message: messages.validateMetaUserScalableMessage,
 			severity: DiagnosticSeverity.Information
 		};
 	}
@@ -702,6 +691,7 @@ export function validateUl(e: HTMLUListElement): Result | undefined {
 	}
 }
 
+// Check for valid <video> tags
 export function validateVideo(): Result {
 	return {
 		message: messages.validateVideoMessage,
