@@ -1,0 +1,26 @@
+{
+  "docs": {
+    "Getting Started": ["docs_getting_started/installation", "docs_getting_started/first-app", "docs_getting_started/building"],
+    "Reference": ["docs_reference/features", "docs_reference/a11y-class", "docs_reference/reference-static"],
+    "Design": ["docs_design/design", "docs_design/a11y-design", "docs_design/vm", "docs_design/optimizer", "docs_design/regexp", "docs_design/modules", "docs_design/strings", "docs_design/ir"]
+  },
+  "specs": {
+    "Specification": ["spec_specification/spec"],
+    "Standards": ["spec_standards/standard-master-list"],
+    "Draft Standards": ["spec_draft_standards/spec-draft-static",
+                        "spec_draft_standards/spec-draft-directives",
+                        "spec_draft_standards/spec-draft-dynamic-types",
+                        "spec_draft_standards/spec-draft-a11y-namespace",
+                        "spec_draft_standards/spec-draft-a11y-directive",
+                        "spec_draft_standards/spec-draft-application-class",
+                        "spec_draft_standards/spec-draft-interface-class",
+                        "spec_draft_standards/spec-draft-log-func",
+                        "spec_draft_standards/spec-draft-safe-vars",
+                        "spec_draft_standards/spec-draft-element-class"
+                      ],
+    "Contributing": ["spec_contributing/code-standards", "spec_contributing/standard-timeline", "spec_contributing/draft-template"]
+  },
+  "access": {
+    "Getting Started": ["access/access-introduction"]
+  }
+}
