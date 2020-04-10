@@ -291,6 +291,12 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, validate.validateNoAriaRole(e));
 	});
 
+	// Validate <menu> tags
+	document.querySelectorAll("menu").forEach(e => {
+		const result = validate.validateMenu(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <meter> tags
 	document.querySelectorAll("meter").forEach(e => {
 		const result = validate.validateNoAriaRole(e);
@@ -300,6 +306,18 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	// Validate <noscript> tags
 	document.querySelectorAll("noscript").forEach(e => {
 		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <object> tags
+	document.querySelectorAll("object").forEach(e => {
+		const result = validate.validateObject(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <ol> tags
+	document.querySelectorAll("ol").forEach(e => {
+		const result = validate.validateOl(e);
 		_diagnostics(e, result);
 	});
 
@@ -339,10 +357,15 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
+	// Validate <section> tags
+	document.querySelectorAll("section").forEach(e => {
+		const result = validate.validateSection(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <select> tags
 	document.querySelectorAll("select").forEach(e => {
 		_diagnostics(e, validate.validateSelect(e));
-		_diagnostics(e, validate.validateNoAriaRole(e));
 	});
 
 	// Validate <slot> tags
@@ -375,6 +398,12 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
+	// Validate <SVG> tags
+	document.querySelectorAll("SVG").forEach(e => {
+		const result = validate.validateSVG(e);
+		_diagnostics(e, result);
+	});
+
 	// Validate <template> tags
 	document.querySelectorAll("template").forEach(e => {
 		const result = validate.validateNoAriaRole(e);
@@ -396,6 +425,12 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	// Validate <track> tags
 	document.querySelectorAll("track").forEach(e => {
 		const result = validate.validateNoAriaRole(e);
+		_diagnostics(e, result);
+	});
+
+	// Validate <ul> tags
+	document.querySelectorAll("ul").forEach(e => {
+		const result = validate.validateUl(e);
 		_diagnostics(e, result);
 	});
 

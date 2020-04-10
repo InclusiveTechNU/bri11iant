@@ -530,7 +530,16 @@ export function validateLink(e: HTMLLinkElement): Result | undefined {
 	}
 }
 
-// TODO: Start with <menu>
+// Check for valid <menu> tags
+export function validateMenu(e: HTMLMenuElement): Result | undefined {
+	const value = e.attributes.getNamedItem("role")?.value;
+	if (value && !roles.validMenuRoleNames.has(value)) {
+		return {
+			message: messages.roleNotAllowedMessage(value, "<menu>"),
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
 
 // Check for valid meta tags
 export function validateMeta(e: HTMLMetaElement): Result | undefined {
@@ -564,6 +573,28 @@ export function validateNoAriaRole(e: HTMLElement): Result | undefined {
 	}
 }
 
+// Check for valid <object> tags
+export function validateObject(e: HTMLObjectElement): Result | undefined {
+	const value = e.attributes.getNamedItem("role")?.value;
+	if (value && !roles.validObjectRoleNames.has(value)) {
+		return {
+			message: messages.roleNotAllowedMessage(value, "<object>"),
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
+
+// Check for valid <ol> tags
+export function validateOl(e: HTMLOListElement): Result | undefined {
+	const value = e.attributes.getNamedItem("role")?.value;
+	if (value && !roles.validOlRoleNames.has(value)) {
+		return {
+			message: messages.roleNotAllowedMessage(value, "<ol>"),
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
+
 // Make sure <span> tags have roles, if used
 export function validateP(e: HTMLParagraphElement): Result | undefined {
 	const ariaLabel = e.attributes.getNamedItem("aria-label");
@@ -573,6 +604,17 @@ export function validateP(e: HTMLParagraphElement): Result | undefined {
 		return {
 			message: messages.validateAriaLabelBadElementMessage("<p>"),
 			severity: DiagnosticSeverity.Warning
+		};
+	}
+}
+
+// Check for valid <section> tags
+export function validateSection(e: HTMLElement): Result | undefined {
+	const value = e.attributes.getNamedItem("role")?.value;
+	if (value && !roles.validSectionRoleNames.has(value)) {
+		return {
+			message: messages.roleNotAllowedMessage(value, "<section>"),
+			severity: DiagnosticSeverity.Information
 		};
 	}
 }
@@ -615,6 +657,17 @@ export function validateSpan(e: HTMLSpanElement): Result | undefined {
 	}
 }
 
+// Check for valid <SVG> tags
+export function validateSVG(e: Element): Result | undefined {
+	const value = e.attributes.getNamedItem("role")?.value;
+	if (value && !roles.validSVGRoleNames.has(value)) {
+		return {
+			message: messages.roleNotAllowedMessage(value, "<SVG>"),
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
+
 // Check that tabindexes are 0 or -1
 export function validateTabIndex(e: Element): Result | undefined {
 	const tabIndex = e.attributes.getNamedItem("tabindex");
@@ -634,6 +687,17 @@ export function validateTitle(e: HTMLTitleElement): Result | undefined {
 			extended: true,
 			message: messages.validateTitleMessage,
 			severity: DiagnosticSeverity.Error
+		};
+	}
+}
+
+// Check for valid <ul> tags
+export function validateUl(e: HTMLUListElement): Result | undefined {
+	const value = e.attributes.getNamedItem("role")?.value;
+	if (value && !roles.validUlRoleNames.has(value)) {
+		return {
+			message: messages.roleNotAllowedMessage(value, "<ul>"),
+			severity: DiagnosticSeverity.Information
 		};
 	}
 }

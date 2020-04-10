@@ -305,3 +305,79 @@ export const validLIRoleNames = new Set([
     "tab",
     "treeitem"
 ]);
+
+export const validMenuRoleNames = new Set([
+    "directory",
+    "group",
+    "listbox",
+    "menu",
+    "menubar",
+    "none",
+    "presentation",
+    "radiogroup",
+    "tablist",
+    "toolbar",
+    "tree"
+]);
+
+export const validObjectRoleNames = new Set([
+    "application",
+    "document",
+    "img"
+]);
+
+export const validOlRoleNames = new Set([
+    "directory",
+    "group",
+    "listbox",
+    "menu",
+    "menubar",
+    "none",
+    "presentation",
+    "radiogroup",
+    "tablist",
+    "toolbar",
+    "tree"
+]);
+
+export const validSectionRoleNames = new Set([
+    "alert",
+    "alertdialog",
+    "application",
+    "banner",
+    "complementary",
+    "contentinfo",
+    "dialog",
+    "document",
+    "feed",
+    "log",
+    "main",
+    "marquee",
+    "navigation",
+    "none",
+    "note",
+    "presentation",
+    "search",
+    "status",
+    "tabpanel"
+]);
+
+export const validSVGRoleNames = new Set([
+    "application",
+    "document",
+    "img"
+]);
+
+export const validUlRoleNames = new Set([
+    "directory",
+    "group",
+    "listbox",
+    "menu",
+    "menubar",
+    "none",
+    "presentation",
+    "radiogroup",
+    "tablist",
+    "toolbar",
+    "tree"
+]);
