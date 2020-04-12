@@ -1,23 +1,143 @@
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
- 
 /* your custom css */
 
-@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
-}
+.profiles > .blockImage {
+    max-width: 110px;
+    height: 110px;
+    border-radius: 100%;
+    overflow: hidden;
 
-@media only screen and (min-width: 1024px) {
-}
+    opacity: .85;
+    -webkit-transition: opacity 0.3s; /* Safari prior 6.1 */
+    transition: opacity 0.3s;
+  }
+  
+  .profiles > .blockImage:hover {
+    opacity: 1;
+  }
+  
+  .bold {
+    font-weight: bold;
+  }
+  
+  .productShowcaseSection.paddingBottom {
+      padding-bottom: 10px;
+  }
+  
+  .profiles > .blockContent > h2 {
+    color: #423360;
+  }
+  
+  .profiles > .blockContent > div > span > p {
+    text-align: center;
+  }
+  
+  .profiles > .blockContent > div > span > p > span {
+    color: #716884;
+  }
+  
+  .fixedHeaderContainer {
+    min-height: 60px;
+  }
+  
+  .normal:hover {
+    color: #423360 !important;
+  }
+  
+  .normal {
+    color: hsla(0,0%,100%,.4) !important;
+    opacity: inherit !important;
+  }
+  
+  .long {
+    max-width: 630px !important;
+  }
+  
+  @media only screen and (max-width: 735px) {
+    .imageAlignSide .blockImage {
+      display: block !important;
+    }
+  }
+  
+  .blockContent > div {
+    margin-top: -21px;
+  }
+  
+  .blockContent > div > span > p {
+    text-align: left;
+  }
+  
+  .blockContent > h2 {
+    font-size: 23px;
+  }
 
-@media only screen and (max-width: 1023px) {
-}
+  .homeContainer {
+    padding-top: 40px;
+  }
 
-@media only screen and (min-width: 1400px) {
-}
+  .mainContainer {
+    padding: 0;
+  }
+  
+  .mainContainer .homePage {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
 
-@media only screen and (min-width: 1500px) {
-}
+  #intro {
+    padding-top: 20px;
+  }
+
+  #details {
+    padding-top: 0;
+  }
+  
+  .logos > a:hover {
+      opacity: .6;
+  }
+  
+  .contentSections > .blockImage {
+      margin-top: 40px;
+  }
+  
+  .headerWrapper > header > a {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: 29px;
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .navPusher {
+      padding-top: 60px;
+    }
+  }
+  
+  a {
+    color: #716884;
+  }
+  
+  a:hover {
+    color: hsla(258, 28%, 45%, 1);
+  }
+  
+  .promoSection .promoRow .pluginRowBlock .pluginWrapper {
+      padding: 0 6px !important;
+  }
+
+  .productShowcaseSection.paddingBottom > a {
+    margin-top: 80px;
+  }
+  
+  .preview {
+    width: 93px;
+    height: 25px;
+    background: #EE8E4A;
+    text-align: center;
+    font-size: 13px;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+    margin: -17px auto;
+    line-height: 27px;
+    margin-bottom: 10px;
+  }

@@ -46,14 +46,14 @@ export function validateArea(e: HTMLAreaElement): Result | undefined {
 }
 
 // Encourage the marking of dynamic regions as live
-export function validateAriaLive(e: Element, document: Document): Result | undefined {
+/* export function validateAriaLive(e: Element, document: Document): Result | undefined {
 	const window = document.defaultView;
 	const $ = require("jquery")(window);
 	const events = $._data(e, "events");
 	// TODO: This
 	
 	return;
-}
+} */
 
 // Check that specified aria roles are valid
 export function validateAriaRole(e: Element): Result | undefined {
@@ -541,9 +541,7 @@ export function validateMeta(e: HTMLMetaElement): Result | undefined {
 
 	// Need to handle having multiple meta tags
 	const userScalable = e.attributes.getNamedItem("user-scalable");
-	console.log(userScalable);
 	if (userScalable && userScalable.value !== "yes") {
-		console.log(userScalable);
 		return {
 			extended: true,
 			message: messages.validateMetaUserScalableMessage,

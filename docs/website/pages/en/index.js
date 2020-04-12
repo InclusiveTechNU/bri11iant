@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-present, Facebook, Inc.
+ * Copyright (c) Northwestern Inclusive Technology Lab
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -29,16 +29,10 @@ class HomeSplash extends React.Component {
       </div>
     );
 
-    const Logo = props => (
-      <div className="projectLogo">
-        <img src={props.img_src} alt="Project Logo" />
-      </div>
-    );
-
-    const ProjectTitle = props => (
+    const ProjectTitle = () => (
       <h2 className="projectTitle">
-        {props.title}
-        <small>{props.tagline}</small>
+        {siteConfig.title}
+        <small>{siteConfig.tagline}</small>
       </h2>
     );
 
@@ -60,13 +54,11 @@ class HomeSplash extends React.Component {
 
     return (
       <SplashContainer>
-        <Logo img_src={`${baseUrl}img/undraw_monitor.svg`} />
         <div className="inner">
-          <ProjectTitle tagline={siteConfig.tagline} title={siteConfig.title} />
+          <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href="#try">Try It Out</Button>
-            <Button href={docUrl('doc1.html')}>Example Link</Button>
-            <Button href={docUrl('doc2.html')}>Example Link 2</Button>
+            <Button href={docUrl('installation.html')}>Get Started</Button>
+            <Button href={docUrl('doc4.html')}>Read The Spec</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -77,7 +69,10 @@ class HomeSplash extends React.Component {
 class Index extends React.Component {
   render() {
     const {config: siteConfig, language = ''} = this.props;
-    const {baseUrl} = siteConfig;
+    const {baseUrl, docsUrl} = siteConfig;
+    const docsPart = `${docsUrl ? `${docsUrl}/` : ''}`;
+    const langPart = `${language ? `${language}/` : ''}`;
+    const docUrl = doc => `${baseUrl}${docsPart}${langPart}${doc}`;
 
     const Block = props => (
       <Container
@@ -86,79 +81,36 @@ class Index extends React.Component {
         background={props.background}>
         <GridBlock
           align="center"
+          className="contentSections"
           contents={props.children}
           layout={props.layout}
         />
       </Container>
     );
 
-    const FeatureCallout = () => (
-      <div
-        className="productShowcaseSection paddingBottom"
-        style={{textAlign: 'center'}}>
-        <h2>Feature Callout</h2>
-        <MarkdownBlock>These are features of this project</MarkdownBlock>
-      </div>
-    );
-
-    const TryOut = () => (
-      <Block id="try">
+    const About = () => (
+      <Block id="intro">
         {[
           {
             content:
-              'To make your landing page more attractive, use illustrations! Check out ' +
-              '[**unDraw**](https://undraw.co/) which provides you with customizable illustrations which are free to use. ' +
-              'The illustrations you see on this page are from unDraw.',
-            image: `${baseUrl}img/undraw_code_review.svg`,
+              'We love the web. Using the document object model and JavaScript, new and experienced developers can create and interact with magical experiences, no matter their device. So why can’t the same be true for interacting with the systems, interfaces, and devices that power so many accessibility and inclusive technologies? Customizable input devices, accessibility UI APIs, and interacting with screen readers often use platform-dependent and low-level programming interfaces which may, or may not, be well-documented.<br><br>That changes with V11, a small, fast, and efficient JavaScript(ish) engine to embed in, and power, the next generation of A11Y technologies. You can finally work with accessibility interfaces in a language that treats your system like the web. Just like the web, it\'s easy to learn for beginners, and powerful enough for the most experienced developers.',
+            image: `${baseUrl}img/bri11iant-logo.svg`,
             imageAlign: 'left',
-            title: 'Wonderful SVG Illustrations',
+            title: 'Helping Developers Code with Accessibility in Mind'
           },
         ]}
       </Block>
     );
 
-    const Description = () => (
-      <Block background="dark">
+    const JavaScriptIsh = () => (
+      <Block id="details">
         {[
           {
             content:
-              'This is another description of how this project is useful',
-            image: `${baseUrl}img/undraw_note_list.svg`,
+              'No, V11 isn’t a Javascript library or framework. We are implementing a version of the JavaScript language, specifically designed to enable an easy to use interface for creating and interacting with desktop and mobile inclusive technologies, without worrying about cross-platform and low-level apis and services. <br><br>We follow ECMAScript standards, so all of your existing JavaScript code can run in V11 (see **[dynamic scripting](docs/reference-static#avoiding-type-checking)**). However, V11 does provide additional features and syntactical sugar designed to create a more inclusive programming language for developers with different sets of abilities, and to better support V11\'s specific use cases. So import those existing JS libraries, and use cool V11 features, too!',
+            image: `${baseUrl}img/undraw_react_y7wq.svg`,
             imageAlign: 'right',
-            title: 'Description',
-          },
-        ]}
-      </Block>
-    );
-
-    const LearnHow = () => (
-      <Block background="light">
-        {[
-          {
-            content:
-              'Each new Docusaurus project has **randomly-generated** theme colors.',
-            image: `${baseUrl}img/undraw_youtube_tutorial.svg`,
-            imageAlign: 'right',
-            title: 'Randomly Generated Theme Colors',
-          },
-        ]}
-      </Block>
-    );
-
-    const Features = () => (
-      <Block layout="fourColumn">
-        {[
-          {
-            content: 'This is the content of my feature',
-            image: `${baseUrl}img/undraw_react.svg`,
-            imageAlign: 'top',
-            title: 'Feature One',
-          },
-          {
-            content: 'The content of my second feature',
-            image: `${baseUrl}img/undraw_operating_system.svg`,
-            imageAlign: 'top',
-            title: 'Feature Two',
+            title: 'Wait! What Do You Mean By JavaScript(ish)?',
           },
         ]}
       </Block>
@@ -177,18 +129,16 @@ class Index extends React.Component {
           </a>
         ));
 
-      const pageUrl = page => baseUrl + (language ? `${language}/` : '') + page;
-
       return (
         <div className="productShowcaseSection paddingBottom">
-          <h2>Who is Using This?</h2>
-          <p>This project is used by all these people</p>
+          <h2>Who is Working With V11?</h2>
+          <p className="long">We might be a group of researchers in Evanston, but we want to share Bri11iant across the globe.<br /><br />
+             We've set up Bri11iant as an open source project to encourage those with bold and exciting new ideas
+             in inclusive technology to work with us to bring them to life.
+             Together, we can redefine development and make inclusive and universal websites and applications the norm.<br />
+          </p>
+          <a href={docUrl('doc4.html')} className="bold">Come Contribute!</a>
           <div className="logos">{showcase}</div>
-          <div className="more-users">
-            <a className="button" href={pageUrl('users.html')}>
-              More {siteConfig.title} Users
-            </a>
-          </div>
         </div>
       );
     };
@@ -196,12 +146,9 @@ class Index extends React.Component {
     return (
       <div>
         <HomeSplash siteConfig={siteConfig} language={language} />
-        <div className="mainContainer">
-          <Features />
-          <FeatureCallout />
-          <LearnHow />
-          <TryOut />
-          <Description />
+        <div className="mainContainer homePage">
+          <About />
+          <JavaScriptIsh />
           <Showcase />
         </div>
       </div>

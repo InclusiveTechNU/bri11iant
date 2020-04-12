@@ -7,7 +7,7 @@
 
 **Made with :purple_heart: in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/)**
 
-Bri11iant is a Language Extension for scaffolding accessible web development. Bri11iant fits right into your text editor, suggesting improvements to your HTML and CSS code in order to improve the accessibility of your websites.
+Bri11iant is a [VSCode language extension](https://code.visualstudio.com/api/language-extensions/overview) for supporting web developers improve the accessibility of their websites. Bri11iant fits right into your text editor, suggesting improvements to your HTML, CSS, and Javascript code in order to improve the accessibility of your websites.
 
 Unlike other projects, Bri11iant reads the HTML files you are working on, loads in any CSS files specified in <link> tags, and runs any specified JS scripts using [JSDOM](https://github.com/jsdom/jsdom) in order to mock the render tree that would be created by a browser. This allows the language extension to provide more nuanced feedback that depends on parent-to-child element relationships and page layout.
 
