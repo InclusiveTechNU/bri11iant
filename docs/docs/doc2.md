@@ -1,7 +1,6 @@
 ---
-id: first-app
-title: Your First App
-sidebar_label: Your First App
+id: doc2
+title: document number 2
 ---
 
 This is a link to [another document.](doc3.md)  
