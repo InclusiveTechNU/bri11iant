@@ -7,7 +7,7 @@
 
 **Made with :purple_heart: in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/)**
 
-Authors: Cooper F. Barth, Thomas B. McHugh, & Anne Marie Piper
+*Authors: Cooper F. Barth, Thomas B. McHugh, & Anne Marie Piper*
 
 Bri11iant is a Language Extension for scaffolding accessible web development. Bri11iant fits right into your text editor, suggesting improvements to your HTML and CSS code in order to improve the accessibility of your websites.
 
