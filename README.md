@@ -9,11 +9,11 @@
 
 *Authors: Cooper F. Barth, Thomas B. McHugh, & Anne Marie Piper*
 
-Bri11iant is a Language Extension for scaffolding accessible web development. Bri11iant fits right into your text editor, suggesting improvements to your HTML and CSS code in order to improve the accessibility of your websites.
+Bri11iant is a [VSCode language extension](https://code.visualstudio.com/api/language-extensions/overview) for supporting web developers improve the accessibility of their websites. Bri11iant fits right into your text editor, suggesting improvements to your HTML, CSS, and Javascript code in order to improve the accessibility of your websites.
 
-Unlike other projects, Bri11iant reads the HTML files you are working on, loads in any CSS files specified in <link> tags, and runs any specified JS scripts using [JSDOM](https://github.com/jsdom/jsdom) in order to mock the render tree that would be created by a browser. This allows the language extension to provide more nuanced feedback that depends on parent-to-child element relationships and page layout.
+We love the web. The goal of Bri11iant is to help make the internet a more inclusive place by providing developers with in-editor support for vital accessibility standards and inclusive design principles. It's often hard to tell what is and isn't an accessibility problem just from looking at your code, and it's even harder sometimes to understand *why* these issues may be harmful. Moreover, there are many ways to make the design of a website more inclusive past simply following WCAG standards. That's where Bri11iant comes in. As you're writing HTML (more languages coming soon!), Bri11iant can diagnose and report parts of your website that could be modified in order to provide your users a more inclusive experience.
 
-[List of Accessibility Standards Supported by Bri11iant](https://github.com/InclusiveTechNU/A11yGrammar)
+Bri11iant is smart. Instead of just parsing the HTML file you're working on, Bri11iant can use the links to your CSS and Javascript files to construct a *virtual render tree* of your website and provide a more complex analysis without you ever needing to launch your browser. This lets Bri11iant give suggestions about inclusive design principles like color contrast, dynamic content handling, and multi-modal content presentation. We want this website to be able to act as a comprehensive resource for learning about accessibility and inclusive design. Alongside the Bri11iant extension, we provide extensive documentation, articles, and blog posts about accessibility, inclusive design, and the A11y community.
 
 ## Compatibility
 

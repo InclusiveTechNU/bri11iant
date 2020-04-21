@@ -62,5 +62,8 @@
 		"@types/node": "^8.10.52",
 		"typelint": "^1.0.2",
 		"typescript": "^3.7.5"
+	},
+	"dependencies": {
+		"jquery": "3.5.0"
 	}
 }

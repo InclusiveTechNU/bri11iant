@@ -57,7 +57,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Perform non-element-specific checks
 	document.querySelectorAll("body *").forEach(e => {
-		_diagnostics(e, validate.validateAriaLive(e, document));
+		// _diagnostics(e, validate.validateAriaLive(e, document));
 		_diagnostics(e, validate.validateAriaRole(e));
 		_diagnostics(e, validate.validateContrast(e, window));
 		_diagnostics(e, validate.validateTabIndex(e));

@@ -20,7 +20,7 @@ async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number>
         const imageData = {data: image.data, width: image.width, height: image.height};
         const cocoPreds = await cocoModel?.detect(imageData)
                                         .catch(err => {
-                                            console.log(err);
+                                            // console.log(err);
                                             return null;
                                         });
 

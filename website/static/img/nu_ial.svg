@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <g transform="matrix(3.48837,0,0,4.34783,-701.163,-734.783)">
+        <rect x="201" y="169" width="86" height="69" style="fill:rgb(91,59,140);"/>
+    </g>
+    <g transform="matrix(1,0,0,1,-27.124,20)">
+        <text x="64.419px" y="245.405px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;fill:white;">Interactive <tspan x="180.481px 196.489px " y="245.405px 245.405px ">Au</tspan>dio Lab</text>
+    </g>
+    <g transform="matrix(0.682503,0,0,0.682503,177.017,218.8)">
+        <g id="Layer-1" serif:id="Layer 1">
+            <path d="M0,-277.802L0,-257.914L33.373,-249.529L39.965,-241.267L39.965,-81.881L-126.493,-278.881L-127.365,-279.913L-176.56,-279.913L-176.56,-265.018L-149.305,-234.419L-149.305,-27.703L-186.104,-17.415L-186.104,0.016L-80.644,0.016L-80.644,-17.519L-113.29,-26.151L-120.048,-34.474L-120.048,-200.713L50.318,2.111L69.95,2.111L69.95,-248.48L106.935,-259.673L106.935,-277.802L0,-277.802Z" style="fill:white;fill-rule:nonzero;"/>
+        </g>
+    </g>
+</svg>

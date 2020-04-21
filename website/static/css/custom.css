@@ -73,10 +73,6 @@
   .homeContainer {
     padding-top: 40px;
   }
-
-  .mainContainer {
-    padding: 0;
-  }
   
   .mainContainer .homePage {
     padding-bottom: 0;
@@ -89,18 +85,20 @@
     margin-bottom: 75px;
   }
 
+  #intro img {
+    width: 70%;
+  }
+
   #about {
     padding-top: 0;
     padding-bottom: 0;
     margin-bottom: 75px;
   }
 
-  #about .blockImage {
-    margin-top: 0;;
-  }
-
-  .mainContainer img {
-    width: 70%;
+  #about img {
+    padding-left: 50px;
+    margin-top: 100px;
+    width: 200%;
   }
   
   .logos > a:hover {
@@ -112,9 +110,12 @@
   }
   
   .headerWrapper > header > a {
-    margin-top: 3px;
-    margin-bottom: 3px;
+    margin-top: 5px;
     height: 29px;
+  }
+
+  .headerWrapper > header > div {
+    margin-top: 5px;
   }
   
   @media screen and (min-width: 1024px) {

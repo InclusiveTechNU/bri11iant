@@ -38,12 +38,10 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {page: 'help', label: 'Getting Started'},
-    {page: 'doc1', label: 'Docs'},
-    // {doc: 'doc4', label: 'API'},
-    // {page: 'help', label: 'Help'}
+    {page: 'docs/getting-started', label: 'Docs'},
+    {page: 'docs/tutorial', label: 'Tutorial'},
     {blog: true, label: 'Blog'},
-    {page: 'contributing', label: 'Contributing'}
+    {page: 'docs/contributing', label: 'Contributing'}
   ],
 
   // If you have users set above, you add it here:
@@ -52,7 +50,7 @@ const siteConfig = {
   /* path to images for header/footer */
   headerIcon: 'img/bri11iant-logo.svg',
   footerIcon: 'img/bri11iant-logo.svg',
-  favicon: 'img/bri11iant.svg',
+  favicon: 'img/favicon.ico',
 
   /* Colors for website */
   colors: {
