@@ -88,12 +88,18 @@ class Index extends React.Component {
       </Container>
     );
 
-    const About = () => (
+    const Intro = () => (
       <Block id="intro">
         {[
           {
             content:
-              'We love the web. Using the document object model and JavaScript, new and experienced developers can create and interact with magical experiences, no matter their device. So why can’t the same be true for interacting with the systems, interfaces, and devices that power so many accessibility and inclusive technologies? Customizable input devices, accessibility UI APIs, and interacting with screen readers often use platform-dependent and low-level programming interfaces which may, or may not, be well-documented.<br><br>That changes with V11, a small, fast, and efficient JavaScript(ish) engine to embed in, and power, the next generation of A11Y technologies. You can finally work with accessibility interfaces in a language that treats your system like the web. Just like the web, it\'s easy to learn for beginners, and powerful enough for the most experienced developers.',
+              `We love the web. The goal of Bri11iant is to help make the internet a more inclusive place by providing 
+              developers with in-editor support for vital accessibility standards and inclusive design principles. It's 
+              often hard to tell what is and isn't an accessibility problem just from looking at your code, and it's even 
+              harder sometimes to understand <i>why</i> these issues are harmful. Moreover, there are many ways to make 
+              the design of a website more inclusive past simply following WCAG standards.<br><br>That's where Bri11iant comes
+              in. As you're writing HTML (more languages coming soon!), Bri11iant can diagnose and report parts of your 
+              website that could be modified in order to provide your users a more inclusive experience.`,
             image: `${baseUrl}img/bri11iant-logo.svg`,
             imageAlign: 'left',
             title: 'Helping Developers Code with Accessibility in Mind'
@@ -102,16 +108,22 @@ class Index extends React.Component {
       </Block>
     );
 
-    const JavaScriptIsh = () => (
-      <Block id="details">
+    const About = () => (
+      <Block id="about">
         {[
           {
             content:
-              'No, V11 isn’t a Javascript library or framework. We are implementing a version of the JavaScript language, specifically designed to enable an easy to use interface for creating and interacting with desktop and mobile inclusive technologies, without worrying about cross-platform and low-level apis and services. <br><br>We follow ECMAScript standards, so all of your existing JavaScript code can run in V11 (see **[dynamic scripting](docs/reference-static#avoiding-type-checking)**). However, V11 does provide additional features and syntactical sugar designed to create a more inclusive programming language for developers with different sets of abilities, and to better support V11\'s specific use cases. So import those existing JS libraries, and use cool V11 features, too!',
-            image: `${baseUrl}img/undraw_react_y7wq.svg`,
+              `Bri11iant is smart. Instead of just parsing the HTML file you're working on, Bri11iant can use the links to your CSS 
+              and Javascript files to construct a <i>virtual render tree</i> of your website and provide a more complex analysis 
+              without you ever needing to launch your browser. This lets Bri11iant give suggestions about inclusive design 
+              princibles like color contrast, dynamic content handling, and multi-modal content presentation.<br><br>We pride 
+              ourselves on being . We want this website to be able to act as a comprehensive resource for learning about accessibility 
+              and inclusive design. Alongside the Bri11iant extension, we provide extensive documentation, articles, and blog posts about 
+              accessibility, inclusive design, and the A11y community.`,
+            image: `${baseUrl}img/bri11iant-logo.svg`,
             imageAlign: 'right',
-            title: 'Wait! What Do You Mean By JavaScript(ish)?',
-          },
+            title: 'Why Bri11iant?'
+          }
         ]}
       </Block>
     );
@@ -131,13 +143,13 @@ class Index extends React.Component {
 
       return (
         <div className="productShowcaseSection paddingBottom">
-          <h2>Who is Working With V11?</h2>
+          <h2>Who is Working With Bri11iant?</h2>
           <p className="long">We might be a group of researchers in Evanston, but we want to share Bri11iant across the globe.<br /><br />
-             We've set up Bri11iant as an open source project to encourage those with bold and exciting new ideas
-             in inclusive technology to work with us to bring them to life.
+             We've set up Bri11iant as an <a href="https://github.com/InclusiveTechNU/bri11iant">open source project</a>to encourage those 
+             with bold and exciting new ideas in inclusive technology to work with us to bring them to life.
              Together, we can redefine development and make inclusive and universal websites and applications the norm.<br />
           </p>
-          <a href={docUrl('doc4.html')} className="bold">Come Contribute!</a>
+          <a href={docUrl('contributing.html')} className="bold">Come Contribute!</a>
           <div className="logos">{showcase}</div>
         </div>
       );
@@ -147,8 +159,8 @@ class Index extends React.Component {
       <div>
         <HomeSplash siteConfig={siteConfig} language={language} />
         <div className="mainContainer homePage">
+          <Intro />
           <About />
-          <JavaScriptIsh />
           <Showcase />
         </div>
       </div>

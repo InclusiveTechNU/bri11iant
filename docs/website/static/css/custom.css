@@ -85,10 +85,22 @@
 
   #intro {
     padding-top: 20px;
+    padding-bottom: 0px;
+    margin-bottom: 75px;
   }
 
-  #details {
+  #about {
     padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 75px;
+  }
+
+  #about .blockImage {
+    margin-top: 0;;
+  }
+
+  .mainContainer img {
+    width: 70%;
   }
   
   .logos > a:hover {
