@@ -2,7 +2,7 @@
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
 import * as path from "path";
-import { workspace, ExtensionContext } from "vscode";
+import { ExtensionContext, languages, workspace, Hover, MarkdownString } from "vscode";
 
 import {
 	LanguageClient,
@@ -42,6 +42,17 @@ export function activate(context: ExtensionContext) {
 			fileEvents: workspace.createFileSystemWatcher("**/.clientrc")
 		}
 	};
+
+	const Bri11iantDocs = new MarkdownString(
+		"Visit the [Bri11iant docs](http://localhost:3000)"
+	)
+	languages.registerHoverProvider({
+		language: "html", scheme: "file"
+	}, {
+		provideHover(document, position, token) {
+			return new Hover(Bri11iantDocs);
+		}
+	})
 
 	// Create the language client and start the client.
 	client = new LanguageClient(

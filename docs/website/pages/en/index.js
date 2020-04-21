@@ -120,7 +120,7 @@ class Index extends React.Component {
               ourselves on being . We want this website to be able to act as a comprehensive resource for learning about accessibility 
               and inclusive design. Alongside the Bri11iant extension, we provide extensive documentation, articles, and blog posts about 
               accessibility, inclusive design, and the A11y community.`,
-            image: `${baseUrl}img/bri11iant-logo.svg`,
+            image: `${baseUrl}img/demo.png`,
             imageAlign: 'right',
             title: 'Why Bri11iant?'
           }
