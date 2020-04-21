@@ -6,16 +6,16 @@
     "tagline": "A VSCode extension for building accessible websites",
     "docs": {
       "contributing": {
-        "title": "Latin-ish",
-        "sidebar_label": "Example Page"
+        "title": "Contributing",
+        "sidebar_label": "Contributing"
       },
       "getting-started": {
         "title": "Getting Started",
         "sidebar_label": "Getting Started"
       },
       "sample": {
-        "title": "Sample Doc",
-        "sidebar_label": "Sample Doc"
+        "title": "Color Contrast",
+        "sidebar_label": "Color Contrast"
       },
       "tutorial": {
         "title": "Tutorial",
@@ -29,7 +29,8 @@
       "Contributing": "Contributing"
     },
     "categories": {
-      "Home": "Home"
+      "Home": "Home",
+      "Documentation": "Documentation"
     }
   },
   "pages-strings": {

@@ -11,6 +11,7 @@ import {
 } from "../util/patterns";
 import { Result } from "./Result";
 import * as roles from "../util/roles";
+import { stringify } from "querystring";
 
 // Check that anchor elements have descriptive text
 export function validateA(e: HTMLAnchorElement): Result | undefined {
@@ -530,23 +531,22 @@ export function validateMenu(e: HTMLMenuElement): Result | undefined {
 
 // Check for valid meta tags
 export function validateMeta(e: HTMLMetaElement): Result | undefined {
-	const maximumScale = e.attributes.getNamedItem("maximum-scale");
-	if (maximumScale && maximumScale.value === "1") {
-		return {
-			extended: true,
-			message: messages.validateMetaMaximumScaleMessage,
-			severity: DiagnosticSeverity.Information
-		};
-	}
-
-	// Need to handle having multiple meta tags
-	const userScalable = e.attributes.getNamedItem("user-scalable");
-	if (userScalable && userScalable.value !== "yes") {
-		return {
-			extended: true,
-			message: messages.validateMetaUserScalableMessage,
-			severity: DiagnosticSeverity.Information
-		};
+	const content = e.attributes.getNamedItem("content");
+	if (content) {
+		if (content.value.includes("maximum-scale")) {
+			return {
+				extended: true,
+				message: messages.validateMetaMaximumScaleMessage,
+				severity: DiagnosticSeverity.Information
+			};
+		}
+		if (content.value.includes("user-scalable")) {
+			return {
+				extended: true,
+				message: messages.validateMetaUserScalableMessage,
+				severity: DiagnosticSeverity.Information
+			};
+		}
 	}
 }
 

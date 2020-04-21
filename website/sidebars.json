@@ -2,7 +2,9 @@
   "docs": {
     "Home": [
       "getting-started",
-      "tutorial",
+      "tutorial"
+    ],
+    "Documentation": [
       "sample"
     ]
   }
