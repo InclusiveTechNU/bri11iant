@@ -43,14 +43,14 @@ export function activate(context: ExtensionContext) {
 		}
 	};
 
-	const Bri11iantDocs = new MarkdownString(
-		"Visit the [Bri11iant docs](http://localhost:3000)"
+	const Bri11iantSample = new MarkdownString(
+		"Visit the [Bri11iant docs](http://localhost:3000/docs/sample)"
 	)
 	languages.registerHoverProvider({
 		language: "html", scheme: "file"
 	}, {
 		provideHover(document, position, token) {
-			return new Hover(Bri11iantDocs);
+			return new Hover(Bri11iantSample);
 		}
 	})
 
