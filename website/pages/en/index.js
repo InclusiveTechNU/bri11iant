@@ -57,7 +57,7 @@ class HomeSplash extends React.Component {
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
             <Button href={docUrl('tutorial.html')}>Get Started</Button>
-            <Button href={docUrl('docs.html')}>Read The Docs</Button>
+            <Button href={docUrl('getting-started.html')}>Read The Docs</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -115,8 +115,8 @@ class Index extends React.Component {
               `Bri11iant is smart. Instead of just parsing the HTML file you're working on, Bri11iant can use the links to your CSS 
               and Javascript files to construct a <i>virtual render tree</i> of your website and provide a more complex analysis 
               without you ever needing to launch your browser. This lets Bri11iant give suggestions about inclusive design 
-              princibles like color contrast, dynamic content handling, and multi-modal content presentation.<br><br>We pride 
-              ourselves on being . We want this website to be able to act as a comprehensive resource for learning about accessibility 
+              princibles like color contrast, dynamic content handling, and multi-modal content presentation.<br><br>
+              We want this website to be able to act as a comprehensive resource for learning about accessibility 
               and inclusive design. Alongside the Bri11iant extension, we provide extensive documentation, articles, and blog posts about 
               accessibility, inclusive design, and the A11y community.`,
             image: `${baseUrl}img/demo.png`,
