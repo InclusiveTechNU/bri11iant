@@ -49,7 +49,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 				diagnostics
 			});
 
-			microservice.sendDiagnostic(diagnostic, htmlTag);
+			microservice.sendDiagnostic(diagnostic, htmlTag, settings.userId);
 		}
 	}
 

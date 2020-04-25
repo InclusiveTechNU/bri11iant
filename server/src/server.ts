@@ -45,9 +45,13 @@ connection.onInitialized(() => {
 
 interface ServerSettings {
 	maxNumberOfProblems: number;
+	userId: string;
 }
 
-const defaultSettings: ServerSettings = { maxNumberOfProblems: 500 };
+const defaultSettings: ServerSettings = {
+	maxNumberOfProblems: 500,
+	userId: "user-id"
+};
 let globalSettings: ServerSettings = defaultSettings;
 
 // Cache the settings of all open documents
