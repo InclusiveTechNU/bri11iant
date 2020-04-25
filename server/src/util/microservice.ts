@@ -12,5 +12,4 @@ export const sendDiagnostic = (diagnostic: Diagnostic, html: string) => {
     })
     .then(console.log)
     .catch(console.error);
-    
 }

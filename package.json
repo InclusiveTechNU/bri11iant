@@ -5,7 +5,10 @@
 	"version": "0.1.0",
 	"publisher": "ITL",
 	"license": "MIT",
-	"repository": "https://github.com/InclusiveTechNU/bri11iant",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/InclusiveTechNU/bri11iant"
+	},
 	"engines": {
 		"vscode": "^1.41.0"
 	},
@@ -52,6 +55,7 @@
 	"scripts": {
 		"compile": "tsc -b",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"publish": "vsce package && vsce publish",
 		"start": "tsc -b",
 		"test": "echo \"Please write some tests.\"",
 		"vscode:prepublish": "cd client && cd .. && npm run compile",
