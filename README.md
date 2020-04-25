@@ -3,7 +3,7 @@
 [![Northwestern HCI](https://img.shields.io/badge/NU-HCI-blueviolet)](https://hci.northwestern.edu/)
 [![NSF Grant 1901456](https://img.shields.io/badge/NSF-1901456-informational)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1901456)
 
-<img src="logo-1.svg" alt="Bri11iant logo - a Lightbulb with an 11 inside" align="right" width="30%" margin-left=0/>
+<img src="logo-1.png" alt="Bri11iant logo - a Lightbulb with an 11 inside" align="right" width="30%" margin-left=0/>
 
 **Made with :purple_heart: in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/)**
 
