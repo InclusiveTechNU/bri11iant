@@ -1,4 +1,5 @@
 import { createDOM } from "../DOM";
+import * as microservice from "../util/microservice";
 import { getDocumentSettings } from "../server";
 import { Result } from "./Result";
 import * as validate from "./validate";
@@ -24,12 +25,11 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 				outerHTML = outerHTML.replace(uriPath, "");
 				startPosition = text.indexOf(outerHTML);
 			}
-			let endPosition
-			if (result.extended) {
-				endPosition = startPosition + outerHTML.length;
-			} else {
-				endPosition = startPosition + outerHTML.slice(0, outerHTML.indexOf(">") + 1).length;
+			let htmlTag = outerHTML;
+			if (!result.extended) {
+				htmlTag = outerHTML.slice(0, outerHTML.indexOf(">") + 1);
 			}
+			const endPosition = startPosition + htmlTag.length;
 			const severity = result.severity;
 			const diagnostic: Diagnostic = {
 				severity,
@@ -48,6 +48,8 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 				uri: htmlDocument.uri,
 				diagnostics
 			});
+
+			microservice.sendDiagnostic(diagnostic, htmlTag);
 		}
 	}
 

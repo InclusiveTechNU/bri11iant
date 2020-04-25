@@ -43,16 +43,19 @@ export function activate(context: ExtensionContext) {
 		}
 	};
 
+	// Markdown for a link to the Bri11iant docs
 	const Bri11iantSample = new MarkdownString(
-		"Visit the [Bri11iant docs](http://localhost:3000/docs/sample)"
-	)
+		"Visit the [Bri11iant docs](http://localhost:3000/docs)"
+	);
+
+	// Register an HTML hover provider to link to the Bri11iant docs
 	languages.registerHoverProvider({
 		language: "html", scheme: "file"
 	}, {
 		provideHover(document, position, token) {
 			return new Hover(Bri11iantSample);
 		}
-	})
+	});
 
 	// Create the language client and start the client.
 	client = new LanguageClient(
