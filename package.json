@@ -3,9 +3,12 @@
 	"displayName": "Bri11iant",
 	"description": "A Scaffolding Tool for A11Y Web Development",
 	"version": "0.1.0",
-	"publisher": "ITL",
+	"publisher": "inclusive-tech",
 	"license": "MIT",
-	"repository": "https://github.com/InclusiveTechNU/bri11iant",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/InclusiveTechNU/bri11iant"
+	},
 	"engines": {
 		"vscode": "^1.41.0"
 	},
@@ -52,12 +55,14 @@
 	"scripts": {
 		"compile": "tsc -b",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"publish": "vsce package && vsce publish",
 		"start": "tsc -b",
 		"test": "echo \"Please write some tests.\"",
 		"vscode:prepublish": "cd client && cd .. && npm run compile",
 		"watch": "tsc -b -w"
 	},
 	"devDependencies": {
+		"eslint": ">=4.18.2",
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^8.10.52",
 		"typelint": "^1.0.2",

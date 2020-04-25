@@ -15,6 +15,7 @@
     "@tensorflow/tfjs": "^1.5.2",
     "@types/jsdom": "12.2.4",
     "@types/pluralize": "0.0.29",
+    "axios": "0.19.2",
     "image-js": "^0.21.8",
     "jsdom": "16.1.0",
     "pluralize": "^8.0.0",

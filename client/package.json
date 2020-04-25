@@ -12,6 +12,7 @@
     "vscode-languageclient": "^6.0.0"
   },
   "devDependencies": {
+    "minimist": ">=0.2.1",
     "vscode": "1.1.36"
   }
 }
