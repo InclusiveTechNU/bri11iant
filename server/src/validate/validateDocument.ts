@@ -52,7 +52,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 			};
 
 			diagnostics.push(diagnostic);
-			htmlTags.push(htmlTag);
+			htmlTags.push(text.substring(elementIndex.start, elementIndex.end));
 			connection.sendDiagnostics({
 				uri: htmlDocument.uri,
 				diagnostics
