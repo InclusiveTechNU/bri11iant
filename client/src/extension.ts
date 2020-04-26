@@ -55,37 +55,6 @@ export function activate(context: ExtensionContext) {
 		"Visit the [Bri11iant docs](http://localhost:3000/docs)"
 	);
 
-	// Holds the most recent set of diagnostics
-	const diagnosticCollection: Map<string, Diagnostic[]> = new Map();
-
-	// Equality comparison for Diagnostics
-	function diagnosticsEqual(d1: Diagnostic, d2: Diagnostic) {
-		return d1.message == d2.message && !d1.range.start.compareTo(d2.range.start) && !d1.range.end.compareTo(d2.range.end);
-	}
-
-	// Fires whenever a new diagnostic is reported
-	context.subscriptions.push(
-		languages.onDidChangeDiagnostics(({ uris }) => {
-			uris.forEach(uri => {
-				const diagnostics = languages.getDiagnostics(uri);
-				if (diagnosticCollection.get(uri.path)) {
-					const prevDiagnostics = diagnosticCollection.get(uri.path);
-					if (prevDiagnostics && diagnostics.length > prevDiagnostics.length) {
-						const newDiagnostics = diagnostics.filter(d1 => {
-							return !prevDiagnostics.some(d2 => {
-								return diagnosticsEqual(d1, d2);
-							});
-						});
-						if (newDiagnostics.length > 0) {
-							console.log(newDiagnostics);
-						}
-					}
-				}
-				diagnosticCollection.set(uri.path, diagnostics);
-			});
-		})
-	);
-
 	// Register an HTML hover provider to link to the Bri11iant docs
 	languages.registerHoverProvider({
 		language: "html", scheme: "file"

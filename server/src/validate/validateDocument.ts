@@ -1,4 +1,5 @@
 import { createDOM } from "../DOM";
+import { diagnosticsEqual } from "../util/diagnostics";
 import * as microservice from "../util/microservice";
 import { getDocumentSettings } from "../server";
 import { Result } from "./Result";
@@ -8,6 +9,9 @@ import {
 	Diagnostic,
 	TextDocument
 } from "vscode-languageserver";
+
+// Holds the most recent set of diagnostics
+let diagnosticCollection: Diagnostic[] = [];
 
 export async function html(htmlDocument: TextDocument, connection: Connection): Promise<void> {
 	const uri = htmlDocument.uri;
@@ -48,8 +52,6 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 				uri: htmlDocument.uri,
 				diagnostics
 			});
-
-			microservice.sendDiagnostic(diagnostic, htmlTag, settings.userId);
 		}
 	}
 
@@ -440,5 +442,17 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		const result = validate.validateVideo();
 		_diagnostics(e, result);
 	});
+
+	// Sends new Diagnostics to the Bri11iant microservice
+	if (diagnostics.length > diagnosticCollection.length) {
+		diagnostics.filter((d1: Diagnostic) => {
+			return !diagnosticCollection.some((d2: Diagnostic) => {
+				return diagnosticsEqual(d1, d2);
+			});
+		}).forEach((d: Diagnostic) => {
+			microservice.sendDiagnostic(d, settings.userId);
+		});
+	}
+	diagnosticCollection = diagnostics;
 
 }
