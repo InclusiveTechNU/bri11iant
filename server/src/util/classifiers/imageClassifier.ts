@@ -35,7 +35,7 @@ async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number>
                 data: image.data, 
                 width: image.width, 
                 height: image.height
-            }).catch((err: string) => {
+            }).catch(() => {
                 return null;
             });
     

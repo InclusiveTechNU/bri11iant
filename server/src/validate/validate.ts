@@ -50,7 +50,7 @@ export function validateAriaLive(e: Element, document: Document): Result | undef
 	const window = document.defaultView;
 	const $ = require("jquery")(window);
 	const events = $._data(e, "events");
-	// console.log(events);
+	
 	
 	return;
 }
@@ -406,18 +406,18 @@ export async function validateImg(e: HTMLImageElement): Promise<Result | undefin
 		}
 	} else {
 		// Run TF object classifier on image to retrieve potential alt text
-		const alt = await altText(e);
+		/* const alt = await altText(e);
 		if (alt) {
 			return {
 				message: messages.validateAltMessage(alt),
 				severity: DiagnosticSeverity.Error
 			};
-		} else {
+		} else { */
 			return {
 				message: messages.validateAltMessage(),
 				severity: DiagnosticSeverity.Error
 			};
-		}
+		// }
 	}
 }
 
