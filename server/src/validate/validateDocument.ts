@@ -1,4 +1,3 @@
-import * as fastParse from "fast-html-parser";
 import { diagnosticsEqual, DiagnosticInfo } from "../util/diagnostics";
 import * as microservice from "../util/microservice";
 import { getDocumentSettings } from "../server";
@@ -9,7 +8,6 @@ import {
 	getElementTagIndex
 } from "../DOM";
 import {
-	IndexRange,
 	getNthIndexOfTag
 } from "../util/html";
 import {
@@ -22,7 +20,6 @@ import {
 let diagnosticCollection: Diagnostic[] = [];
 
 export async function html(htmlDocument: TextDocument, connection: Connection): Promise<void> {
-	const uri = htmlDocument.uri;
 	let settings = await getDocumentSettings(htmlDocument.uri);
 	let text: string = htmlDocument.getText();
 	let textLower: string  = text.toLowerCase();
@@ -70,7 +67,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Perform non-element-specific checks
 	document.querySelectorAll("body *").forEach(e => {
-		_diagnostics(e, validate.validateAriaLive(e, document));
+		_diagnostics(e, validate.validateAriaLive(e, window));
 		_diagnostics(e, validate.validateAriaRole(e));
 		_diagnostics(e, validate.validateContrast(e, window));
 		_diagnostics(e, validate.validateTabIndex(e));
@@ -110,6 +107,11 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	document.querySelectorAll("base").forEach(e => {
 		const result = validate.validateNoAriaRole(e);
 		_diagnostics(e, result);
+	});
+
+	// Validate <body> tags
+	document.querySelectorAll("body").forEach(e => {
+		_diagnostics(e, validate.validateAriaLiveGlobal(window));
 	});
 
 	// Validate <br> tags

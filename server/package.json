@@ -22,6 +22,7 @@
     "image-js": "0.21.9",
     "jquery": "3.5.0",
     "jsdom": "16.1.0",
+    "mutation-observer": "1.0.3",
     "pluralize": "^8.0.0",
     "vscode-languageserver": "5.2.1"
   }

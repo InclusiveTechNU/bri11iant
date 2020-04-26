@@ -11,6 +11,7 @@ import {
 } from "../util/patterns";
 import { Result } from "./Result";
 import * as roles from "../util/roles";
+import { DOMWindow, JSDOM } from "jsdom";
 
 // Check that anchor elements have descriptive text
 export function validateA(e: HTMLAnchorElement): Result | undefined {
@@ -46,12 +47,22 @@ export function validateArea(e: HTMLAreaElement): Result | undefined {
 }
 
 // Encourage the marking of dynamic regions as live
-export function validateAriaLive(e: Element, document: Document): Result | undefined {
-	const window = document.defaultView;
-	const $ = require("jquery")(window);
-	const events = $._data(e, "events");
-	
-	
+export function validateAriaLive(e: Element, window: DOMWindow): Result | undefined {
+	// const $ = require("jquery")(window);
+	// const events = $._data(e, "events");
+	try {
+		const element = (e as HTMLElement);
+		console.log(element.onclick);
+	} catch {
+		return;
+	}
+
+}
+
+// Looks at global event handlers set on the DOM window
+export function validateAriaLiveGlobal(window: DOMWindow): Result | undefined {
+	// TODO: This
+	// onblur, onerror, onfocus, onload, and onscroll that are set on <body> are really set on the window
 	return;
 }
 
