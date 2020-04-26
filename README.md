@@ -19,7 +19,7 @@ Bri11iant is smart. Instead of just parsing the HTML file you're working on, Bri
 
 ### Text Editors
 
-- [Visual Studio Code](https://code.visualstudio.com)
+- [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=inclusive-tech.brilliant)
 - More on the way!
 
 ### Languages
@@ -33,8 +33,8 @@ Bri11iant is smart. Instead of just parsing the HTML file you're working on, Bri
 
 ### Visual Studio Code
 
-1. Download the Bri11iant extension within the VSCode application.
-2. Install and enable the application
+1. Download the [Bri11iant extension](https://marketplace.visualstudio.com/items?itemName=inclusive-tech.brilliant).
+2. Install and enable the application.
 
 ### Local (VSCode)
 
