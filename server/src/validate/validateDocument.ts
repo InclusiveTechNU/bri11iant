@@ -22,6 +22,11 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	let diagnostics: Diagnostic[] = [];
 
 	function _diagnostics(e: Element, result: Result | undefined) {
+		// Diagnostic checks do not run when the document is empty
+		if (text.length === 0) {
+			return;
+		}
+
 		if (result && problems < settings.maxNumberOfProblems) {
 			let outerHTML = e.outerHTML;
 			let startPosition = text.indexOf(outerHTML);
