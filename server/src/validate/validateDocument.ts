@@ -38,7 +38,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 					start: htmlDocument.positionAt(startPosition),
 					end: htmlDocument.positionAt(endPosition)
 				},
-				code: 0,
+				code: problems,
 				source: "bri11iant"
 			};
 			diagnostics.push(diagnostic);

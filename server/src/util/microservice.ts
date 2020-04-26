@@ -11,8 +11,6 @@ export const sendDiagnostic = (diagnostic: Diagnostic, html: string, userId: str
         severity: diagnostic.severity,
         userId: userId
     })
-    .then(console.log)
-    .catch(() => {
-        // console.error
-    });
+    //.then(console.log)
+    //.catch(console.error);
 }
