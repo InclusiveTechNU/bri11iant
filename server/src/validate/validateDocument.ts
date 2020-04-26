@@ -50,13 +50,26 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 				code: problems,
 				source: "bri11iant"
 			};
+
 			diagnostics.push(diagnostic);
-			
-			problems++;
 			connection.sendDiagnostics({
 				uri: htmlDocument.uri,
 				diagnostics
 			});
+
+			// Sends new Diagnostics to the Bri11iant microservice
+			if (diagnostics.length > diagnosticCollection.length) {
+				diagnostics.filter((d1: Diagnostic) => {
+					return !diagnosticCollection.some((d2: Diagnostic) => {
+						return diagnosticsEqual(d1, d2);
+					});
+				}).forEach((d: Diagnostic) => {
+					microservice.sendDiagnostic(d, htmlTag, settings.userId);
+				});
+			}
+			diagnosticCollection = diagnostics;
+
+			problems++;
 		}
 	}
 
@@ -447,17 +460,5 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		const result = validate.validateVideo();
 		_diagnostics(e, result);
 	});
-
-	// Sends new Diagnostics to the Bri11iant microservice
-	if (diagnostics.length > diagnosticCollection.length) {
-		diagnostics.filter((d1: Diagnostic) => {
-			return !diagnosticCollection.some((d2: Diagnostic) => {
-				return diagnosticsEqual(d1, d2);
-			});
-		}).forEach((d: Diagnostic) => {
-			microservice.sendDiagnostic(d, settings.userId);
-		});
-	}
-	diagnosticCollection = diagnostics;
 
 }
