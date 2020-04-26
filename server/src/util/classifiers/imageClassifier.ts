@@ -1,7 +1,8 @@
 /*! objectClassifier.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
-import { load } from '@tensorflow-models/coco-ssd';
+import { Image } from "image-js";
+import { load } from "@tensorflow-models/coco-ssd";
 import * as pluralize from 'pluralize';
 
 async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number> | undefined> {
@@ -11,12 +12,27 @@ async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number>
         const cocoModel = await load()
                                 .catch(() => { return; });
         if (!cocoModel) { return; }
+
+        let imageUri = src.value;
+        const fileExtension = "file://";
+        if (imageUri.startsWith(fileExtension)) {
+            imageUri = imageUri.substring(fileExtension.length);
+        }
+        const image = await Image.load(imageUri)
+                                 .catch((err: string) => {
+                                     console.error(err);
+                                     return;
+                                 });
+        if (!image) { return; }
         
-        const cocoPreds = await cocoModel?.detect(e)
-                                          .catch(err => {
-                                              // console.log(err);
-                                              return null;
-                                          });
+        const cocoPreds = await cocoModel?.detect({
+            data: image.data, 
+            width: image.width, 
+            height: image.height
+        }).catch(err => {
+            console.log(err);
+            return null;
+        });
 
         // Store predictions as map
         cocoPreds?.forEach((pred) => {
@@ -30,7 +46,7 @@ async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number>
 };
 
 function getAltText(imageObjects: Map<string, number>): string {
-    let sampleAltText = "";
+    let sampleAltText = "such as \"";
     let imageObjectNames = imageObjects.keys();
     let index = 0;
     for (let objectName of imageObjectNames) {
@@ -55,12 +71,11 @@ function getAltText(imageObjects: Map<string, number>): string {
         index++;
     }
 
-    return sampleAltText;
+    return sampleAltText + "\"";
 }
 
 export async function altText(e: HTMLImageElement): Promise<string | undefined> {
     const imageObjects = await classifyObjects(e);
-    console.log(imageObjects?.size);
     if (imageObjects && imageObjects?.size > 0) {
         return getAltText(imageObjects);
     }

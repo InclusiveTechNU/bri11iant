@@ -16,6 +16,9 @@
     "@types/jsdom": "12.2.4",
     "@types/pluralize": "0.0.29",
     "axios": "0.19.2",
+    "get-image-data": "github:michaelrhodes/get-image-data#4.1.0",
+    "image-js": "0.21.9",
+    "jquery": "3.5.0",
     "jsdom": "16.1.0",
     "pluralize": "^8.0.0",
     "vscode-languageserver": "5.2.1"

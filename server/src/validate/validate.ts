@@ -11,7 +11,6 @@ import {
 } from "../util/patterns";
 import { Result } from "./Result";
 import * as roles from "../util/roles";
-import { stringify } from "querystring";
 
 // Check that anchor elements have descriptive text
 export function validateA(e: HTMLAnchorElement): Result | undefined {
@@ -47,14 +46,14 @@ export function validateArea(e: HTMLAreaElement): Result | undefined {
 }
 
 // Encourage the marking of dynamic regions as live
-/* export function validateAriaLive(e: Element, document: Document): Result | undefined {
+export function validateAriaLive(e: Element, document: Document): Result | undefined {
 	const window = document.defaultView;
 	const $ = require("jquery")(window);
 	const events = $._data(e, "events");
-	// TODO: This
+	// console.log(events);
 	
 	return;
-} */
+}
 
 // Check that specified aria roles are valid
 export function validateAriaRole(e: Element): Result | undefined {
