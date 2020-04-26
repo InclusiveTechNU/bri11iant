@@ -2,6 +2,8 @@
 * Adopted from https://github.com/tmcw/relative-luminance
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import { JSDOM } from "jsdom";
+
 // red, green, and blue coefficients
 const rc = 0.2126;
 const gc = 0.7152;
@@ -32,13 +34,23 @@ function convertColor(color: string): number[] {
         const r = parseInt(color.substring(1, 3), 16);
         const g = parseInt(color.substring(3, 5), 16);
         const b = parseInt(color.substring(5, 7), 16);
-        return [r, g, b]; 
-    } else if (color.indexOf("hsl") == 0) {
-        // TODO: handle hsl formatting
-        return [0, 0, 0];
+        return [r, g, b];
     } else {
-        // TODO: handle word-formatted colors
-        return [0, 0, 0];
+        const DOM = new JSDOM();
+        const placeholder = DOM.window.document.createElement("div");
+        placeholder.style.color = color;
+        DOM.window.document.body.appendChild(placeholder);
+        const style = DOM.window.getComputedStyle(placeholder);
+        const c = style.getPropertyValue("color");
+        let rgb = c.substr(4).split(")")[0].split(","),
+              r = (+rgb[0]).toString(16),
+              g = (+rgb[1]).toString(16),
+              b = (+rgb[2]).toString(16);
+        return [
+            parseInt(r, 16),
+            parseInt(g, 16),
+            parseInt(b, 16)
+        ];
     }
 }
 

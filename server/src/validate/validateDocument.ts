@@ -1,4 +1,3 @@
-import * as fastParse from "fast-html-parser";
 import { diagnosticsEqual, DiagnosticInfo } from "../util/diagnostics";
 import * as microservice from "../util/microservice";
 import { getDocumentSettings } from "../server";
