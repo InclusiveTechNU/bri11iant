@@ -1,14 +1,14 @@
 import axios from "axios";
 import config from "../config/config";
-import { Diagnostic } from "vscode-languageserver";
+import { DiagnosticInfo } from "./diagnostics";
 
 const BASE_URL = config.microserviceUrl;
 
-export const sendDiagnostic = (diagnostic: Diagnostic, html: string, userId: string) => {
+export const sendDiagnostic = (d: DiagnosticInfo, userId: string) => {
     axios.post(`${BASE_URL}/diagnostics`, {
-        html: html,
-        message: diagnostic.message,
-        severity: diagnostic.severity,
+        html: d.htmlTag,
+        message: d.diagnostic.message,
+        severity: d.diagnostic.severity,
         userId: userId
     })
     //.then(console.log)

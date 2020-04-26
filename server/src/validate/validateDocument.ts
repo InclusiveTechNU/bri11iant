@@ -1,5 +1,5 @@
 import { createDOM } from "../DOM";
-import { diagnosticsEqual } from "../util/diagnostics";
+import { diagnosticsEqual, DiagnosticInfo } from "../util/diagnostics";
 import * as microservice from "../util/microservice";
 import { getDocumentSettings } from "../server";
 import { Result } from "./Result";
@@ -20,6 +20,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	let text: string = htmlDocument.getText();
 	let problems = 0;
 	let diagnostics: Diagnostic[] = [];
+	let htmlTags: string[] = [];
 
 	function _diagnostics(e: Element, result: Result | undefined) {
 		// Diagnostic checks do not run when the document is empty
@@ -52,22 +53,11 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 			};
 
 			diagnostics.push(diagnostic);
+			htmlTags.push(htmlTag);
 			connection.sendDiagnostics({
 				uri: htmlDocument.uri,
 				diagnostics
 			});
-
-			// Sends new Diagnostics to the Bri11iant microservice
-			if (diagnostics.length > diagnosticCollection.length) {
-				diagnostics.filter((d1: Diagnostic) => {
-					return !diagnosticCollection.some((d2: Diagnostic) => {
-						return diagnosticsEqual(d1, d2);
-					});
-				}).forEach((d: Diagnostic) => {
-					microservice.sendDiagnostic(d, htmlTag, settings.userId);
-				});
-			}
-			diagnosticCollection = diagnostics;
 
 			problems++;
 		}
@@ -460,5 +450,18 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		const result = validate.validateVideo();
 		_diagnostics(e, result);
 	});
+
+	// Sends new Diagnostics to the Bri11iant microservice
+	diagnostics.map((d: Diagnostic, i: number) => ({
+		diagnostic: d,
+		htmlTag: htmlTags[i]
+	})).filter((d1: DiagnosticInfo) => {
+		return !diagnosticCollection.some((d2: Diagnostic) => {
+			return diagnosticsEqual(d1.diagnostic, d2);
+		});
+	}).forEach((d: DiagnosticInfo) => {
+		microservice.sendDiagnostic(d, settings.userId);
+	});
+	diagnosticCollection = diagnostics;
 
 }
