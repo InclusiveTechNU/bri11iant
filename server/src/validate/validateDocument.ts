@@ -1,9 +1,14 @@
+import * as fastParse from "fast-html-parser";
 import { createDOM } from "../DOM";
 import { diagnosticsEqual, DiagnosticInfo } from "../util/diagnostics";
 import * as microservice from "../util/microservice";
 import { getDocumentSettings } from "../server";
 import { Result } from "./Result";
 import * as validate from "./validate";
+import {
+	IndexRange,
+	getNthIndexOfTagName
+} from "../util/html";
 import {
     Connection,
 	Diagnostic,
@@ -18,6 +23,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
 	let settings = await getDocumentSettings(htmlDocument.uri);
 	let text: string = htmlDocument.getText();
+	let textLower: string  = text.toLowerCase();
 	let problems = 0;
 	let diagnostics: Diagnostic[] = [];
 	let htmlTags: string[] = [];
@@ -29,24 +35,17 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		}
 
 		if (result && problems < settings.maxNumberOfProblems) {
-			let outerHTML = e.outerHTML;
-			let startPosition = text.indexOf(outerHTML);
-			if (startPosition === -1) {
-				outerHTML = outerHTML.replace(uriPath, "");
-				startPosition = text.indexOf(outerHTML);
-			}
-			let htmlTag = outerHTML;
-			if (!result.extended) {
-				htmlTag = outerHTML.slice(0, outerHTML.indexOf(">") + 1);
-			}
-			const endPosition = startPosition + htmlTag.length;
+			const tagName = e.tagName.toLowerCase();
+			const tagIndex = parseInt(e.getAttribute('__br_uid__')!)!;
+			const elementIndex = getNthIndexOfTagName(tagName, tagIndex, textLower);
+
 			const severity = result.severity;
 			const diagnostic: Diagnostic = {
 				severity,
 				message: result.message,
 				range: {
-					start: htmlDocument.positionAt(startPosition),
-					end: htmlDocument.positionAt(endPosition)
+					start: htmlDocument.positionAt(elementIndex.start),
+					end: htmlDocument.positionAt(elementIndex.end)
 				},
 				code: problems,
 				source: "bri11iant"

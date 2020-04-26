@@ -13,9 +13,11 @@
   "dependencies": {
     "@tensorflow-models/coco-ssd": "^2.0.1",
     "@tensorflow/tfjs": "^1.5.2",
+    "@types/fast-html-parser": "^1.0.0",
     "@types/jsdom": "12.2.4",
     "@types/pluralize": "0.0.29",
     "axios": "0.19.2",
+    "fast-html-parser": "^1.0.1",
     "get-image-data": "github:michaelrhodes/get-image-data#4.1.0",
     "image-js": "0.21.9",
     "jquery": "3.5.0",

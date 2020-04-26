@@ -12,10 +12,27 @@ function setLinkToFullPath(dom: JSDOM, uriPath: string, elementType: string, src
     }
 }
 
+function addUniqueIds(DOM: JSDOM): JSDOM {
+    let tagIndex: Map<string, number> = new Map();
+    const recurse = (e: Element) => {
+        let tagUID = tagIndex.get(e.tagName) ?? 0;
+        e.setAttribute("__br_uid__", tagUID.toString());
+        tagIndex.set(e.tagName, tagUID+1);
+
+        if (e.childElementCount > 0) {
+            recurse(e.children[0]);
+        }
+        if (e.nextElementSibling !== null) {
+            recurse(e.nextElementSibling);
+        }
+    }
+    recurse(DOM.window.document.documentElement);
+    return DOM;
+}
+
 export function createDOM(text: string, uri: string): Promise<JSDOM> {
     // Create temporary DOM for initial parsing
-    const tempDOM = new JSDOM(text);
-
+    let tempDOM = new JSDOM(text);
     const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
 
     // Replace element links with full paths
@@ -23,10 +40,10 @@ export function createDOM(text: string, uri: string): Promise<JSDOM> {
     setLinkToFullPath(tempDOM, uriPath, "img", "src"); // img
     setLinkToFullPath(tempDOM, uriPath, "script", "src"); // JS
 
-	const DOM = new JSDOM(tempDOM.serialize(), {
+	let DOM = addUniqueIds(new JSDOM(tempDOM.serialize(), {
         resources: "usable",
         runScripts: "dangerously"
-    });
+    }));
 
     // Return DOM when the scripts have loaded
     return new Promise(resolve => {
