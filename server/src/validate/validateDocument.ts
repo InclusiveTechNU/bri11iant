@@ -1,10 +1,13 @@
 import * as fastParse from "fast-html-parser";
-import { createDOM } from "../DOM";
 import { diagnosticsEqual, DiagnosticInfo } from "../util/diagnostics";
 import * as microservice from "../util/microservice";
 import { getDocumentSettings } from "../server";
 import { Result } from "./Result";
 import * as validate from "./validate";
+import { 
+	createDOM,
+	getElementTagIndex
+} from "../DOM";
 import {
 	IndexRange,
 	getNthIndexOfTagName
@@ -36,7 +39,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 		if (result && problems < settings.maxNumberOfProblems) {
 			const tagName = e.tagName.toLowerCase();
-			const tagIndex = parseInt(e.getAttribute('__br_uid__')!)!;
+			const tagIndex = getElementTagIndex(e);
 			const elementIndex = getNthIndexOfTagName(tagName, tagIndex, textLower);
 
 			const severity = result.severity;

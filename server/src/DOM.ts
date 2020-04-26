@@ -3,6 +3,8 @@
 
 import { JSDOM } from "jsdom";
 
+const uniqueIdAttributeName = '__br_uid__';
+
 function setLinkToFullPath(dom: JSDOM, uriPath: string, elementType: string, srcAttr: string) {
     for (const link of dom.window.document.querySelectorAll(elementType)) {
         const attribute = link.getAttribute(srcAttr);
@@ -16,7 +18,7 @@ function addUniqueIds(DOM: JSDOM): JSDOM {
     let tagIndex: Map<string, number> = new Map();
     const recurse = (e: Element) => {
         let tagUID = tagIndex.get(e.tagName) ?? 0;
-        e.setAttribute("__br_uid__", tagUID.toString());
+        e.setAttribute(uniqueIdAttributeName, tagUID.toString());
         tagIndex.set(e.tagName, tagUID+1);
 
         if (e.childElementCount > 0) {
@@ -28,6 +30,10 @@ function addUniqueIds(DOM: JSDOM): JSDOM {
     }
     recurse(DOM.window.document.documentElement);
     return DOM;
+}
+
+export function getElementTagIndex(e: Element) {
+    return parseInt(e.getAttribute(uniqueIdAttributeName)!)!;
 }
 
 export function createDOM(text: string, uri: string): Promise<JSDOM> {
