@@ -6,7 +6,7 @@ export interface IndexRange {
     end: number;
 }
 
-export function getNthIndexOfTagName(tagName: string, index: number, source: string): IndexRange {
+export function getNthIndexOfTag(tagName: string, index: number, source: string): IndexRange {
     // Get nth start position
     const tagQuery = `<${tagName}`;
     let currentIndex = 1;

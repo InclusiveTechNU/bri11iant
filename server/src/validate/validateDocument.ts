@@ -10,7 +10,7 @@ import {
 } from "../DOM";
 import {
 	IndexRange,
-	getNthIndexOfTagName
+	getNthIndexOfTag
 } from "../util/html";
 import {
     Connection,
@@ -23,7 +23,6 @@ let diagnosticCollection: Diagnostic[] = [];
 
 export async function html(htmlDocument: TextDocument, connection: Connection): Promise<void> {
 	const uri = htmlDocument.uri;
-	const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
 	let settings = await getDocumentSettings(htmlDocument.uri);
 	let text: string = htmlDocument.getText();
 	let textLower: string  = text.toLowerCase();
@@ -40,7 +39,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		if (result && problems < settings.maxNumberOfProblems) {
 			const tagName = e.tagName.toLowerCase();
 			const tagIndex = getElementTagIndex(e);
-			const elementIndex = getNthIndexOfTagName(tagName, tagIndex, textLower);
+			const elementIndex = getNthIndexOfTag(tagName, tagIndex, textLower);
 
 			const severity = result.severity;
 			const diagnostic: Diagnostic = {
