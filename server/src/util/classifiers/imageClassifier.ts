@@ -2,16 +2,22 @@
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
 import { Image } from "image-js";
-import { load } from "@tensorflow-models/coco-ssd";
+import { load, ObjectDetection } from "@tensorflow-models/coco-ssd";
 import * as pluralize from 'pluralize';
+
+let cocoModel: ObjectDetection | void;
+async function loadModel() {
+    cocoModel = await load();
+}
+loadModel();
 
 async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number> | undefined> {
     let preds: Map<string, number> = new Map();
     const src = e.attributes.getNamedItem("src");
     if (src && src.value) { 
-        const cocoModel = await load()
-                                .catch(() => { return; });
-        if (!cocoModel) { return; }
+        if (!cocoModel) {
+            await loadModel();
+        }
 
         let imageUri = src.value;
         const fileExtension = "file://";
@@ -20,26 +26,26 @@ async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number>
         }
         const image = await Image.load(imageUri)
                                  .catch((err: string) => {
-                                     console.error(err);
                                      return;
                                  });
         if (!image) { return; }
         
-        const cocoPreds = await cocoModel?.detect({
-            data: image.data, 
-            width: image.width, 
-            height: image.height
-        }).catch(err => {
-            console.log(err);
-            return null;
-        });
-
-        // Store predictions as map
-        cocoPreds?.forEach((pred) => {
-            const objectName: string = pred.class;
-            const existingCount: number = preds.get(objectName) ?? 0;
-            preds.set(objectName, existingCount + 1);
-        });
+        if (cocoModel) {
+            const cocoPreds = await cocoModel.detect({
+                data: image.data, 
+                width: image.width, 
+                height: image.height
+            }).catch((err: string) => {
+                return null;
+            });
+    
+            // Store predictions as map
+            cocoPreds?.forEach((pred) => {
+                const objectName: string = pred.class;
+                const existingCount: number = preds.get(objectName) ?? 0;
+                preds.set(objectName, existingCount + 1);
+            });
+        }
 
         return preds;
     }
