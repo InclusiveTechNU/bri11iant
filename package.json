@@ -33,7 +33,7 @@
 		"publish": "vsce package && vsce publish",
 		"start": "tsc -b",
 		"test": "jest",
-		"vscode:prepublish": "cd client && cd .. && npm run compile",
+		"vscode:prepublish": "npm run compile && cd client && npm run webpack && cd ..",
 		"watch": "tsc -b -w"
 	},
 	"devDependencies": {

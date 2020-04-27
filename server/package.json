@@ -2,6 +2,7 @@
   "name": "bri11iant-server",
   "version": "1.0.0",
   "description": "Language Server for Bri11iant",
+  "main": "./dist/server",
   "engines": {
     "node": "*"
   },
@@ -20,9 +21,9 @@
     "fast-html-parser": "^1.0.1",
     "get-image-data": "github:michaelrhodes/get-image-data#4.1.0",
     "image-js": "0.21.9",
-    "jquery": "3.5.0",
     "jsdom": "16.1.0",
     "pluralize": "^8.0.0",
     "vscode-languageserver": "5.2.1"
-  }
+  },
+  "devDependencies": {}
 }

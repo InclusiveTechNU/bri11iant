@@ -48,8 +48,8 @@ export function validateArea(e: HTMLAreaElement): Result | undefined {
 // Encourage the marking of dynamic regions as live
 export function validateAriaLive(e: Element, document: Document): Result | undefined {
 	const window = document.defaultView;
-	const $ = require("jquery")(window);
-	const events = $._data(e, "events");
+	// const $ = require("jquery")(window);
+	// const events = $._data(e, "events");
 	
 	
 	return;
