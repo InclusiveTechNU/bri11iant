@@ -2,7 +2,6 @@
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
 import { JSDOM } from "jsdom";
-import { setObserver } from "./mutation/mutation";
 
 const uniqueIdAttributeName = '__br_uid__';
 
@@ -38,10 +37,6 @@ export function getElementTagIndex(e: Element) {
     return parseInt(e.getAttribute(uniqueIdAttributeName)!)!;
 }
 
-function observerCallback() {
-    console.log("woot!");
-}
-
 export function createDOM(text: string, uri: string): Promise<JSDOM> {
     // Create temporary DOM for initial parsing
     let tempDOM = new JSDOM(text);
@@ -57,9 +52,6 @@ export function createDOM(text: string, uri: string): Promise<JSDOM> {
         resources: "usable",
         runScripts: "dangerously"
     }));
-
-    // Set mutation observer
-    // setObserver(DOM.window.document.documentElement, observerCallback);
 
     // Return DOM when the scripts have loaded
     return new Promise(resolve => {

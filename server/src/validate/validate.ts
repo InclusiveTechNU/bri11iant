@@ -11,7 +11,7 @@ import {
 } from "../util/patterns";
 import { Result } from "./Result";
 import * as roles from "../util/roles";
-import { DOMWindow, JSDOM } from "jsdom";
+import { DOMWindow } from "jsdom";
 
 // Check that anchor elements have descriptive text
 export function validateA(e: HTMLAnchorElement): Result | undefined {
@@ -51,8 +51,8 @@ export function validateAriaLive(e: Element, window: DOMWindow): Result | undefi
 	// const $ = require("jquery")(window);
 	// const events = $._data(e, "events");
 	try {
-		const element = (e as HTMLElement);
-		console.log(element.onclick);
+		// const element = (e as HTMLElement);
+		// console.log(element.onclick);
 	} catch {
 		return;
 	}

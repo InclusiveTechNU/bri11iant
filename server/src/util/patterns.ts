@@ -1,5 +1,6 @@
 /*! patterns.ts
-* Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
+* Copyright (c) 2020 Northwestern University Inclusive Technology Lab 
+* Adapted from https://marketplace.visualstudio.com/items?itemName=MaxvanderSchee.web-accessibility*/
 
 // Match nondescriptive alt tag starts
 export const altBadStart: RegExp = new RegExp([
