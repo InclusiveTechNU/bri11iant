@@ -5,6 +5,8 @@
 
 <img src="logo-1.png" alt="Bri11iant logo - a Lightbulb with an 11 inside" align="right" width="30%" margin-left=0/>
 
+**Bri11iant is currently in Alpha! Feel free to download the extension and leave us feedback, but know that the application will receive many updates before the Open Beta.**
+
 **Made with :purple_heart: in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/)**
 
 *Authors: Cooper F. Barth, Thomas B. McHugh, & Anne Marie Piper*
