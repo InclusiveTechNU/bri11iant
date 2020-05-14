@@ -2,7 +2,7 @@
 	"name": "brilliant",
 	"displayName": "Bri11iant",
 	"description": "A Scaffolding Tool for A11Y Web Development",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"publisher": "inclusive-tech",
 	"license": "MIT",
 	"repository": {
@@ -33,7 +33,7 @@
 		"publish": "vsce package && vsce publish",
 		"start": "tsc -b",
 		"test": "jest",
-		"vscode:prepublish": "npm run compile && cd client && npm run webpack && cd ..",
+		"vscode:prepublish": "npm run compile",
 		"watch": "tsc -b -w"
 	},
 	"devDependencies": {
@@ -57,16 +57,11 @@
 					"default": 500,
 					"description": "Controls the maximum number of problems produced by the server."
 				},
-				"bri11iant.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VS Code and the language server."
+				"bri11iant.sendDiagnostics": {
+					"scope": "resource",
+					"type": "boolean",
+					"default": false,
+					"description": "Controls whether diagnostics are recorded for research purposes."
 				},
 				"bri11iant.userId": {
 					"scope": "resource",

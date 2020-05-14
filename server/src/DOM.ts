@@ -17,9 +17,10 @@ function setLinkToFullPath(dom: JSDOM, uriPath: string, elementType: string, src
 function addUniqueIds(DOM: JSDOM): JSDOM {
     let tagIndex: Map<string, number> = new Map();
     const recurse = (e: Element) => {
+        // Set unique ID
         let tagUID = tagIndex.get(e.tagName) ?? 0;
         e.setAttribute(uniqueIdAttributeName, tagUID.toString());
-        tagIndex.set(e.tagName, tagUID+1);
+        tagIndex.set(e.tagName, tagUID + 1);
 
         if (e.childElementCount > 0) {
             recurse(e.children[0]);
@@ -39,6 +40,7 @@ export function getElementTagIndex(e: Element) {
 export function createDOM(text: string, uri: string): Promise<JSDOM> {
     // Create temporary DOM for initial parsing
     let tempDOM = new JSDOM(text);
+
     const uriPath = uri.substr(0, uri.lastIndexOf("\/") + 1);
 
     // Replace element links with full paths

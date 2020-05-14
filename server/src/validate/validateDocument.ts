@@ -1,14 +1,12 @@
-import { diagnosticsEqual, DiagnosticInfo } from "../util/diagnostics";
-import * as microservice from "../util/microservice";
 import { getDocumentSettings } from "../server";
 import { Result } from "./Result";
 import * as validate from "./validate";
-import { 
+import { DiagnosticInfo } from "../util/diagnostics";
+import {
 	createDOM,
 	getElementTagIndex
 } from "../DOM";
 import {
-	IndexRange,
 	getNthIndexOfTag
 } from "../util/html";
 import {
@@ -17,11 +15,7 @@ import {
 	TextDocument
 } from "vscode-languageserver";
 
-// Holds the most recent set of diagnostics
-let diagnosticCollection: Diagnostic[] = [];
-
-export async function html(htmlDocument: TextDocument, connection: Connection): Promise<void> {
-	const uri = htmlDocument.uri;
+export async function html(htmlDocument: TextDocument, connection: Connection): Promise<DiagnosticInfo[]> {
 	let settings = await getDocumentSettings(htmlDocument.uri);
 	let text: string = htmlDocument.getText();
 	let textLower: string  = text.toLowerCase();
@@ -69,7 +63,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Perform non-element-specific checks
 	document.querySelectorAll("body *").forEach(e => {
-		_diagnostics(e, validate.validateAriaLive(e, document));
+		_diagnostics(e, validate.validateAriaLive(e, window));
 		_diagnostics(e, validate.validateAriaRole(e));
 		_diagnostics(e, validate.validateContrast(e, window));
 		_diagnostics(e, validate.validateTabIndex(e));
@@ -109,6 +103,11 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	document.querySelectorAll("base").forEach(e => {
 		const result = validate.validateNoAriaRole(e);
 		_diagnostics(e, result);
+	});
+
+	// Validate <body> tags
+	document.querySelectorAll("body").forEach(e => {
+		_diagnostics(e, validate.validateAriaLiveGlobal(window));
 	});
 
 	// Validate <br> tags
@@ -451,17 +450,11 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		_diagnostics(e, result);
 	});
 
-	// Sends new Diagnostics to the Bri11iant microservice
-	diagnostics.map((d: Diagnostic, i: number) => ({
-		diagnostic: d,
-		htmlTag: htmlTags[i]
-	})).filter((d1: DiagnosticInfo) => {
-		return !diagnosticCollection.some((d2: Diagnostic) => {
-			return diagnosticsEqual(d1.diagnostic, d2);
-		});
-	}).forEach((d: DiagnosticInfo) => {
-		microservice.sendDiagnostic(d, settings.userId);
+	return diagnostics.map((d: Diagnostic, i: number) => {
+		return {
+			diagnostic: d,
+			htmlTag: htmlTags[i]
+		};
 	});
-	diagnosticCollection = diagnostics;
 
 }

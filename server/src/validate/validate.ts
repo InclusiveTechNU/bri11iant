@@ -5,12 +5,9 @@ import { altText } from "../util/classifiers/imageClassifier";
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import * as messages from "../util/messages";
-import {
-	altNonDescriptive,
-	altBadStart
-} from "../util/patterns";
 import { Result } from "./Result";
 import * as roles from "../util/roles";
+import { DOMWindow } from "jsdom";
 
 // Check that anchor elements have descriptive text
 export function validateA(e: HTMLAnchorElement): Result | undefined {
@@ -46,12 +43,22 @@ export function validateArea(e: HTMLAreaElement): Result | undefined {
 }
 
 // Encourage the marking of dynamic regions as live
-export function validateAriaLive(e: Element, document: Document): Result | undefined {
-	const window = document.defaultView;
+export function validateAriaLive(e: Element, window: DOMWindow): Result | undefined {
 	// const $ = require("jquery")(window);
 	// const events = $._data(e, "events");
-	
-	
+	try {
+		// const element = (e as HTMLElement);
+		// console.log(element.onclick);
+	} catch {
+		return;
+	}
+
+}
+
+// Looks at global event handlers set on the DOM window
+export function validateAriaLiveGlobal(window: DOMWindow): Result | undefined {
+	// TODO: This
+	// onblur, onerror, onfocus, onload, and onscroll that are set on <body> are really set on the window
 	return;
 }
 
@@ -388,16 +395,6 @@ export async function validateImg(e: HTMLImageElement): Promise<Result | undefin
 					severity: DiagnosticSeverity.Information
 				};
 			}
-		} else if (altNonDescriptive.test(alt.value)) {
-			return {
-				message: messages.validateAltDescriptiveMessage,
-				severity: DiagnosticSeverity.Information
-			};
-		} else if (altBadStart.test(alt.value)) {
-			return {
-				message: messages.validateAltBadStartMessage,
-				severity: DiagnosticSeverity.Information
-			};
 		} else if (alt.value.length > 125) {
 			return {
 				message: messages.validateAltLongMessage,
@@ -406,18 +403,18 @@ export async function validateImg(e: HTMLImageElement): Promise<Result | undefin
 		}
 	} else {
 		// Run TF object classifier on image to retrieve potential alt text
-		/* const alt = await altText(e);
+		const alt = await altText(e);
 		if (alt) {
 			return {
 				message: messages.validateAltMessage(alt),
 				severity: DiagnosticSeverity.Error
 			};
-		} else { */
+		} else {
 			return {
 				message: messages.validateAltMessage(),
 				severity: DiagnosticSeverity.Error
 			};
-		// }
+		}
 	}
 }
 

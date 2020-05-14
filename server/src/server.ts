@@ -1,6 +1,9 @@
 /*! server.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import { DiagnosticInfo } from "./util/diagnostics";
+import { loadModel } from "./util/classifiers/imageClassifier";
+import { sendDiagnostics } from "./util/microservice";
 import * as validateDocument from "./validate/validateDocument";
 import {
 	createConnection,
@@ -21,6 +24,9 @@ connection.onInitialize((params: InitializeParams) => {
 	let capabilities = params.capabilities;
 	hasConfigurationCapability = !!(capabilities.workspace && !!capabilities.workspace.configuration);
 	hasWorkspaceFolderCapability = !!(capabilities.workspace && !!capabilities.workspace.workspaceFolders);
+
+	// Initialize classification models
+	loadModel();
 
 	return {
 		capabilities: {
@@ -43,13 +49,15 @@ connection.onInitialized(() => {
 
 // MARK: Default Server Settings
 
-interface ServerSettings {
+export interface ServerSettings {
 	maxNumberOfProblems: number;
+	sendDiagnostics: boolean;
 	userId: string;
 }
 
 const defaultSettings: ServerSettings = {
 	maxNumberOfProblems: 500,
+	sendDiagnostics: false,
 	userId: "user-id"
 };
 let globalSettings: ServerSettings = defaultSettings;
@@ -95,14 +103,22 @@ documents.onDidClose((e: { document: { uri: string; }; }) => {
 	});
 });
 
+// Holds the most recent set of diagnostics
+let diagnosticCollection: DiagnosticInfo[] = [];
+
 // Handle document content changing
 documents.onDidChangeContent((change: { document: TextDocument; }) => {
 	validateTextDocument(change.document);
 });
 
 async function validateTextDocument(textDocument: TextDocument) {
-	validateDocument.html(textDocument, connection);
 	// TODO: Add more document types later
+	const diagnostics: DiagnosticInfo[] = await validateDocument.html(textDocument, connection);
+	const settings = await getDocumentSettings(textDocument.uri);
+	if (settings.sendDiagnostics) {
+		sendDiagnostics(diagnostics, diagnosticCollection, settings);
+	}
+	diagnosticCollection = diagnostics;
 }
 
 documents.listen(connection);
