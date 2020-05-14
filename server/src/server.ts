@@ -51,11 +51,13 @@ connection.onInitialized(() => {
 
 export interface ServerSettings {
 	maxNumberOfProblems: number;
+	sendDiagnostics: boolean;
 	userId: string;
 }
 
 const defaultSettings: ServerSettings = {
 	maxNumberOfProblems: 500,
+	sendDiagnostics: false,
 	userId: "user-id"
 };
 let globalSettings: ServerSettings = defaultSettings;
@@ -113,7 +115,9 @@ async function validateTextDocument(textDocument: TextDocument) {
 	// TODO: Add more document types later
 	const diagnostics: DiagnosticInfo[] = await validateDocument.html(textDocument, connection);
 	const settings = await getDocumentSettings(textDocument.uri);
-	sendDiagnostics(diagnostics, diagnosticCollection, settings);
+	if (settings.sendDiagnostics) {
+		sendDiagnostics(diagnostics, diagnosticCollection, settings);
+	}
 	diagnosticCollection = diagnostics;
 }
 

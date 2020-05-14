@@ -60,16 +60,11 @@
 					"default": 500,
 					"description": "Controls the maximum number of problems produced by the server."
 				},
-				"bri11iant.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VS Code and the language server."
+				"bri11iant.sendDiagnostics": {
+					"scope": "resource",
+					"type": "boolean",
+					"default": false,
+					"description": "Controls whether diagnostics are recorded for research purposes."
 				},
 				"bri11iant.userId": {
 					"scope": "resource",
