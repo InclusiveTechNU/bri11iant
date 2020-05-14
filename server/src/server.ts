@@ -1,6 +1,7 @@
 /*! server.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import { loadModel } from "./util/classifiers/imageClassifier";
 import * as validateDocument from "./validate/validateDocument";
 import {
 	createConnection,
@@ -21,6 +22,9 @@ connection.onInitialize((params: InitializeParams) => {
 	let capabilities = params.capabilities;
 	hasConfigurationCapability = !!(capabilities.workspace && !!capabilities.workspace.configuration);
 	hasWorkspaceFolderCapability = !!(capabilities.workspace && !!capabilities.workspace.workspaceFolders);
+
+	// Initialize classification models
+	loadModel();
 
 	return {
 		capabilities: {

@@ -6,10 +6,9 @@ import { load, ObjectDetection } from "@tensorflow-models/coco-ssd";
 import * as pluralize from 'pluralize';
 
 let cocoModel: ObjectDetection | void;
-async function loadModel() {
+export async function loadModel() {
     cocoModel = await load();
 }
-loadModel();
 
 async function classifyObjects(e: HTMLImageElement): Promise<Map<string, number> | undefined> {
     let preds: Map<string, number> = new Map();
