@@ -1,7 +1,9 @@
 /*! server.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+import { DiagnosticInfo } from "./util/diagnostics";
 import { loadModel } from "./util/classifiers/imageClassifier";
+import { sendDiagnostics } from "./util/microservice";
 import * as validateDocument from "./validate/validateDocument";
 import {
 	createConnection,
@@ -47,7 +49,7 @@ connection.onInitialized(() => {
 
 // MARK: Default Server Settings
 
-interface ServerSettings {
+export interface ServerSettings {
 	maxNumberOfProblems: number;
 	userId: string;
 }
@@ -99,14 +101,20 @@ documents.onDidClose((e: { document: { uri: string; }; }) => {
 	});
 });
 
+// Holds the most recent set of diagnostics
+let diagnosticCollection: DiagnosticInfo[] = [];
+
 // Handle document content changing
 documents.onDidChangeContent((change: { document: TextDocument; }) => {
 	validateTextDocument(change.document);
 });
 
 async function validateTextDocument(textDocument: TextDocument) {
-	validateDocument.html(textDocument, connection);
 	// TODO: Add more document types later
+	const diagnostics: DiagnosticInfo[] = await validateDocument.html(textDocument, connection);
+	const settings = await getDocumentSettings(textDocument.uri);
+	sendDiagnostics(diagnostics, diagnosticCollection, settings);
+	diagnosticCollection = diagnostics;
 }
 
 documents.listen(connection);
