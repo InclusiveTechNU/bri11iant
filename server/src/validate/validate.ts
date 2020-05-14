@@ -5,10 +5,6 @@ import { altText } from "../util/classifiers/imageClassifier";
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
 import * as messages from "../util/messages";
-import {
-	altNonDescriptive,
-	altBadStart
-} from "../util/patterns";
 import { Result } from "./Result";
 import * as roles from "../util/roles";
 import { DOMWindow } from "jsdom";
@@ -399,16 +395,6 @@ export async function validateImg(e: HTMLImageElement): Promise<Result | undefin
 					severity: DiagnosticSeverity.Information
 				};
 			}
-		} else if (altNonDescriptive.test(alt.value)) {
-			return {
-				message: messages.validateAltDescriptiveMessage,
-				severity: DiagnosticSeverity.Information
-			};
-		} else if (altBadStart.test(alt.value)) {
-			return {
-				message: messages.validateAltBadStartMessage,
-				severity: DiagnosticSeverity.Information
-			};
 		} else if (alt.value.length > 125) {
 			return {
 				message: messages.validateAltLongMessage,
@@ -417,18 +403,18 @@ export async function validateImg(e: HTMLImageElement): Promise<Result | undefin
 		}
 	} else {
 		// Run TF object classifier on image to retrieve potential alt text
-		/* const alt = await altText(e);
+		const alt = await altText(e);
 		if (alt) {
 			return {
 				message: messages.validateAltMessage(alt),
 				severity: DiagnosticSeverity.Error
 			};
-		} else { */
+		} else {
 			return {
 				message: messages.validateAltMessage(),
 				severity: DiagnosticSeverity.Error
 			};
-		// }
+		}
 	}
 }
 
