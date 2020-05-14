@@ -250,7 +250,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 
 	// Validate <img> tags
 	document.querySelectorAll("img").forEach(async e => {
-		const result = await validate.validateImg(e)
+		const result = await validate.validateImg(e, settings.altText);
 		_diagnostics(e, result);
 	});
 	

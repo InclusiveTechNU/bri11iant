@@ -50,12 +50,14 @@ connection.onInitialized(() => {
 // MARK: Default Server Settings
 
 export interface ServerSettings {
+	altText: boolean;
 	maxNumberOfProblems: number;
 	sendDiagnostics: boolean;
 	userId: string;
 }
 
 const defaultSettings: ServerSettings = {
+	altText: true,
 	maxNumberOfProblems: 500,
 	sendDiagnostics: false,
 	userId: "user-id"

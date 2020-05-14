@@ -51,6 +51,12 @@
 			"type": "object",
 			"title": "Bri11iant",
 			"properties": {
+				"bri11iant.altText": {
+					"scope": "resource",
+					"type": "boolean",
+					"default": true,
+					"description": "Controls whether Bri11iant attempts to generate missing alt text."
+				},
 				"bri11iant.maxNumberOfProblems": {
 					"scope": "resource",
 					"type": "number",

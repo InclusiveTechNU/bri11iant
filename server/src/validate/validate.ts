@@ -379,7 +379,7 @@ export function validateIFrame(e: HTMLIFrameElement): Result | undefined {
 }
 
 // Checks that img tags use valid alt attributes
-export async function validateImg(e: HTMLImageElement): Promise<Result | undefined> {
+export async function validateImg(e: HTMLImageElement, generateAltText: Boolean): Promise<Result | undefined> {
 	const alt = e.attributes.getNamedItem("alt");
 	if (alt) {
 		const role = e.attributes.getNamedItem("role")?.value;
@@ -401,7 +401,7 @@ export async function validateImg(e: HTMLImageElement): Promise<Result | undefin
 				severity: DiagnosticSeverity.Information
 			};
 		}
-	} else {
+	} else if (generateAltText) {
 		// Run TF object classifier on image to retrieve potential alt text
 		const alt = await altText(e);
 		if (alt) {
@@ -415,6 +415,11 @@ export async function validateImg(e: HTMLImageElement): Promise<Result | undefin
 				severity: DiagnosticSeverity.Error
 			};
 		}
+	} else {
+		return {
+			message: messages.validateAltMessage(),
+			severity: DiagnosticSeverity.Error
+		};
 	}
 }
 
