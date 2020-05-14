@@ -2,9 +2,10 @@
   "name": "bri11iant-client",
   "version": "1.0.0",
   "description": "Language Client for Bri11iant",
-  "main": "src/extension.ts",
+  "main": "./dist/extension",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack --mode production"
   },
   "author": "Northwestern University Inclusive Technology Lab",
   "license": "MIT",
@@ -12,7 +13,9 @@
     "vscode-languageclient": "^6.0.0"
   },
   "devDependencies": {
-    "minimist": ">=0.2.1",
-    "vscode": "1.1.36"
+    "ts-loader": "7.0.1",
+    "vscode": "1.1.36",
+    "webpack": "4.43.0",
+    "webpack-cli": "3.3.11"
   }
 }

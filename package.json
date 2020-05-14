@@ -2,7 +2,7 @@
 	"name": "brilliant",
 	"displayName": "Bri11iant",
 	"description": "A Scaffolding Tool for A11Y Web Development",
-	"version": "0.2.0",
+	"version": "0.2.2",
 	"publisher": "inclusive-tech",
 	"license": "MIT",
 	"repository": {
@@ -45,9 +45,6 @@
 		"ts-jest": "^25.4.0",
 		"typelint": "^1.0.2",
 		"typescript": "^3.7.5"
-	},
-	"dependencies": {
-		"jquery": "3.5.0"
 	},
 	"contributes": {
 		"configuration": {
