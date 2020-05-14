@@ -9,5 +9,5 @@
 		"strict": true
 	},
 	"include": ["src"],
-	"exclude": ["node_modules/@tensorflow-models/coco-ssd/tsconfig.json"]
+	"exclude": ["node_modules/@tensorflow-models/coco-ssd/tsconfig.json", "test/*"]
 }
