@@ -7,7 +7,7 @@
     "node": "*"
   },
   "scripts": {
-    "postinstall": "rm -rf node_modules/@tensorflow-models/coco-ssd/tsconfig.json && rm -rf node_modules/@tensorflow-models/coco-ssd/*.ts"
+    "postinstall": "node postinstall.js"
   },
   "author": "Northwestern University Inclusive Technology Lab",
   "license": "MIT",
