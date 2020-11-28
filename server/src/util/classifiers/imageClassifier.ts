@@ -1,8 +1,9 @@
 /*! objectClassifier.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
+/* 
 import { Image } from "image-js";
-import { load, ObjectDetection } from "@tensorflow-models/coco-ssd";
+// import { load, ObjectDetection } from "@tensorflow-models/coco-ssd";
 import * as pluralize from 'pluralize';
 
 let cocoModel: ObjectDetection | void;
@@ -85,3 +86,4 @@ export async function altText(e: HTMLImageElement): Promise<string | undefined> 
         return getAltText(imageObjects);
     }
 }
+*/

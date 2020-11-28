@@ -2,7 +2,7 @@
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
 import { DiagnosticInfo } from "./util/diagnostics";
-import { loadModel } from "./util/classifiers/imageClassifier";
+// import { loadModel } from "./util/classifiers/imageClassifier";
 import { sendDiagnostics } from "./util/microservice";
 import * as validateDocument from "./validate/validateDocument";
 import {
@@ -26,7 +26,7 @@ connection.onInitialize((params: InitializeParams) => {
 	hasWorkspaceFolderCapability = !!(capabilities.workspace && !!capabilities.workspace.workspaceFolders);
 
 	// Initialize classification models
-	loadModel();
+	// loadModel();
 
 	return {
 		capabilities: {
@@ -60,7 +60,7 @@ const defaultSettings: ServerSettings = {
 	altText: true,
 	maxNumberOfProblems: 500,
 	sendDiagnostics: false,
-	userId: "user-id"
+	userId: "__br_uuid__"
 };
 let globalSettings: ServerSettings = defaultSettings;
 
