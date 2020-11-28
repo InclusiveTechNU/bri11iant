@@ -1,13 +1,14 @@
 /*! validate.ts
 * Copyright (c) 2020 Northwestern University Inclusive Technology Lab */
 
-import { altText } from "../util/classifiers/imageClassifier";
+// import { altText } from "../util/classifiers/imageClassifier";
 import { contrast } from "../util/contrast";
 import { DiagnosticSeverity } from "vscode-languageserver";
+import { DOMWindow } from "jsdom";
 import * as messages from "../util/messages";
+import * as navigation from "../util/navigation";
 import { Result } from "./Result";
 import * as roles from "../util/roles";
-import { DOMWindow } from "jsdom";
 
 // Check that anchor elements have descriptive text
 export function validateA(e: HTMLAnchorElement): Result | undefined {
@@ -212,6 +213,17 @@ export function validateDialog(e: HTMLDialogElement): Result | undefined {
 	}
 }
 
+// Validate that CSS display: none is used correctly
+export function validateDisplayNone(e: Element, window: Window): Result | undefined {
+	const style = window.getComputedStyle(e);
+	if (style.display.toLowerCase() === "none") {
+		return {
+			message: messages.displayNoneWarningMessage,
+			severity: DiagnosticSeverity.Information
+		};
+	}
+}
+
 // Check that divs use WAI-ARIA roles
 export function validateDiv(e: HTMLDivElement): Result | undefined {
 	const role = e.attributes.getNamedItem("role");
@@ -229,7 +241,7 @@ export function validateDiv(e: HTMLDivElement): Result | undefined {
 		return {
 			message: messages.validateAriaLabelBadElementMessage("<div>"),
 			severity: DiagnosticSeverity.Warning
-		}
+		};
 	}
 }
 
@@ -379,7 +391,7 @@ export function validateIFrame(e: HTMLIFrameElement): Result | undefined {
 }
 
 // Checks that img tags use valid alt attributes
-export async function validateImg(e: HTMLImageElement, generateAltText: Boolean): Promise<Result | undefined> {
+export async function validateImg(e: HTMLImageElement, generateAltText: Boolean = false): Promise<Result | undefined> {
 	const alt = e.attributes.getNamedItem("alt");
 	if (alt) {
 		const role = e.attributes.getNamedItem("role")?.value;
@@ -403,7 +415,7 @@ export async function validateImg(e: HTMLImageElement, generateAltText: Boolean)
 		}
 	} else if (generateAltText) {
 		// Run TF object classifier on image to retrieve potential alt text
-		const alt = await altText(e);
+		/* const alt = await altText(e);
 		if (alt) {
 			return {
 				message: messages.validateAltMessage(alt),
@@ -414,7 +426,7 @@ export async function validateImg(e: HTMLImageElement, generateAltText: Boolean)
 				message: messages.validateAltMessage(),
 				severity: DiagnosticSeverity.Error
 			};
-		}
+		} */
 	} else {
 		return {
 			message: messages.validateAltMessage(),
@@ -546,6 +558,22 @@ export function validateMeta(e: HTMLMetaElement): Result | undefined {
 				extended: true,
 				message: messages.validateMetaUserScalableMessage,
 				severity: DiagnosticSeverity.Information
+			};
+		}
+	}
+}
+
+export function validateNavBeforeMain(document: Document): {element: Element, result: Result} | undefined {
+	const main = navigation.detectMainContent(document);
+	const nav = navigation.detectNavigationContent(document);
+	if (main && nav) {
+		if (!navigation.isMainBeforeNav(document, main, nav)) {
+			return {
+				element: main,
+				result: {
+					message: messages.validateNavBeforeMainMessage,
+					severity: DiagnosticSeverity.Information
+				}
 			};
 		}
 	}

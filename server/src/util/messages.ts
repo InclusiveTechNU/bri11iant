@@ -1,3 +1,4 @@
+export const displayNoneWarningMessage = "Using CSS display:none makes this content unreadable to screen readers. Consider placing the element off-screen using absolute positioning instead.";
 export const noRolesAllowedMessage = "ARIA roles are not supported on this element.";
 export const roleNotAllowedMessage = (role: String, tag: String = "") => `${role} is not a supported ARIA role for ${tag === ""? "this tag" : `${tag} tags.`}`;
 export const validateAMessage = "Provide descriptive text in between anchor tags. This provides important context for screen reader users as to where the link goes.";
@@ -14,15 +15,16 @@ export const validateAriaOverTitleMessage = "It's recommended to use aria-label 
 export const validateAriaRoleMessage = (role: String = "The specified role value") => `"${role}" is not a valid ARIA role - see https://www.w3.org/TR/html-aria/#allowed-aria-roles-states-and-properties for details.`
 export const validateAudioMessage = "Consider instead using a <video> tag instead of an <audio> tag to display audio content, as <audio> tags do not currently support subtitles.\nAdd your audio as a <source> element with your captions in a <track kind=\"subtitles\">\nFor more info, see https://www.iandevlin.com/blog/2015/12/html5/webvtt-and-audio/.";
 export const validateContrastMessage = (c: Number) => `Color contrast between content and its background must be 4.5:1 or above (is ${c.toFixed(2)}:1).`;
-export const validateDivMessage = "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]\nhttps://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles.";
+export const validateDivMessage = "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"].\n This helps screen reader users understand the purpose of the content and navigate to it more easily.";
 export const validateHeadTitleMessage = "Provide a title within the <head> tags. This helps identify what the title of the page is in a browser's tabs.";
 export const validateHeadUserScalableMessage = "Avoid setting the user-scalable attribute. By setting this attribute, you are overriding the default pinch zoom behavior of the browser, potentially preventing people with low vision concerns from accessing your website.";
 export const validateHtmlMessage = "Provide a language in the <html> tag [lang=\"\"]. Providing a language lets screen readers and web scrapers know the language in which to read the content of the page.";
 export const validateMetaMaximumScaleMessage = "Avoid using [maximum-scale=1]. By setting maximum-scale=1.0, you are disabling the functionality to use pinch zoom on certain mobile devices, preventing people with low vision concerns from accessing your website.";
 export const validateMetaUserScalableMessage = "Avoid setting the user-scalable attribute. By setting this attribute, you are overriding the default pinch zoom behavior of the browser, potentially preventing people with low vision concerns from accessing your website.";
+export const validateNavBeforeMainMessage = "Main content should be placed before navigation content in HTML files. This helps screen reader users get to the main content of your page more quickly.";
 export const validateSelectAriaLiveMessage = "We encourage the use of the aria-live=\"polite\" attribute in order to help screen readers announce dynamic changes to the page content: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions";
 export const validateSelectMultipleMessage = "We strongly advise the use of multiselect variations other than <select multiple>, as this tag is nearly impossible to use with a screen reader. Read https://www.24a11y.com/2019/select-your-poison-part-2/ for more info.";
-export const validateSpanMessage = "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\"]\nhttps://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles";
+export const validateSpanMessage = "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\".\n This helps screen reader users understand the purpose of the content and navigate to it more easily.";
 export const validateTabIndex = "A tabindex other than 0 or -1 interferes with the focus order.";
 export const validateTitleMessage = "Provide a text within the <title> tags.";
-export const validateVideoMessage = "We recommend using a third-party video player (such as Plyr: https://plyr.io/) instead of the native <video> element due to its inconsistent behavior with screen readers.";
+export const validateVideoMessage = "We recommend using a third-party video player such as Plyr (https://plyr.io/) instead of the native <video> element due to its inconsistent behavior with screen readers.";

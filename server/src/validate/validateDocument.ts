@@ -2,18 +2,9 @@ import { getDocumentSettings } from "../server";
 import { Result } from "./Result";
 import * as validate from "./validate";
 import { DiagnosticInfo } from "../util/diagnostics";
-import {
-	createDOM,
-	getElementTagIndex
-} from "../DOM";
-import {
-	getNthIndexOfTag
-} from "../util/html";
-import {
-    Connection,
-	Diagnostic,
-	TextDocument
-} from "vscode-languageserver";
+import { createDOM, getElementTagIndex } from "../DOM";
+import { getNthIndexOfTag } from "../util/html";
+import { Connection, Diagnostic, TextDocument } from "vscode-languageserver";
 
 export async function html(htmlDocument: TextDocument, connection: Connection): Promise<DiagnosticInfo[]> {
 	let settings = await getDocumentSettings(htmlDocument.uri);
@@ -23,9 +14,9 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	let diagnostics: Diagnostic[] = [];
 	let htmlTags: string[] = [];
 
-	function _diagnostics(e: Element, result: Result | undefined) {
-		// Diagnostic checks do not run when the document is empty
-		if (text.length === 0) {
+	function _diagnostics(e: Element | undefined, result: Result | undefined) {
+		// Diagnostic checks should not run when the document is empty or when a target element is not found
+		if (text.length === 0 || !e) {
 			return;
 		}
 
@@ -61,11 +52,16 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	const window = DOM.window;
 	const document = window.document;
 
+	// Perform navigation placement checks
+	const navBeforeMainResult = validate.validateNavBeforeMain(document);
+	_diagnostics(navBeforeMainResult?.element, navBeforeMainResult?.result);
+
 	// Perform non-element-specific checks
-	document.querySelectorAll("body *").forEach(e => {
+	document.querySelectorAll("body *:not(script)").forEach(e => {
 		_diagnostics(e, validate.validateAriaLive(e, window));
 		_diagnostics(e, validate.validateAriaRole(e));
 		_diagnostics(e, validate.validateContrast(e, window));
+		_diagnostics(e, validate.validateDisplayNone(e, window));
 		_diagnostics(e, validate.validateTabIndex(e));
 	});
 

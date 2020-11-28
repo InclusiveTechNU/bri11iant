@@ -8,20 +8,25 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <body>
-        <a href="This link needs descriptive text"></a>
-        <a id="link" href="This link is fine because we give it descriptive text in index.js!"></a>
-        <i class="material-icons">accessibility</i>
-        <div id="no-role-sadness">This is a div!</div>
-        <div id="good-role-happy" role="random">This div's role isn't a valid WAI-ARIA role</div>
-        <div id="good-role-happy" role="tooltip">This is a good div!</div>
-        <div id="bad-tab-index" tabindex="1" role="tooltip"></div>
-        <div id="good-tab-index" tabindex="-1" role="tooltip"></div>
-        <h1>The contrast for this header isn't great (specified in index.css)</h1>
-        <h2>The color contrast for this header is much better!</h2>
-        <h3>The color contrast for this header is much better!</h3>
-        <img src="" alt="Honestly, this alt text is far too long and it doesn't even really tell the user much about what's happening in the linked image.">
-        <img src="img/cat.jpg">
-        <video controls src=""></video>
+        <main>
+            <i class="material-icons">accessibility</i>
+            <div id="no-role-sadness">This is a div!</div>
+            <section id="hi">This has display none, so I can't read it :(</section>
+            <div id="good-role-happy" role="random">This div's role isn't a valid WAI-ARIA role</div>
+            <div id="good-role-happy" role="tooltip">This is a good div!</div>
+            <div id="bad-tab-index" tabindex="1" role="tooltip"></div>
+            <div id="good-tab-index" tabindex="-1" role="tooltip"></div>
+            <h1>The contrast for this header isn't great (specified in index.css)</h1>
+            <h2>The color contrast for this header is much better!</h2>
+            <h3>The color contrast for this header is much better!</h3>
+            <img src="" alt="Honestly, this alt text is far too long and it doesn't even really tell the user much about what's happening in the linked image.">
+            <img src="img/cat.jpg">
+            <video controls src=""></video>
+        </main>
+        <nav>
+            <a href="This link needs descriptive text"></a>
+            <a id="link" href="This link is fine because we give it descriptive text in index.js!"></a>
+        </nav>
     </body>
     <script src="index.js"></script>
 </html>
