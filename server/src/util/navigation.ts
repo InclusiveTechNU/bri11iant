@@ -1,5 +1,3 @@
-import { exception } from "console";
-
 class ElementQueue {
     elements: Array<Element>;
 
@@ -23,54 +21,6 @@ class ElementQueue {
         this.elements.push(e);
     }
     
-}
-
-export function detectMainContent(document: Document): Element | null {
-    const main = document.querySelectorAll("main");
-    if (main.length > 1) {
-        // TODO: We shouldn't have multiple main areas
-        return null;
-    } else if (main.length === 1) {
-        return main[0];
-    } else {
-        // TODO: More complex analysis to find this
-        return document.firstElementChild;
-    }
-}
-
-export function detectNavigationContent(document: Document): Element | null {
-    const nav = document.querySelectorAll("nav");
-    if (nav.length > 1) {
-        // TODO: We shouldn't have multiple navigation areas
-        return null;
-    } else if (nav.length === 1) {
-        return nav[0];
-    } else {
-        const q = new ElementQueue();
-        for (const child of document.childNodes) {
-            q.push(child as Element);
-        }
-
-        while (!q.empty()) {
-            const e = q.pop();
-            let aCount = 0;
-            let aContent = "";
-            for (const child of e?.childNodes) {
-                const node = child as HTMLAnchorElement;
-                if (node.href !== "") {
-                    aCount++;
-                    aContent += node.textContent;
-                }
-            }
-            // Designating 3 links in close succession as a navigation area
-            // We also compare the length of the link text to the length of the body to account for text content that contains hyperlinks
-            if (aCount >= 3 && (e.textContent?.length ?? 0) <= aContent.length) {
-                return e;
-            }
-        }
-
-        return null;
-    }
 }
 
 enum ElementComparisonResult {
@@ -99,12 +49,63 @@ function compareElementOrder(
     }
 
     let comparisonResult = ElementComparisonResult.None;
-    for (const child of parent?.childNodes ?? []) {
+    for (const child of parent?.children ?? []) {
         if (comparisonResult === ElementComparisonResult.None) {
             comparisonResult = compareElementOrder(child as Element, e1, e2, currResult);
         }
     }
     return comparisonResult;
+}
+
+export function detectMainContent(document: Document): Element | null {
+    const main = document.querySelectorAll("main");
+    if (main.length > 1) {
+        // TODO: We shouldn't have multiple main areas
+        return null;
+    } else if (main.length === 1) {
+        return main[0];
+    } else {
+        // Jusy take the largest top-level section
+        const topLevelNodes = document.querySelector("body")?.children ?? [];
+        return Array.from(topLevelNodes).sort((a, b) => b.outerHTML.length - a.outerHTML.length)[0];
+    }
+}
+
+export function detectNavigationContent(document: Document): Element | null {
+    const nav = document.querySelectorAll("nav");
+    if (nav.length > 1) {
+        // TODO: We shouldn't have multiple navigation areas
+        return null;
+    } else if (nav.length === 1) {
+        return nav[0];
+    } else {
+        const q = new ElementQueue();
+        for (const child of document.querySelectorAll("body > *:not(script)")) {
+            q.push(child);
+        }
+
+        while (!q.empty()) {
+            const e = q.pop();
+            let aCount = 0;
+            let aContent = "";
+            for (const child of e?.children) {
+                q.push(child);
+                const node = child as HTMLAnchorElement;
+                if (node.href) {
+                    aCount++;
+                    aContent += node.textContent?.replace(/\s/g, "");
+                }
+            }
+
+            // Designating 3 links in close succession as a navigation area
+            // We also compare the length of the link text to the length of the body to account for text content that contains hyperlinks
+            if (aCount >= 3 && (e.textContent?.replace(/\s/g, "").length ?? 0) <= aContent.length) {
+                return e;
+            }
+        }
+
+        return null;
+    }
 }
 
 export function isMainBeforeNav(document: Document, main: Element, nav: Element): Boolean {

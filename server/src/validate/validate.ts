@@ -563,18 +563,27 @@ export function validateMeta(e: HTMLMetaElement): Result | undefined {
 	}
 }
 
-export function validateNavBeforeMain(document: Document): {element: Element, result: Result} | undefined {
+export function validateNavBeforeMain(document: Document): { element: Element, result: Result }[] | undefined {
 	const main = navigation.detectMainContent(document);
 	const nav = navigation.detectNavigationContent(document);
 	if (main && nav) {
 		if (!navigation.isMainBeforeNav(document, main, nav)) {
-			return {
-				element: main,
-				result: {
-					message: messages.validateNavBeforeMainMessage,
-					severity: DiagnosticSeverity.Information
+			return [
+				{
+					element: main,
+					result: {
+						message: messages.validateNavBeforeMainMainMessage,
+						severity: DiagnosticSeverity.Information
+					}
+				},
+				{
+					element: nav,
+					result: {
+						message: messages.validateNavBeforeMainNavMessage,
+						severity: DiagnosticSeverity.Information
+					}
 				}
-			};
+			];
 		}
 	}
 }

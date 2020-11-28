@@ -54,14 +54,24 @@
 				"bri11iant.altText": {
 					"scope": "resource",
 					"type": "boolean",
-					"default": true,
-					"description": "Controls whether Bri11iant attempts to generate missing alt text."
+					"default": false,
+					"description": "Controls whether Bri11iant attempts to generate missing alt text. (Deprecated)"
 				},
 				"bri11iant.maxNumberOfProblems": {
 					"scope": "resource",
 					"type": "number",
 					"default": 500,
+					"maximum": 1000,
 					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"bri11iant.mode": {
+					"type": "string",
+					"default": "Standard",
+					"enum": ["Standard", "Education"],
+					"enumDescriptions": [
+						"The standard version of Bri11iant, for use by web developers.",
+						"A modified version of Bri11iant for use by educators and students, tailored to teach web accessibility concepts."
+					]
 				},
 				"bri11iant.sendDiagnostics": {
 					"scope": "resource",
@@ -72,7 +82,8 @@
 				"bri11iant.userId": {
 					"scope": "resource",
 					"type": "string",
-					"default": "user-id",
+					"default": "",
+					"maxLength": 10,
 					"description": "Participant id for research studies involving Bri11iant."
 				}
 			}

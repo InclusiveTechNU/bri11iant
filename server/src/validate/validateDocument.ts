@@ -53,8 +53,9 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	const document = window.document;
 
 	// Perform navigation placement checks
-	const navBeforeMainResult = validate.validateNavBeforeMain(document);
-	_diagnostics(navBeforeMainResult?.element, navBeforeMainResult?.result);
+	validate.validateNavBeforeMain(document)?.forEach(result => {
+		_diagnostics(result?.element, result?.result);
+	});
 
 	// Perform non-element-specific checks
 	document.querySelectorAll("body *:not(script)").forEach(e => {
