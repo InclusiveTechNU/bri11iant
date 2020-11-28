@@ -7,9 +7,13 @@
 
 **Bri11iant is currently in Alpha! Feel free to download the extension and leave us feedback, but know that the application will receive many updates before the Open Beta.**
 
-**Made with :purple_heart: in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/)**
+**Are you an educator interested in using Bri11iant? Contact us at cooperfbarth@gmail.com.**
 
-*Authors: Cooper F. Barth, Thomas B. McHugh, & Anne Marie Piper*
+**Made with :purple_heart: in Evanston, IL at the [Northwestern Inclusive Technology Lab](http://inclusive.northwestern.edu/) and [Delta Lab](http://delta.northwestern.edu)**
+
+*Authors: Cooper F. Barth, Thomas B. McHugh*
+
+*Advisors: Anne Marie Piper (UCI), Eleanor O'Rourke (NU)*
 
 Bri11iant is a [VSCode language extension](https://marketplace.visualstudio.com/items?itemName=inclusive-tech.brilliant) for supporting web developers improve the accessibility of their websites. Bri11iant fits right into your text editor, suggesting improvements to your HTML, CSS, and Javascript code in order to improve the accessibility of your websites.
 
