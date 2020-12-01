@@ -563,28 +563,37 @@ export function validateMeta(e: HTMLMetaElement): Result | undefined {
 	}
 }
 
-export function validateNavBeforeMain(document: Document): { element: Element, result: Result }[] | undefined {
+export function validateNavigation(document: Document): { element: Element, result: Result }[] | undefined {
 	const main = navigation.detectMainContent(document);
 	const nav = navigation.detectNavigationContent(document);
-	if (main && nav) {
-		if (!navigation.isMainBeforeNav(document, main, nav)) {
-			return [
-				{
-					element: main,
-					result: {
-						message: messages.validateNavBeforeMainMainMessage,
-						severity: DiagnosticSeverity.Information
-					}
-				},
-				{
-					element: nav,
-					result: {
-						message: messages.validateNavBeforeMainNavMessage,
-						severity: DiagnosticSeverity.Information
-					}
+	if (main && nav && !navigation.isNavBeforeMain(document, main, nav)) {
+		return [
+			{
+				element: main,
+				result: {
+					message: messages.validateNavBeforeMainMainMessage,
+					severity: DiagnosticSeverity.Hint
 				}
-			];
-		}
+			},
+			{
+				element: nav,
+				result: {
+					message: messages.validateNavBeforeMainNavMessage,
+					severity: DiagnosticSeverity.Hint
+				}
+			}
+		];
+	}
+	if (main && !navigation.isMainFirst(document, main, nav ? true : false)) {
+		return [
+			{
+				element: main,
+				result: {
+					message: messages.validateMainFirstMessage,
+					severity: DiagnosticSeverity.Hint
+				}
+			}
+		];
 	}
 }
 
@@ -698,8 +707,18 @@ export function validateTabIndex(e: Element): Result | undefined {
 	const tabIndex = e.attributes.getNamedItem("tabindex");
 	if (tabIndex && tabIndex.value !== "-1" && tabIndex.value !== "0") {
 		return {
-			message: messages.validateTabIndex,
+			message: messages.validateTabIndexMessage,
 			severity: DiagnosticSeverity.Error
+		};
+	}
+}
+
+export function validateTable(e: HTMLTableElement): Result | undefined {
+	const headers = e.querySelectorAll("th");
+	if (headers.length === 0) {
+		return {
+			message: messages.validateTableMessage,
+			severity: DiagnosticSeverity.Warning
 		};
 	}
 }

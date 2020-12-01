@@ -19,6 +19,7 @@ export const validateDivMessage = "Use Semantic HTML5 or specify a WAI-ARIA role
 export const validateHeadTitleMessage = "Provide a title within the <head> tags. This helps identify what the title of the page is in a browser's tabs.";
 export const validateHeadUserScalableMessage = "Avoid setting the user-scalable attribute. By setting this attribute, you are overriding the default pinch zoom behavior of the browser, potentially preventing people with low vision concerns from accessing your website.";
 export const validateHtmlMessage = "Provide a language in the <html> tag [lang=\"\"]. Providing a language lets screen readers and web scrapers know the language in which to read the content of the page.";
+export const validateMainFirstMessage = "The main content of your page should be placed first in the HTML so that screen reader users can access it quickly, because screen readers navigate content top-down in a linear fashion."
 export const validateMetaMaximumScaleMessage = "Avoid using [maximum-scale=1]. By setting maximum-scale=1.0, you are disabling the functionality to use pinch zoom on certain mobile devices, preventing people with low vision concerns from accessing your website.";
 export const validateMetaUserScalableMessage = "Avoid setting the user-scalable attribute. By setting this attribute, you are overriding the default pinch zoom behavior of the browser, potentially preventing people with low vision concerns from accessing your website.";
 export const validateNavBeforeMainMainMessage = "Main content should be placed before navigation content in HTML files. This helps screen reader users get to the main content of your page more quickly. Alternatively, include an invisible link that skips to the main content.";
@@ -26,6 +27,7 @@ export const validateNavBeforeMainNavMessage = "Navigation content should be pla
 export const validateSelectAriaLiveMessage = "We encourage the use of the aria-live=\"polite\" attribute in order to help screen readers announce dynamic changes to the page content: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions";
 export const validateSelectMultipleMessage = "We strongly advise the use of multiselect variations other than <select multiple>, as this tag is nearly impossible to use with a screen reader. Read https://www.24a11y.com/2019/select-your-poison-part-2/ for more info.";
 export const validateSpanMessage = "Use Semantic HTML5 or specify a WAI-ARIA role [role=\"\".\n This helps screen reader users understand the purpose of the content and navigate to it more easily.";
-export const validateTabIndex = "A tabindex other than 0 or -1 interferes with the focus order.";
+export const validateTabIndexMessage = "A tabindex other than 0 or -1 interferes with the focus order, making it hard to navigate the website with a keyboard.";
+export const validateTableMessage = "Tables should contain a header column designated by <th> tags. This helps screen readers better navigate and understand table content.";
 export const validateTitleMessage = "Provide a text within the <title> tags.";
 export const validateVideoMessage = "We recommend using a third-party video player such as Plyr (https://plyr.io/) instead of the native <video> element due to its inconsistent behavior with screen readers.";

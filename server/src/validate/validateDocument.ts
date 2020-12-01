@@ -53,7 +53,7 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 	const document = window.document;
 
 	// Perform navigation placement checks
-	validate.validateNavBeforeMain(document)?.forEach(result => {
+	validate.validateNavigation(document)?.forEach(result => {
 		_diagnostics(result?.element, result?.result);
 	});
 
@@ -411,6 +411,12 @@ export async function html(htmlDocument: TextDocument, connection: Connection): 
 		const result = validate.validateSVG(e);
 		_diagnostics(e, result);
 	});
+
+	// Validate <table> tags
+	document.querySelectorAll("table").forEach(e => {
+		const result = validate.validateTable(e);
+		_diagnostics(e, result);
+	})
 
 	// Validate <template> tags
 	document.querySelectorAll("template").forEach(e => {

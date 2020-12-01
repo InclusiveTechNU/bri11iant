@@ -108,7 +108,14 @@ export function detectNavigationContent(document: Document): Element | null {
     }
 }
 
-export function isMainBeforeNav(document: Document, main: Element, nav: Element): Boolean {
+export function isNavBeforeMain(document: Document, main: Element, nav: Element): Boolean {
     const body = document.querySelector("body");
-    return compareElementOrder(body, main, nav) === ElementComparisonResult.First;
+    return compareElementOrder(body, nav, main) === ElementComparisonResult.First;
+}
+
+export function isMainFirst(document: Document, main: Element, navExists: Boolean = false): Boolean {
+    const body = document.querySelector("body");
+    const mainIndex = Array.prototype.indexOf.call(body?.children, main);
+    // If there is no main content, we still want to return true to avoid sending a Diagnostic
+    return mainIndex <= 0 || (navExists && mainIndex <= 1);
 }
